@@ -975,6 +975,7 @@ export default () => ({
   "oauthResolveIdentityError": "핸들 또는 DID를 찾을 수 없습니다. 입력 내용을 확인하세요.",
   "oauthSessionRestoreError": "OAuth 세션 복원에 실패했습니다. 다시 로그인하세요.",
   "imageCompressionError": "이미지 압축 중 오류가 발생했습니다.",
+  "imageDecodeError": "이미지 디코딩에 실패했습니다.",
   "invalidCidError": "잘못된 CID입니다.",
   "invalidJwtError": "잘못된 JWT입니다.",
   "invalidUrlError": "잘못된 URL입니다",

@@ -975,6 +975,7 @@ export default () => ({
   "oauthResolveIdentityError": "Handle ou DID introuvable. Vérifie tes informations.",
   "oauthSessionRestoreError": "Échec de la restauration de la session OAuth. Reconnecte-toi.",
   "imageCompressionError": "Erreur de compression d'image.",
+  "imageDecodeError": "Échec du décodage de l'image.",
   "invalidCidError": "CID invalide.",
   "invalidJwtError": "JWT invalide.",
   "invalidUrlError": "URL invalide",

@@ -975,6 +975,7 @@ export default () => ({
   "oauthResolveIdentityError": "Handle or DID not found. Please check your input.",
   "oauthSessionRestoreError": "Failed to restore OAuth session. Please log in again.",
   "imageCompressionError": "An error occurred while compressing the image.",
+  "imageDecodeError": "Failed to decode the image.",
   "invalidCidError": "Invalid CID.",
   "invalidJwtError": "Invalid JWT.",
   "invalidUrlError": "Invalid URL",

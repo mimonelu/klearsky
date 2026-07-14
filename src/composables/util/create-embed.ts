@@ -138,7 +138,7 @@ export default async function (
     }
 
     // 画像サイズのアスペクト比（実際にはサイズ）を取得
-    const aspectRatios: Array<undefined | TTAspectRatio> = []
+    const aspectRatios: Array<TTAspectRatio> = []
     if (params.medias != null) {
       for (const file of params.medias) {
         const img = new Image()
@@ -151,7 +151,7 @@ export default async function (
           })
         } catch (error: any) {
           $warn("createEmbed", error)
-          aspectRatios.push(undefined)
+          return Error("imageDecodeError")
         }
       }
     }
@@ -165,9 +165,7 @@ export default async function (
           const result: AppBskyEmbedImages.Image = {
             image: fileBlobRef,
             alt: params.alts?.[index] ?? "",
-          }
-          if (aspectRatios[index] != null) {
-            result.aspectRatio = aspectRatios[index]
+            aspectRatio: aspectRatios[index],
           }
           return result
         })

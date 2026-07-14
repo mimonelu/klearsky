@@ -975,6 +975,7 @@ export default () => ({
   "oauthResolveIdentityError": "ハンドルまたはDIDが見つかりません。入力内容を確認してください。",
   "oauthSessionRestoreError": "OAuthセッションの復元に失敗しました。再度ログインしてください。",
   "imageCompressionError": "画像の圧縮中にエラーが発生しました。",
+  "imageDecodeError": "画像のデコードに失敗しました。",
   "invalidCidError": "不正なCIDです。",
   "invalidJwtError": "不正なJWTです。",
   "invalidUrlError": "不正なURLです",
