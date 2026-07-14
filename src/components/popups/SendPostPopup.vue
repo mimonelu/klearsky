@@ -82,6 +82,8 @@ const easyFormState = reactive<{
   alts: [],
 })
 
+const MAX_NUMBER_OF_ATTACHED_FILE = 10
+
 const easyFormProps: TTEasyForm = {
   hasSubmitButton: false,
   submitCallback,
@@ -126,7 +128,7 @@ const easyFormProps: TTEasyForm = {
       placeholder: $t("imageBoxes"),
       // accept: "image/bmp, image/gif, image/jpeg, image/png, image/svg+xml, image/webp",
       isMultipleFile: true,
-      maxNumberOfFile: 4,
+      maxNumberOfFile: MAX_NUMBER_OF_ATTACHED_FILE,
       quadLayout: true,
       onChange: onChangeImage,
     },
@@ -281,7 +283,7 @@ watch(() => mainState.sendPostPopupProps.visibility, async (value?: boolean) => 
   }
 
   if (props.fileList != null) {
-    easyFormState.medias = Array.from(props.fileList)
+    easyFormState.medias = Array.from(props.fileList).slice(0, MAX_NUMBER_OF_ATTACHED_FILE)
   }
 
   onInputUrl()
@@ -295,7 +297,7 @@ watch(() => mainState.sendPostPopupProps.visibility, async (value?: boolean) => 
 watch(() => props.fileList, (value?: FileList) => {
   const files = value != null ? Array.from(value) : []
   files.unshift(...easyFormState.medias)
-  easyFormState.medias = files
+  easyFormState.medias = files.slice(0, MAX_NUMBER_OF_ATTACHED_FILE)
   onInputUrl()
   onChangeImage()
 })

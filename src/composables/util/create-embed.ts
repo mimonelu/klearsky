@@ -1,4 +1,4 @@
-import type { AppBskyEmbedImages, AppBskyEmbedVideo, BlobRef } from "@atproto/api"
+import type { AppBskyEmbedGallery, AppBskyEmbedImages, AppBskyEmbedVideo, BlobRef } from "@atproto/api"
 import Util from "@/composables/util"
 import CONSTS from "@/consts/consts.json"
 
@@ -244,23 +244,24 @@ export default async function (
         }
       },
     }
-    if (images.length > 0)
-      parent.embed.media = { $type: "app.bsky.embed.images", images }
-    else if (video != null)
+    if (images.length > 0) {
+      parent.embed.media = makeEmbedImages(images)
+    } else if (video != null) {
       parent.embed.media = video
-    else if (external != null)
-      parent.embed.media = { $type: "app.bsky.embed.external", external }
-    else if (feedOrLinkOrStarterPackCard != null)
+    } else if (external != null) {
+      parent.embed.media = {
+        $type: "app.bsky.embed.external",
+        external,
+      }
+    } else if (feedOrLinkOrStarterPackCard != null) {
       parent.embed.media = feedOrLinkOrStarterPackCard
+    }
   }
 
   // 画像またはリンクカード
   if (params.type !== "quoteRepost" && manualQuoteRepost == null) {
     if (images.length > 0) {
-      parent.embed = {
-        $type: "app.bsky.embed.images",
-        images,
-      }
+      parent.embed = makeEmbedImages(images)
     } else if (video != null) {
       parent.embed = video
     } else if (external != null) {
@@ -271,6 +272,27 @@ export default async function (
     } else if (feedOrLinkOrStarterPackCard != null) {
       parent.embed = feedOrLinkOrStarterPackCard
     }
+  }
+}
+
+function makeEmbedImages (images: AppBskyEmbedImages.Image[]): AppBskyEmbedImages.Main | AppBskyEmbedGallery.Main {
+  // 4枚以下
+  if (images.length < 5) {
+    return {
+      $type: "app.bsky.embed.images",
+      images,
+    }
+  }
+
+  // 5枚以上（ギャラリー形式）
+  return {
+    $type: "app.bsky.embed.gallery",
+    items: images.map((image) => {
+      return {
+        "$type": "app.bsky.embed.gallery#image",
+        ...image,
+      }
+    }),
   }
 }
 

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
+import Slider from "@/components/next/Slider/Slider.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 
 type TTItem = File
@@ -169,10 +170,11 @@ function getVideoSizes (): Array<undefined | {
       </div>
     </template>
 
-    <!-- 4分割レイアウト -->
+    <!-- 4分割 or スライダーレイアウト -->
     <template v-else>
-      <div
+      <Component
         v-if="state.previews.length > 0"
+        :is="state.previews.length < 5 ? 'div' : Slider"
         class="attached-items"
         :data-number-of-items="state.previews.length"
       >
@@ -214,7 +216,7 @@ function getVideoSizes (): Array<undefined | {
             </button>
           </div>
         </div>
-      </div>
+      </Component>
     </template>
   </div>
 </template>

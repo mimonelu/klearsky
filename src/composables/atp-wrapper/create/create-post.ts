@@ -2,7 +2,6 @@ import Package from "@/../package.json"
 import type { AppBskyFeedPost } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
-import CONSTS from "@/consts/consts.json"
 import OWN_DOMAIN from "@/consts/own-domain"
 
 export default async function (
@@ -98,8 +97,8 @@ export default async function (
 
   const response: Error | TTCidUri =
     await this.agent.post(record)
-      .then((value) => value)
-      .catch((error) => error)
+      .then((value: TTCidUri) => value)
+      .catch((error: Error) => error)
   $log("post", response)
   if (response instanceof Error) {
     return response
