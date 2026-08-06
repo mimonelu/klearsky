@@ -444,7 +444,9 @@ function removeMyFeed (uri: string) {
     padding: calc(0.25rem - 2px) 0 0.25rem 2px;
   }
 
+  /*
   // グレーアウト処理
+  // BACKUP: ユーザー要望により無効化
   &__content[data-is-selected="false"] {
     filter: grayscale(100%);
     transition: filter 250ms ease-out;
@@ -453,5 +455,6 @@ function removeMyFeed (uri: string) {
   &:hover &__content {
     filter: grayscale(0%);
   }
+  */
 }
 </style>

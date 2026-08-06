@@ -69,7 +69,9 @@
     }
   }
 
+  /*
   // グレーアウト処理
+  // BACKUP: ユーザー要望により無効化
   &__link[data-is-selected="false"] {
     filter: grayscale(100%);
     transition: filter 250ms ease-out;
@@ -78,6 +80,7 @@
   &:hover &__link {
     filter: grayscale(0%);
   }
+  */
 
   // 新着フォロー中フィードバッジ用
   &__dot {
