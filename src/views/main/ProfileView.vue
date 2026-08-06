@@ -117,7 +117,10 @@ const numberOfPostsPerDay = computed((): undefined | number => {
 // 登録時に使用したスターターパック
 const joinedStarterPackUrl = computed((): undefined | string => {
   return mainState.currentProfile?.joinedViaStarterPack != null
-    ? `https://bsky.app/starter-pack/${mainState.currentProfile.joinedViaStarterPack.creator.handle}/${Util.getRkey(mainState.currentProfile.joinedViaStarterPack.uri)}`
+    ? Util.officialUrl.starterPack(
+      mainState.currentProfile.joinedViaStarterPack.creator.handle,
+      mainState.currentProfile.joinedViaStarterPack.uri
+    )
     : undefined
 })
 

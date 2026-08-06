@@ -34,7 +34,7 @@ const state = reactive<{
     return `"${props.user?.description}" - ${props.user?.displayName}(${props.user?.handle}) ${state.shareUrl}`
   }),
   shareUrl: computed((): string => {
-    return `https://bsky.app/profile/${props.user?.handle}`
+    return Util.officialUrl.profile(props.user?.handle)
   }),
 })
 

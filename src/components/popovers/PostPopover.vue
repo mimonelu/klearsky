@@ -53,8 +53,7 @@ const state = reactive<{
     return `"${props.post?.record?.text}" - ${props.post?.author.displayName}(${props.post?.author.handle}) ${state.shareUrl}`
   }),
   shareUrl: computed((): string => {
-    const rkey = Util.getRkey(props.post?.uri)
-    return `https://bsky.app/profile/${props.post?.author.handle}/post/${rkey}`
+    return Util.officialUrl.post(props.post?.author.handle, props.post?.uri)
   }),
 })
 

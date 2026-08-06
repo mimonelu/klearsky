@@ -16,6 +16,7 @@ import injectFoldingToFeeds from "@/composables/util/inject-folding-to-feeds"
 import makeCustomLinks from "@/composables/util/make-custom-links"
 import makeLightningLinks from "@/composables/util/make-lightning-links"
 import mergeFeeds from "@/composables/util/merge-feeds"
+import officialUrl from "@/composables/util/official-url"
 import parseOgp from "@/composables/util/parse-ogp"
 import safeJson from "@/composables/util/safe-json"
 import safeUrl from "@/composables/util/safe-url"
@@ -55,6 +56,7 @@ export default {
   makeCustomLinks,
   makeLightningLinks,
   mergeFeeds,
+  officialUrl,
   parseOgp,
   ...safeJson,
   safeUrl,

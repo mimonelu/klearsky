@@ -27,8 +27,7 @@ const state = reactive<{
     return `${props.generator?.displayName} - ${props.generator?.description} ${state.shareUrl}`
   }),
   shareUrl: computed((): string => {
-    const rkey = Util.getRkey(props.generator?.uri)
-    return `https://bsky.app/profile/${props.generator?.creator.did}/feed/${rkey}`
+    return Util.officialUrl.feed(props.generator?.uri)
   }),
 })
 

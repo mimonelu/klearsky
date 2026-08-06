@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Popup from "@/components/popups/Popup.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -9,6 +10,8 @@ defineProps<{
 }>()
 
 const url = window.location.href
+
+const authorProfileUrl = Util.officialUrl.profile("mimonelu.net")
 
 function close () {
   emit("close")
@@ -32,7 +35,7 @@ function close () {
 * {{ url }}</pre>
       <pre class="help">{{ $t("errorNotification") }} <a
         class="textlink"
-        href="https://bsky.app/profile/mimonelu.net"
+        :href="authorProfileUrl"
         rel="noreferrer"
         target="_blank"
       ><span>@mimonelu.net</span></a> </pre>

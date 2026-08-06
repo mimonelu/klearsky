@@ -26,23 +26,19 @@ const state = reactive<{
 const officialUrl = computed((): undefined | string => {
   switch (props.place) {
     case "feed": {
-      const uri = props.uri?.replace('at://', '').replace('app.bsky.feed.generator', 'feed')
-      return `https://bsky.app/profile/${uri}`
+      return Util.officialUrl.feed(props.uri)
     }
     case "list": {
-      const rkey = Util.getRkey(props.uri)
-      return `https://bsky.app/profile/${props.handle}/lists/${rkey}`
+      return Util.officialUrl.list(props.handle, props.uri)
     }
     case "post": {
-      const rkey = Util.getRkey(props.uri)
-      return `https://bsky.app/profile/${props.handle}/post/${rkey}`
+      return Util.officialUrl.post(props.handle, props.uri)
     }
     case "profile": {
-      return `https://bsky.app/profile/${props.handle}`
+      return Util.officialUrl.profile(props.handle)
     }
     case "starterPack": {
-      const rkey = Util.getRkey(props.uri)
-      return `https://bsky.app/starter-pack/${props.did}/${rkey}`
+      return Util.officialUrl.starterPack(props.did, props.uri)
     }
     default: {
       return undefined
