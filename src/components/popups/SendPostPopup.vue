@@ -549,7 +549,7 @@ function onClickClearButton () {
   onInputUrl()
 }
 
-function onChangeImage () {
+function onChangeImage (_item?: TTEasyFormItem, _form?: TTEasyForm, deletedIndex?: number) {
   // ファイルがひとつ以上選択されているか否かでリンクカード／フィードカードの表示状態を切り替える
   const urlItem = easyFormProps.data.find((item: TTEasyFormItem) => {
     return item.model === "url"
@@ -558,7 +558,9 @@ function onChangeImage () {
   urlItem.display = easyFormState.medias.length === 0
 
   // alt の更新
-  // TODO: 意図しない alt が削除される不具合を修正すること
+  if (deletedIndex != null) {
+    easyFormState.alts.splice(deletedIndex, 1)
+  }
   easyFormState.alts.splice(easyFormState.medias.length)
   easyFormProps.data.splice(
     0,

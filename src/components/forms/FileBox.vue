@@ -6,7 +6,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 
 type TTItem = File
 
-const emit = defineEmits<{(event: "change", value: Array<TTItem>): void}>()
+const emit = defineEmits<{(event: "change", value: Array<TTItem>, deletedIndex?: number): void}>()
 
 defineExpose({
   getVideoSizes,
@@ -109,7 +109,7 @@ function setPreviews (items: Array<TTItem>) {
 function deleteItem (index: number) {
   state.items.splice(index, 1)
   state.previews.splice(index, 1)
-  emit("change", state.items)
+  emit("change", state.items, index)
 }
 
 // 動画の aspectRatio 対応

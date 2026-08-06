@@ -49,7 +49,7 @@ type TTEasyFormItem = {
   translate?: "no" | "yes"
   autoResizeTextarea?: boolean
   onBlur?: (item: TTEasyFormItem, form: TTEasyForm) => void
-  onChange?: (item: TTEasyFormItem, form: TTEasyForm) => void
+  onChange?: (item: TTEasyFormItem, form: TTEasyForm, deletedIndex?: number) => void
   onClick?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onFocus?: (item: TTEasyFormItem, form: TTEasyForm) => void
   onInput?: (item: TTEasyFormItem, form: TTEasyForm) => void

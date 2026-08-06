@@ -99,10 +99,10 @@ function onChange (item: TTEasyFormItem) {
   if (item.onUpdate != null) item.onUpdate(item, props)
 }
 
-function onChangeFile (files: Array<File>, item: TTEasyFormItem) {
+function onChangeFile (files: Array<File>, item: TTEasyFormItem, deletedIndex?: number) {
   if (item.model == null) return
   item.state[item.model] = files
-  if (item.onChange != null) item.onChange(item, props)
+  if (item.onChange != null) item.onChange(item, props, deletedIndex)
 }
 
 function onFocus (item: TTEasyFormItem) {
@@ -324,7 +324,7 @@ function validate (): boolean {
                 :maxNumber="item.maxNumberOfFile"
                 :quadLayout="item.quadLayout"
                 :class="item.classes"
-                @change="(items: Array<File>) => { onChangeFile(items, item) }"
+                @change="(items: Array<File>, deletedIndex?: number) => { onChangeFile(items, item, deletedIndex) }"
               />
             </template>
 
