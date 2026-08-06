@@ -94,7 +94,7 @@ const segments = computed((): Array<RichParam> => {
 const router = useRouter()
 
 function transformInternalLink (uri: string): undefined | string {
-  return Util.officialUrl.parseToInternalPath(uri)
+  return Util.officialUrl.parseToInternalPath(uri, true)
 }
 
 async function openWindowIfCan (segment: RichParam) {

@@ -42,6 +42,14 @@ onBeforeUnmount(() => {
 })
 
 async function onSubmit () {
+  // 公式アプリのURLが入力された場合はアプリ内遷移する
+  const officialPath = Util.officialUrl.parseToInternalPath(mainState.currentSearchTerm)
+  if (officialPath != null) {
+    mainState.currentSearchTerm = ""
+    router.push(officialPath)
+    return
+  }
+
   // キーワード入力ボックス押下時、未入力であれば検索ステートをクリア
   if (mainState.currentSearchTerm === "") {
     resetState()

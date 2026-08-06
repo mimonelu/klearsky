@@ -5,6 +5,7 @@ import CopyRight from "@/components/labels/Copyright.vue"
 import Logo from "@/components/images/Logo.vue"
 import MyFeedList from "@/components/lists/MyFeedList.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const $t = inject("$t") as Function
 
@@ -19,6 +20,14 @@ const mainState = inject("state") as MainState
 const router = useRouter()
 
 function searchPost () {
+  // 公式アプリのURLが入力された場合はアプリ内遷移する
+  const officialPath = Util.officialUrl.parseToInternalPath(state.text)
+  if (officialPath != null) {
+    state.text = ""
+    router.push(officialPath)
+    return
+  }
+
   const query = state.text !== ""
     ? { text: state.text }
     : undefined
