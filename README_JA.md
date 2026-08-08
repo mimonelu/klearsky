@@ -24,7 +24,7 @@ AT Protocol（Bluesky）向けの高機能Webクライアント。豊富なカ�
 
 ### 前提条件
 
-- Node.js v18.17.1以上
+- Node.js v22.16.0以上
 - npmまたはyarnパッケージマネージャー
 
 ### インストール
