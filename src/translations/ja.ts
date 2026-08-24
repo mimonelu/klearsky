@@ -284,6 +284,7 @@ export default () => ({
   "postSearchLatest": "最新",
   "postSearchTop": "人気",
   "feedSearch": "フィードを見つける",
+  "starterPackSearch": "スターターパックを見つける",
   "keyword": "キーワード",
   "searchUserLatestPost": "最近のポストを検索",
   "searchUserTopPost": "人気ポストを検索",

@@ -59,6 +59,15 @@ const query = computed((): string => {
           <SVGIcon name="feed" />
         </RouterLink>
 
+        <!-- スターターパック検索ページ -->
+        <RouterLink
+          class="tab__button"
+          :to="`/search/starter-pack${query}`"
+          :title="$t('starterPackSearch')"
+        >
+          <SVGIcon name="cards" />
+        </RouterLink>
+
         <!-- ユーザー検索ページ -->
         <RouterLink
           class="tab__button"

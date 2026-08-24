@@ -187,6 +187,12 @@ interface MainState {
   currentSearchFeedsLastTerm?: string
   fetchSearchFeeds: (direction: "new" | "old") => Promise<void>
 
+  // 検索 - 現在のスターターパック検索結果
+  currentSearchStarterPacks: Array<TIStarterPack>
+  currentSearchStarterPacksCursor?: string
+  currentSearchStarterPacksLastTerm?: string
+  fetchSearchStarterPacks: (direction: "new" | "old") => Promise<void>
+
   // 検索 - 現在のおすすめユーザー検索結果
   currentSearchSuggestionResults: Array<TTUser>
   currentSearchSuggestionCursor?: string

@@ -284,6 +284,7 @@ export default () => ({
   "postSearchLatest": "Récentes",
   "postSearchTop": "Populaires",
   "feedSearch": "Trouver des fils",
+  "starterPackSearch": "Trouver des packs de départ",
   "keyword": "Mot-clé",
   "searchUserLatestPost": "Rechercher publications récentes",
   "searchUserTopPost": "Rechercher publications populaires",

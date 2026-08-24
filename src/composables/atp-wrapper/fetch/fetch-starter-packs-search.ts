@@ -1,4 +1,4 @@
-import type { AppBskyGraphSearchStarterPacks } from "@atproto/api"
+import type { AppBskyGraphSearchStarterPacksV2 } from "@atproto/api"
 
 export default async function (
   this: TIAtpWrapper,
@@ -10,18 +10,18 @@ export default async function (
   if (this.agent == null) {
     return Error("noAgentError")
   }
-  const query: AppBskyGraphSearchStarterPacks.QueryParams = { q }
+  const query: AppBskyGraphSearchStarterPacksV2.QueryParams = { q }
   if (limit != null) {
     query.limit = limit
   }
   if (cursor != null) {
     query.cursor = cursor
   }
-  const response: Error | AppBskyGraphSearchStarterPacks.Response =
-    await this.agent.app.bsky.graph.searchStarterPacks(query)
-      .then((value) => value)
-      .catch((error) => error)
-  $log("searchStarterPacks", response)
+  const response: Error | AppBskyGraphSearchStarterPacksV2.Response =
+    await this.agent.app.bsky.graph.searchStarterPacksV2(query)
+      .then((value: any) => value)
+      .catch((error: any) => error)
+  $log("searchStarterPacksV2", response)
   if (response instanceof Error) {
     return response
   }

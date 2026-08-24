@@ -52,6 +52,10 @@ const indexedAt = computed((): string => {
   return mainState.formatDate(props.starterPack?.indexedAt)
 })
 
+const listItemCount = computed((): undefined | number => {
+  return props.starterPack?.listItemCount ?? props.starterPack?.list?.listItemCount
+})
+
 function toggleDetailDisplay () {
   Util.blurElement()
   state.detailDisplay = !state.detailDisplay
@@ -166,19 +170,18 @@ async function deleteStarterPack () {
       </div>
 
       <!-- フィード数 -->
-      <div
-        v-if="starterPack.record?.feeds != null"
-        class="starter-pack-card__feeds_count"
-      >
+      <div class="starter-pack-card__feeds_count">
         <SVGIcon name="feed" />
-        <span>{{ starterPack.record.feeds.length ?? '-' }}</span>
+        <span>{{ starterPack.record.feeds?.length ?? '-' }}</span>
       </div>
 
       <!-- リストアイテム数 -->
-      <div class="starter-pack-card__list_item_count">
+      <div
+        v-if="listItemCount != null"
+        class="starter-pack-card__list_item_count"
+      >
         <SVGIcon name="list" />
-        <!-- WANT: 後日再検証 -->
-        <span>{{ starterPack.listItemCount ?? starterPack.list?.listItemCount ?? '-' }}</span>
+        <span>{{ listItemCount ?? '-' }}</span>
       </div>
 
       <!-- 使用数 -->

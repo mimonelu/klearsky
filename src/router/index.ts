@@ -35,6 +35,7 @@ import AuthorSuggestedFollowsView from "@/views/main/profile/AuthorSuggestedFoll
 // Main - Search
 import FeedSearchView from "@/views/main/search/FeedSearchView.vue"
 import PostSearchView from "@/views/main/search/PostSearchView.vue"
+import StarterPackSearchView from "@/views/main/search/StarterPackSearchView.vue"
 import UserSearchView from "@/views/main/search/UserSearchView.vue"
 
 const router = createRouter({
@@ -212,6 +213,12 @@ const router = createRouter({
               name: "feed-search",
               meta: { label: "feedSearch" },
               component: FeedSearchView,
+            },
+            {
+              path: "starter-pack",
+              name: "starter-pack-search",
+              meta: { label: "starterPackSearch" },
+              component: StarterPackSearchView,
             },
             {
               path: "user",

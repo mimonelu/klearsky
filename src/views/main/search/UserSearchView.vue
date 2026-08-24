@@ -36,7 +36,15 @@ onBeforeUnmount(() => {
 })
 
 async function fetchNewResults () {
-  if (state.processing) return
+  // 検索ワードを変えておきながら検索せずに画面遷移した場合、
+  // `watch` が後から反応してしまい、ユーザー検索画面に遷移してしまう不具合への対応
+  if (router.currentRoute.value.name !== "user-search") {
+    return
+  }
+
+  if (state.processing) {
+    return
+  }
   mainState.currentSearchLastUserTerm = mainState.currentSearchTerm
   mainState.currentSearchUsers.splice(0)
   state.processing = true
@@ -66,6 +74,12 @@ async function fetchNewResults () {
     mainState.currentSearchUsersCursor = cursor
     state.mode = "related"
   }
+
+  // fetch 中に他タブへ遷移していた場合、このビューへ強制遷移してしまう不具合への対応
+  if (router.currentRoute.value.name !== "user-search") {
+    return
+  }
+
   updateRouter()
 }
 

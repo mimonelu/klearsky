@@ -284,6 +284,7 @@ export default () => ({
   "postSearchLatest": "Latest",
   "postSearchTop": "Popular",
   "feedSearch": "Find Feeds",
+  "starterPackSearch": "Find Starter Packs",
   "keyword": "Keyword",
   "searchUserLatestPost": "Search latest posts",
   "searchUserTopPost": "Search top posts",

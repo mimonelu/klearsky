@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject, onBeforeUnmount, onMounted, reactive, watch } from "vue"
 import { useRouter } from "vue-router"
-import FeedCard from "@/components/cards/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
+import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 
@@ -11,10 +11,8 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   processing: boolean
-  mode: "popular" | "related"
 }>({
   processing: false,
-  mode: "popular",
 })
 
 const router = useRouter()
@@ -24,9 +22,9 @@ const unwatchOnQuery = watch(() => router.currentRoute.value.query.text, (value:
 }, { immediate: true })
 
 onMounted(async () => {
-  const textbox = document.getElementById("feed-term-textbox")
+  const textbox = document.getElementById("starter-pack-term-textbox")
   if (textbox != null) textbox.focus()
-  if (mainState.currentSearchFeedsLastTerm !== mainState.currentSearchTerm)
+  if (mainState.currentSearchStarterPacksLastTerm !== mainState.currentSearchTerm)
     await fetchNewResults()
 })
 
@@ -37,22 +35,24 @@ onBeforeUnmount(() => {
 async function fetchNewResults () {
   // 検索ワードを変えておきながら検索せずに画面遷移した場合、
   // `watch` が後から反応してしまい、フィード検索画面に遷移してしまう不具合への対応
-  if (router.currentRoute.value.name !== "feed-search") {
+  if (router.currentRoute.value.name !== "starter-pack-search") {
     return
   }
 
   if (state.processing) {
     return
   }
-  mainState.currentSearchFeedsLastTerm = mainState.currentSearchTerm
-  mainState.currentSearchFeeds.splice(0)
+  mainState.currentSearchStarterPacksLastTerm = mainState.currentSearchTerm
+  mainState.currentSearchStarterPacks.splice(0)
+  if (mainState.currentSearchTerm === "") {
+    return
+  }
   state.processing = true
-  await mainState.fetchSearchFeeds("new")
+  await mainState.fetchSearchStarterPacks("new")
   state.processing = false
-  state.mode = mainState.currentSearchTerm === "" ? "popular" : "related"
 
   // fetch 中に他タブへ遷移していた場合、このビューへ強制遷移してしまう不具合への対応
-  if (router.currentRoute.value.name !== "feed-search") {
+  if (router.currentRoute.value.name !== "starter-pack-search") {
     return
   }
 
@@ -61,15 +61,20 @@ async function fetchNewResults () {
 
 async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
-  if (state.processing) return
-  if (mainState.currentSearchFeedsLastTerm !== mainState.currentSearchTerm) {
-    mainState.currentSearchFeedsLastTerm = mainState.currentSearchTerm
-    mainState.currentSearchFeeds.splice(0)
-    mainState.currentSearchFeedsCursor = undefined
+  if (state.processing) {
+    return
+  }
+  if (mainState.currentSearchTerm === "") {
+    return
+  }
+  if (mainState.currentSearchStarterPacksLastTerm !== mainState.currentSearchTerm) {
+    mainState.currentSearchStarterPacksLastTerm = mainState.currentSearchTerm
+    mainState.currentSearchStarterPacks.splice(0)
+    mainState.currentSearchStarterPacksCursor = undefined
     updateRouter()
   }
   state.processing = true
-  await mainState.fetchSearchFeeds(direction)
+  await mainState.fetchSearchStarterPacks(direction)
   state.processing = false
 }
 
@@ -77,13 +82,13 @@ function updateRouter () {
   const query = mainState.currentSearchTerm !== ""
     ? { text: mainState.currentSearchTerm }
     : undefined
-  router.push({ name: "feed-search", query })
+  router.push({ name: "starter-pack-search", query })
 }
 
 function openKeywordHistoryPopover ($event: Event) {
   mainState.openKeywordHistoryPopover(
     $event.target,
-    mainState.currentSetting.feedSearchKeywordHistory,
+    mainState.currentSetting.starterPackSearchKeywordHistory,
     (keyword: string) => {
       mainState.currentSearchTerm = keyword
       fetchNewResults()
@@ -103,16 +108,16 @@ function onScrolledToBottom () {
 </script>
 
 <template>
-  <div class="feed-search-view">
+  <div class="starter-pack-search-view">
     <Portal to="search-view-header">
       <form @submit.prevent="fetchNewResults">
         <div class="group-parts">
           <!-- キーワードボックス -->
           <input
             v-model="mainState.currentSearchTerm"
-            id="feed-term-textbox"
+            id="starter-pack-term-textbox"
             type="search"
-            :placeholder="$t('feedSearch')"
+            :placeholder="$t('starterPackSearch')"
             autocapitalize="off"
             autocomplete="off"
             inputmode="search"
@@ -131,24 +136,16 @@ function onScrolledToBottom () {
         </div>
       </form>
     </Portal>
-    <div class="feed-search-view__main">
-      <div
-        v-if="state.mode === 'popular' && !state.processing"
-        class="textlabel"
-      >
-        <div class="textlabel__text">
-          <SVGIcon name="feed" />{{ $t("popularFeeds") }}
-        </div>
-      </div>
-      <div class="feed-card-container">
-        <FeedCard
-          v-for="generator of mainState.currentSearchFeeds"
-          :key="generator.uri"
-          :generator="generator"
+    <div class="starter-pack-search-view__main">
+      <div class="starter-pack-card-container">
+        <StarterPackCard
+          v-for="starterPack of mainState.currentSearchStarterPacks"
+          :key="starterPack.uri"
+          :starterPack="starterPack as TIStarterPack"
           :menuDisplay="true"
-          :detailDisplay="true"
-          :orderButtonDisplay="false"
+          :detailDisplay="false"
           :creatorDisplay="true"
+          :unclickable="false"
         />
       </div>
       <LoadButton
@@ -167,7 +164,7 @@ function onScrolledToBottom () {
 </template>
 
 <style lang="scss" scoped>
-.feed-search-view {
+.starter-pack-search-view {
   .textlabel {
     margin-top: 0.5rem;
     padding-left: 1rem;
@@ -180,7 +177,7 @@ function onScrolledToBottom () {
   }
 }
 
-.feed-card-container {
+.starter-pack-card-container {
   flex-grow: 1;
 }
 </style>

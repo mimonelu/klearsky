@@ -246,6 +246,12 @@ export const state: MainState = reactive<MainState>({
   currentSearchFeedsLastTerm: undefined,
   fetchSearchFeeds: fetchSearchFeeds,
 
+  // 検索 - 現在のスターターパック検索結果
+  currentSearchStarterPacks: [],
+  currentSearchStarterPacksCursor: undefined,
+  currentSearchStarterPacksLastTerm: undefined,
+  fetchSearchStarterPacks: fetchSearchStarterPacks,
+
   // 検索 - 現在のおすすめユーザー検索結果
   currentSearchSuggestionResults: [],
   currentSearchSuggestionCursor: undefined,
@@ -1138,6 +1144,9 @@ function saveSettings () {
   if (state.settings[did].lightning == null) {
     state.settings[did].lightning = undefined
   }
+  if (state.settings[did].starterPackSearchKeywordHistory == null) {
+    state.settings[did].starterPackSearchKeywordHistory = []
+  }
   if (state.settings[did].userSearchKeywordHistory == null) {
     state.settings[did].userSearchKeywordHistory = []
   }
@@ -1991,6 +2000,23 @@ async function fetchSearchFeeds (direction: "old" | "new") {
   }
   if (cursor != null) {
     state.currentSearchFeedsCursor = cursor
+  }
+}
+
+// 検索 - 現在のスターターパック検索結果
+async function fetchSearchStarterPacks (direction: "old" | "new") {
+  const newCursor = await state.atp.fetchStarterPacksSearch(
+    state.currentSearchStarterPacks,
+    state.currentSearchTerm,
+    CONSTS.LIMIT_OF_FETCH_STARTER_PACKS_SEARCH,
+    direction === "old" ? state.currentSearchStarterPacksCursor : undefined,
+  )
+  if (newCursor instanceof Error) {
+    state.openErrorPopup(newCursor, "mainState/fetchSearchStarterPacks")
+    return
+  }
+  if (newCursor != null) {
+    state.currentSearchStarterPacksCursor = newCursor
   }
 }
 

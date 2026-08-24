@@ -36,6 +36,7 @@ type TTSetting = {
   replyFolding?: Array<number>
   repostFolding?: Array<number>
   otherFolding?: Array<number>
+  starterPackSearchKeywordHistory?: Array<string>
   timeControl?: string
   timelineFetchInterval?: number
   uiLanguage?: string
