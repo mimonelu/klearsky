@@ -631,6 +631,14 @@ interface MainState {
   openSendStarterPackReportPopup: Function
   closeSendStarterPackReportPopup: () => void
 
+  // ポップアップ - チャットルームレポート送信ポップアップ
+  sendChatConvoReportPopupProps: {
+    display: boolean
+    myConvo?: TIMyConvo
+  }
+  openSendChatConvoReportPopup: Function
+  closeSendChatConvoReportPopup: () => void
+
   // ポップアップ - チャットメッセージレポート送信ポップアップ
   sendChatMessageReportPopupProps: {
     display: boolean

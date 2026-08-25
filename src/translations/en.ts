@@ -473,6 +473,7 @@ export default () => ({
   "reportSendList": "Report list",
   "reportSendStarterPack": "Report starter pack",
   "reportSendChatMessage": "Report message",
+  "reportSendChatConvo": "Report chat",
   "reportSendConfirmation": "Confirm report",
   "reportSendConfirmationMessage": "Are you sure you want to send this report?",
   "reportReasonType": "Category",

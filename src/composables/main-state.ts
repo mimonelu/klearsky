@@ -702,6 +702,14 @@ export const state: MainState = reactive<MainState>({
   openSendStarterPackReportPopup: openSendStarterPackReportPopup,
   closeSendStarterPackReportPopup: closeSendStarterPackReportPopup,
 
+  // ポップアップ - チャットルームレポート送信ポップアップ
+  sendChatConvoReportPopupProps: {
+    display: false,
+    myConvo: undefined,
+  },
+  openSendChatConvoReportPopup: openSendChatConvoReportPopup,
+  closeSendChatConvoReportPopup: closeSendChatConvoReportPopup,
+
   // ポップアップ - チャットメッセージレポート送信ポップアップ
   sendChatMessageReportPopupProps: {
     display: false,
@@ -2773,6 +2781,17 @@ function openSendStarterPackReportPopup (starterPack: TIStarterPack) {
 
 function closeSendStarterPackReportPopup () {
   state.sendStarterPackReportPopupProps.display = false
+}
+
+// ポップアップ - チャットルームレポート送信ポップアップ
+
+function openSendChatConvoReportPopup (myConvo: TIMyConvo) {
+  state.sendChatConvoReportPopupProps.myConvo = myConvo
+  state.sendChatConvoReportPopupProps.display = true
+}
+
+function closeSendChatConvoReportPopup () {
+  state.sendChatConvoReportPopupProps.display = false
 }
 
 // ポップアップ - チャットメッセージレポート送信ポップアップ

@@ -64,6 +64,7 @@ import SelectDatePopup from "@/components/popups/SelectDatePopup.vue"
 import SelectLabelsPopup from "@/components/popups/SelectLabelsPopup.vue"
 import SelectLanguagesPopup from "@/components/popups/SelectLanguagesPopup.vue"
 import SendAccountReportPopup from "@/components/next/Report/SendAccountReportPopup.vue"
+import SendChatConvoReportPopup from "@/components/next/Report/SendChatConvoReportPopup.vue"
 import SendChatMessageReportPopup from "@/components/next/Report/SendChatMessageReportPopup.vue"
 import SendFeedReportPopup from "@/components/next/Report/SendFeedReportPopup.vue"
 import SendListReportPopup from "@/components/next/Report/SendListReportPopup.vue"
@@ -678,6 +679,15 @@ const {
           v-if="state.sendStarterPackReportPopupProps.display"
           :starterPack="state.sendStarterPackReportPopupProps.starterPack as TIStarterPack"
           @close="state.closeSendStarterPackReportPopup"
+        />
+      </Transition>
+
+      <!-- チャットルームレポート送信ポップアップ -->
+      <Transition>
+        <SendChatConvoReportPopup
+          v-if="state.sendChatConvoReportPopupProps.display"
+          :myConvo="state.sendChatConvoReportPopupProps.myConvo as TIMyConvo"
+          @close="state.closeSendChatConvoReportPopup"
         />
       </Transition>
 

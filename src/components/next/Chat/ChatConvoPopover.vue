@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue"
 import MenuTickerOpenSource from "@/components/menus/OpenSource.vue"
+import MenuTickerSendChatConvoReport from "@/components/next/Report/SendChatConvoReport.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
@@ -110,6 +111,12 @@ async function callback (type:
         <SVGIcon name="volumeOn" />
         <span>{{ $t("unmuteChatConvo") }}</span>
       </button>
+
+      <!-- チャットルームレポート送信ポップアップを開く -->
+      <MenuTickerSendChatConvoReport
+        :myConvo="myConvo"
+        @close="emit('close')"
+      />
 
       <!-- 退室 -->
       <button

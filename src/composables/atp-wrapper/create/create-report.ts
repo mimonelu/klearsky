@@ -7,11 +7,13 @@ export default async function (
   if (this.agent == null) {
     return Error("noAgentError")
   }
-  const $type = params.convoId != null || params.messageId != null
+  const $type = params.convoId != null && params.messageId != null
     ? "chat.bsky.convo.defs#messageRef"
-    : params.cid == null || params.uri == null
-      ? "com.atproto.admin.defs#repoRef"
-      : "com.atproto.repo.strongRef"
+    : params.convoId != null
+      ? "chat.bsky.convo.defs#convoRef"
+      : params.cid == null || params.uri == null
+        ? "com.atproto.admin.defs#repoRef"
+        : "com.atproto.repo.strongRef"
   const query: ComAtprotoModerationCreateReport.InputSchema = {
     reasonType: params.reasonType,
     reason: params.reason,

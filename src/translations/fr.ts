@@ -473,6 +473,7 @@ export default () => ({
   "reportSendList": "Signaler la liste",
   "reportSendStarterPack": "Signaler le starter pack",
   "reportSendChatMessage": "Signaler le message",
+  "reportSendChatConvo": "Signaler la conversation",
   "reportSendConfirmation": "Confirmation d'envoi",
   "reportSendConfirmationMessage": "Ce signalement sera envoyé. Es-tu sûr?",
   "reportReasonType": "Catégorie",
