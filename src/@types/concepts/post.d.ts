@@ -127,6 +127,15 @@ type TTExternal = {
   title?: string
   description?: string
 
+  // standard.site
+  source?: {
+    $type: "app.bsky.embed.external#viewExternalSource"
+    uri: string
+    icon?: string
+    title?: string
+    description?: string
+  }
+
   // プレビューリンクカード用
   preview?: string
 }

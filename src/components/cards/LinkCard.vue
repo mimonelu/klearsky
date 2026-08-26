@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, ref } from "vue"
+import { computed, inject } from "vue"
 import { useRouter } from "vue-router"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -175,6 +175,29 @@ function searchUrl () {
     query: { text: props.external.uri }
   })
 }
+
+// 通常のリンクカード - standard.site
+
+const isSourceDomainMismatched = computed((): boolean => {
+  const sourceUri = props.external.source?.uri
+  if (sourceUri == null) {
+    return false
+  }
+  const externalUrl = Util.safeUrl(props.external.uri)
+  const sourceUrl = Util.safeUrl(sourceUri)
+  if (externalUrl == null || sourceUrl == null) {
+    return false
+  }
+  return externalUrl.host !== sourceUrl.host
+})
+
+function openSourceUrl () {
+  const uri = props.external.source?.uri
+  if (uri == null) {
+    return
+  }
+  window.open(uri, "_blank", "noopener,noreferrer")
+}
 </script>
 
 <template>
@@ -202,26 +225,28 @@ function searchUrl () {
       target="_blank"
       @click.stop
     >
-      <LazyImage
-        v-if="
-          displayImage &&
-          layout !== 'none' &&
-          typeof external.thumb === 'string'
-        "
-        :src="external.thumb"
-      />
+      <div class="external__main">
+        <LazyImage
+          v-if="
+            displayImage &&
+            layout !== 'none' &&
+            typeof external.thumb === 'string'
+          "
+          :src="external.thumb"
+        />
 
-      <!-- 通常のリンクカード - 各種情報 -->
-      <div class="external__meta">
-        <div class="external__meta__title">
-          <span>{{ external.title || external.uri }}</span>
-        </div>
-        <div class="external__meta__description">
-          <span>{{ external.description || "&emsp;" }}</span>
-        </div>
-        <div class="external__meta__uri">
-          <SVGIcon name="link" />
-          <span>{{ external.uri }}</span>
+        <!-- 通常のリンクカード - 各種情報 -->
+        <div class="external__meta">
+          <div class="external__meta__title">
+            <span>{{ external.title || external.uri }}</span>
+          </div>
+          <div class="external__meta__description">
+            <span>{{ external.description }}</span>
+          </div>
+          <div class="external__meta__uri">
+            <SVGIcon name="link" />
+            <span>{{ external.uri }}</span>
+          </div>
         </div>
       </div>
 
@@ -233,6 +258,39 @@ function searchUrl () {
       >
         <SVGIcon name="search" />
       </button>
+
+      <!-- 通常のリンクカード - standard.site -->
+      <div
+        v-if="external.source"
+        class="external__source"
+        role="link"
+        tabindex="0"
+        @click.stop="openSourceUrl"
+        @keydown.enter.stop="openSourceUrl"
+      >
+        <img
+          v-if="external.source.icon != null"
+          :src="external.source.icon"
+          :alt="external.source.title"
+          class="external__source__icon"
+          decoding="async"
+          loading="lazy"
+        />
+        <div
+          v-else
+          class="external__source__dummy-icon"
+        >
+          <SVGIcon name="at" />
+        </div>
+        <div class="external__source__title">{{ external.source.title || "&nbsp;" }}</div>
+        <div class="external__source__description">{{ external.source.description || "&nbsp;" }}</div>
+        <div
+          v-if="isSourceDomainMismatched"
+          class="external__source__caution textlabel__text--alert"
+        >
+          <SVGIcon name="alert" />{{ $t("sourceDomainMismatch") }}
+        </div>
+      </div>
     </Component>
 
     <!-- 埋込型リンクカード -->
@@ -413,16 +471,16 @@ function searchUrl () {
           <span>{{ external.uri }}</span>
         </div>
       </a>
-    </div>
 
-    <!-- 埋込型リンクカード - URL検索ボタン -->
-    <button
-      v-if="!noLink && !isInvalidUrl"
-      class="external__search-button"
-      @click.prevent.stop="searchUrl"
-    >
-      <SVGIcon name="search" />
-    </button>
+      <!-- 埋込型リンクカード - URL検索ボタン -->
+      <button
+        v-if="!noLink && !isInvalidUrl"
+        class="external__search-button"
+        @click.prevent.stop="searchUrl"
+      >
+        <SVGIcon name="search" />
+      </button>
+    </div>
 
     <slot name="after" />
   </div>
@@ -430,7 +488,7 @@ function searchUrl () {
 
 <style lang="scss" scoped>
 .external {
-  --size: 6rem;
+  --horizontal-size: 5rem;
   position: relative;
 
   // 不正な URL
@@ -438,7 +496,7 @@ function searchUrl () {
     background-color: rgb(var(--fg-color), 0.125);
     border: 1px solid rgb(var(--fg-color), 0.25);
     border-radius: var(--border-radius-middle);
-    padding: 0.5em 0.75em;
+    padding: 0.75em;
     pointer-events: none;
     user-select: none;
     word-break: break-all;
@@ -446,49 +504,25 @@ function searchUrl () {
 
   // 横レイアウト
   &[data-layout="horizontal"] {
+    .external__main {
+      display: flex;
+    }
+
     .external--default .lazy-image {
       aspect-ratio: 1 / 1;
       object-fit: cover;
-      min-width: var(--size);
-      max-width: var(--size);
-    }
-
-    .external__meta__title,
-    .external__meta__description {
-      & > span {
-        white-space: nowrap;
-      }
+      min-width: var(--horizontal-size);
+      max-width: var(--horizontal-size);
     }
   }
 
   // 縦レイアウト
   &[data-layout="vertical"] {
-    .external--default {
-      flex-direction: column;
-
-      .lazy-image {
-        aspect-ratio: 1.91 / 1;
-        object-fit: cover;
-        width: 100%;
-        min-height: 100%;
-      }
-    }
-  }
-
-  &:not([data-layout="horizontal"]) {
-    .external__meta__title > span,
-    .external__meta__description > span {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      word-break: break-word;
-    }
-    .external__meta__title > span {
-      line-clamp: 3;
-      -webkit-line-clamp: 3;
-    }
-    .external__meta__description > span {
-      line-clamp: 2;
-      -webkit-line-clamp: 2;
+    .external--default .lazy-image {
+      aspect-ratio: 1.91 / 1;
+      object-fit: cover;
+      width: 100%;
+      min-height: 100%;
     }
   }
 
@@ -498,6 +532,7 @@ function searchUrl () {
     border: 1px solid rgb(var(--fg-color), 0.25);
     border-radius: var(--border-radius-middle);
     display: flex;
+    flex-direction: column;
     overflow: hidden;
     position: relative;
   }
@@ -511,11 +546,7 @@ function searchUrl () {
     flex-grow: 1;
     align-items: center;
     grid-template-rows: auto auto auto;
-    padding: 0.5em 0.75em;
-    min-height: var(--size);
-    [data-layout="horizontal"] & {
-      grid-template-rows: 1fr auto 1fr;
-    }
+    padding: 0.75em;
 
     &__title,
     &__description,
@@ -533,12 +564,16 @@ function searchUrl () {
       & > span {
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 
     &__title {
       color: rgb(var(--fg-color));
       font-weight: bold;
+
+      // URL検索ボタン分、右側に余白を追加
+      margin-right: 2.5em;
 
       & > span {
         line-height: var(--line-height-high);
@@ -555,18 +590,88 @@ function searchUrl () {
     }
 
     &__uri {
-      border-top: 1px solid rgb(var(--fg-color), 0.125);
       color: rgb(var(--fg-color), 0.5);
       font-size: 0.75em;
       margin-top: 0.25em;
-      margin-right: 2.5em;
-      padding-top: 0.5em;
-      width: calc(100% - 2.5em);
 
       & > span {
         line-height: var(--line-height-low);
-        white-space: nowrap;
       }
+    }
+  }
+  .external__main {
+    &:hover {
+      .external__meta {
+        background-color: rgb(var(--fg-color), 0.125);
+      }
+    }
+  }
+
+  // 通常のリンクカード - standard.site
+  &__source {
+    border-top: 1px solid rgb(var(--fg-color), 0.125);
+    display: grid;
+    grid-gap: 0 0.5em;
+    grid-template-areas:
+      "icon title"
+      "icon description"
+      "caution caution";
+    grid-template-columns: 2em 1fr;
+    align-items: center;
+    padding: 0.75em;
+    &:hover {
+      background-color: rgb(var(--fg-color), 0.125);
+    }
+
+    &__icon,
+    &__dummy-icon {
+      grid-area: icon;
+      border-radius: var(--border-radius-middle);
+      width: 2em;
+      height: 2em;
+    }
+
+    &__dummy-icon {
+      background-color: rgb(var(--blue-color));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      & > .svg-icon {
+        fill: rgb(var(--white-color));
+      }
+    }
+
+    &__icon {
+      object-fit: cover;
+    }
+
+    &__title,
+    &__description,
+    &__caution {
+      line-height: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__title {
+      grid-area: title;
+      font-weight: bold;
+      font-size: 0.875em;
+    }
+
+    &__description {
+      grid-area: description;
+      color: rgb(var(--fg-color), 0.75);
+      font-size: 0.75em;
+    }
+
+    &__caution {
+      grid-area: caution;
+      font-size: 0.75em;
+      font-weight: bold;
+      margin-top: 0.5em;
     }
   }
 
@@ -577,19 +682,19 @@ function searchUrl () {
     justify-content: center;
     position: absolute;
     right: 0;
-    bottom: 0;
+    top: 0;
     width: 2.5em;
     height: 2.5em;
     &:focus, &:hover {
       cursor: pointer;
 
       & > .svg-icon {
-        fill: rgb(var(--fg-color));
+        fill: rgb(var(--gray-color));
       }
     }
 
     & > .svg-icon {
-      fill: rgb(var(--fg-color), 0.5);
+      fill: rgb(var(--gray-color), 0.75);
     }
   }
 

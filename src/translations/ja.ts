@@ -981,6 +981,7 @@ export default () => ({
   "invalidCidError": "不正なCIDです。",
   "invalidJwtError": "不正なJWTです。",
   "invalidUrlError": "不正なURLです",
+  "sourceDomainMismatch": "リンク先とソースのドメインが異なります",
   "jwtDecodeError": "JWTのエンコードでエラーが発生しました。",
   "jwtUpdateError": "セッションをアップデートします。\nログインフォームから再ログインしてください。",
   "noJwtError": "JWTがありません。再ログインしてください。",

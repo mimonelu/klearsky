@@ -981,6 +981,7 @@ export default () => ({
   "invalidCidError": "Invalid CID.",
   "invalidJwtError": "Invalid JWT.",
   "invalidUrlError": "Invalid URL",
+  "sourceDomainMismatch": "Source domain differs from the link",
   "jwtDecodeError": "An error occurred during JWT encoding.",
   "jwtUpdateError": "Update your session.\nPlease re-login using the login form.",
   "noJwtError": "JWT is missing. Please log in again.",
