@@ -590,6 +590,8 @@ export default () => ({
   "listDescription": "説明",
   "listUserManagement": "リスト",
   "listUserManagementDetail": "リストユーザーの追加／削除",
+  "listUserNotFoundInList": "このユーザーはこのリストに含まれていません。",
+  "listUserAlreadyInList": "このユーザーはすでにこのリストに含まれています。",
   "listMuted": "ミュート中",
   "listMuting": "リストミュート中",
   "listBlocked": "ブロック中",

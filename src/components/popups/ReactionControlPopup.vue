@@ -131,7 +131,7 @@ const easyFormState = reactive<{
       })
       .forEach((myList: TTList) => {
         results.push({
-          label: `${myList.name} (${myList.listItemCount ?? myList.items?.length ?? "-"})`,
+          label: `${myList.name} (${myList.listItemCount ?? "-"})`,
           value: myList.uri,
           icon: DESIGN_CONSTS.LIST_PURPOSE_ICON_MAP[myList.purpose] ?? "help",
         })

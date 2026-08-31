@@ -13,9 +13,6 @@ type TTList = {
     blocked?: string;
   }
   indexedAt: string
-
-  // マイリスト用
-  items?: Array<TTListItem>
 }
 
 type TTListPurpose =

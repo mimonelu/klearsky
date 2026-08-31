@@ -59,11 +59,6 @@ export default class {
       }
       if (cursor == null) break
     }
-
-    // 全マイリストユーザーの取得
-    for (const list of this.items) {
-      list.items = await this.fetchAllListItems(list.uri)
-    }
   }
 
   async fetchAllListItems (uri: string): Promise<Array<TTListItem>> {

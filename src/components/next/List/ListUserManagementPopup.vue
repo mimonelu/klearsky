@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-import { computed, inject, reactive, type ComputedRef } from "vue"
+import { computed, inject, onMounted, reactive, type ComputedRef } from "vue"
 import ListCardList from "@/components/next/List/ListCardList.vue"
 import Loader from "@/components/shells/Loader.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import UserBox from "@/components/compositions/UserBox.vue"
+import CONSTS from "@/consts/consts.json"
 
-interface TTUserMap { [k: string]: boolean }
+// リストURIからリストユーザーURIへのマップ
+// NOTE: キーが存在する＝対象ユーザーがそのリストに所属している
+interface TTListItemUriMap { [listUri: string]: string }
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -14,17 +17,21 @@ const props = defineProps<{
   user?: TTUser
 }>()
 
+const $t = inject("$t") as Function
+
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  loaderDisplay: boolean
   loaderDisplayMap: { [k: string]: boolean }
 
   // マイリストにおける自分が作成したリストの配列
   lists: ComputedRef<Array<TTList>>
 
-  // 各リストにおける対象ユーザーの存在フラグマップ
-  userMap: ComputedRef<TTUserMap>
+  // 各リストにおける対象ユーザーの listItemUri マップ
+  listItemUriMap: TTListItemUriMap
 }>({
+  loaderDisplay: false,
   loaderDisplayMap: {},
 
   // マイリストにおける自分が作成したリストの配列
@@ -34,88 +41,188 @@ const state = reactive<{
     })
   }),
 
-  // 各リストにおける対象ユーザーの存在フラグマップ
-  userMap: computed((): TTUserMap => {
-    if (props.user == null) return {}
-    const map: TTUserMap = {}
-    state.lists.forEach((list: TTList) => {
-      map[list.uri] = (list.items?.findIndex((listItem: TTListItem) => {
-        return listItem.subject.did === props.user?.did
-      }) ?? - 1) !== - 1
-    })
-    return map
-  }),
+  listItemUriMap: {},
 })
+
+onMounted(() => {
+  fetchListsWithMembership()
+})
+
+// 対象ユーザーの所属リストを取得
+// NOTE: リファレンスリストには含まれない
+async function fetchListsWithMembership () {
+  if (props.user == null) return
+  state.loaderDisplay = true
+  let cursor: undefined | string = undefined
+  for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_LISTS_WITH_MEMBERSHIP_ITERATION; i ++) {
+    const response = await mainState.atp.fetchListsWithMembership(
+      props.user.did,
+      CONSTS.LIMIT_OF_FETCH_LISTS_WITH_MEMBERSHIP,
+      cursor
+    )
+    if (response instanceof Error) {
+      mainState.openErrorPopup(response, "ListUserManagementPopup/fetchListsWithMembership")
+      break
+    }
+    response.actors.forEach((actor) => {
+      state.listItemUriMap[actor.listUri] = actor.listItemUri
+    })
+    if (response.cursor == null) break
+    cursor = response.cursor
+  }
+  state.loaderDisplay = false
+}
 
 function close () {
   emit("close")
 }
 
-async function clicked (list: TTList) {
-  if (state.loaderDisplayMap[list.uri]) return
-  if (props.user == null) return
+function isReferenceList (list: TTList): boolean {
+  return list.purpose === "app.bsky.graph.defs#referencelist"
+}
 
-  // 対象マイリスト
-  const myList = state.lists.find((myList: TTList) => {
-    return myList.uri === list.uri
-  })
-  if (myList?.items == null) return
-
-  if (state.userMap[list.uri]) {
-    // リストユーザーをマイリストから削除
-    const listItemIndex = myList.items.findIndex((listItem: TTListItem) => {
-      return listItem.subject.did === props.user?.did
-    })
-    if (listItemIndex === - 1) return
-    const listItem = myList.items[listItemIndex]
-    state.loaderDisplayMap[list.uri] = true
-    const result = await mainState.atp.deleteListUser(listItem.uri)
-    state.loaderDisplayMap[list.uri] = false
-    if (result instanceof Error) {
-      // TODO:
-      return
-    }
-    myList.items.splice(listItemIndex, 1)
-
-    // リストユーザー数をデクリメント
-    if (list.listItemCount != null) {
-      list.listItemCount --
-    }
-
-    // リストユーザーを現在のリストから削除
-    if (mainState.currentList?.uri !== list.uri) return
-    const currentListItemIndex = mainState.currentListItems.findIndex((listItem: TTListItem) => {
-      return listItem.subject.did === props.user?.did
-    })
-    if (currentListItemIndex === - 1) return
-    mainState.currentListItems.splice(currentListItemIndex, 1)
-  } else {
-    // リストユーザーをマイリストに追加
-    state.loaderDisplayMap[list.uri] = true
-    const listUserUri = await mainState.atp.createListUser(list.uri, props.user.did)
-    state.loaderDisplayMap[list.uri] = false
-    if (listUserUri instanceof Error) {
-      // TODO:
-      return
-    }
-    const newListItem: TTListItem = {
-      uri: listUserUri,
-      subject: props.user,
-    }
-    myList.items.unshift(newListItem)
-
-    // リストユーザー数をインクリメント
-    if (list.listItemCount != null) {
-      list.listItemCount ++
-    }
-
-    // リストユーザーを現在のリストに追加
-    if (mainState.currentList?.uri !== list.uri) return
-    mainState.currentListItems.unshift(newListItem)
+function clicked (list: TTList) {
+  // リファレンスリストは追加／削除ボタンで個別に処理する
+  if (isReferenceList(list)) {
+    return
   }
+  if (state.listItemUriMap[list.uri] != null) {
+    removeUser(list)
+  } else {
+    addUser(list)
+  }
+}
+
+async function addUser (list: TTList) {
+  if (props.user == null || state.loaderDisplayMap[list.uri]) {
+    return
+  }
+  state.loaderDisplayMap[list.uri] = true
+
+  // リファレンスリストは所属判定ができないため、追加実行時にオンデマンドで既存チェックを行う
+  if (state.listItemUriMap[list.uri] == null && isReferenceList(list)) {
+    const foundListItemUri = await findListItemUri(list.uri, props.user.did)
+    if (foundListItemUri != null) {
+      // 既に追加済み
+      state.listItemUriMap[list.uri] = foundListItemUri
+      state.loaderDisplayMap[list.uri] = false
+      mainState.openMessagePopup({
+        title: $t("error"),
+        text: $t("listUserAlreadyInList"),
+      })
+      return
+    }
+  }
+  if (state.listItemUriMap[list.uri] != null) {
+    state.loaderDisplayMap[list.uri] = false
+    mainState.openMessagePopup({
+      title: $t("error"),
+      text: $t("listUserAlreadyInList"),
+    })
+    return
+  }
+
+  const listItemUri = await mainState.atp.createListUser(list.uri, props.user.did)
+  state.loaderDisplayMap[list.uri] = false
+  if (listItemUri instanceof Error) {
+    mainState.openErrorPopup(listItemUri, "ListUserManagementPopup/addUser")
+    return
+  }
+  state.listItemUriMap[list.uri] = listItemUri
+
+  // リストユーザー数をインクリメント
+  if (list.listItemCount != null) {
+    list.listItemCount ++
+  }
+
+  syncCurrentListItems("add", list, listItemUri)
 
   // セッションキャッシュの更新
   mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
+}
+
+async function removeUser (list: TTList) {
+  if (props.user == null || state.loaderDisplayMap[list.uri]) {
+    return
+  }
+  state.loaderDisplayMap[list.uri] = true
+
+  // リファレンスリストは所属判定ができないため、削除実行時にオンデマンドで listItemUri を検索する
+  let listItemUri = state.listItemUriMap[list.uri]
+  if (listItemUri == null) {
+    const foundListItemUri = await findListItemUri(list.uri, props.user.did)
+    if (foundListItemUri == null) {
+      state.loaderDisplayMap[list.uri] = false
+      mainState.openMessagePopup({
+        title: $t("error"),
+        text: $t("listUserNotFoundInList"),
+      })
+      return
+    }
+    listItemUri = foundListItemUri
+  }
+
+  const result = await mainState.atp.deleteListUser(listItemUri)
+  state.loaderDisplayMap[list.uri] = false
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "ListUserManagementPopup/removeUser")
+    return
+  }
+  delete state.listItemUriMap[list.uri]
+
+  // リストユーザー数をデクリメント
+  if (list.listItemCount != null) {
+    list.listItemCount --
+  }
+
+  syncCurrentListItems("remove", list, listItemUri)
+
+  // セッションキャッシュの更新
+  mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
+}
+
+// 指定リストのメンバーをページングしながら検索し、対象ユーザーの listItemUri を特定する
+async function findListItemUri (listUri: string, userDid: string): Promise<undefined | string> {
+  const items: Array<TTListItem> = []
+  let cursor = undefined
+  for (let i = 0; i < CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS_ITERATION; i ++) {
+    const result = await mainState.atp.fetchListItems(
+      items,
+      listUri,
+      CONSTS.LIMIT_OF_FETCH_MY_LIST_USERS,
+      cursor
+    )
+    const found = items.find((item: TTListItem) => item.subject.did === userDid)
+    if (found != null) {
+      return found.uri
+    }
+    if (result instanceof Error || result == null) {
+      break
+    }
+    cursor = result
+  }
+  return undefined
+}
+
+// 現在表示中のリストユーザー一覧との同期
+function syncCurrentListItems (type: "add" | "remove", list: TTList, listItemUri: string) {
+  if (props.user == null || mainState.currentList?.uri !== list.uri) {
+    return
+  }
+  if (type === "remove") {
+    const currentListItemIndex = mainState.currentListItems.findIndex((listItem: TTListItem) => {
+      return listItem.subject.did === props.user?.did
+    })
+    if (currentListItemIndex === - 1) {
+      return
+    }
+    mainState.currentListItems.splice(currentListItemIndex, 1)
+  } else {
+    mainState.currentListItems.unshift({
+      uri: listItemUri,
+      subject: props.user,
+    })
+  }
 }
 </script>
 
@@ -123,6 +230,7 @@ async function clicked (list: TTList) {
   <Popup
     class="list-user-management-popup"
     :hasCloseButton="true"
+    :loaderDisplay="state.loaderDisplay"
     @close="close"
   >
     <template #header>
@@ -149,14 +257,38 @@ async function clicked (list: TTList) {
         :headerDisplay="false"
         :loaderDisplay="false"
         :isCompact="true"
-        @clicked="clicked as unknown"
+        @clicked="clicked as (...args: unknown[]) => void"
       >
-        <!-- リストチェックアイコン -->
+        <!-- リファレンスリスト: 所属判定不能のため追加／削除ボタンを常設 -->
         <div
-          class="list-card__check-icon"
-          :data-checked="state.userMap[list.uri]"
+          v-if="isReferenceList(list)"
+          class="list-card__reference-buttons"
         >
-          <SVGIcon :name="state.userMap[list.uri] ? 'check' : 'minus'" />
+          <button
+            type="button"
+            class="button--important"
+            @click.stop.prevent="removeUser(list)"
+          >
+            <SVGIcon name="remove" />
+            <span>{{ $t("delete") }}</span>
+          </button>
+          <button
+            type="button"
+            class="button"
+            @click.stop.prevent="addUser(list)"
+          >
+            <SVGIcon name="plus" />
+            <span>{{ $t("add") }}</span>
+          </button>
+        </div>
+
+        <!-- 通常のリスト: 所属フラグアイコン -->
+        <div
+          v-else
+          class="list-card__check-icon"
+          :data-checked="state.listItemUriMap[list.uri] != null"
+        >
+          <SVGIcon :name="state.listItemUriMap[list.uri] != null ? 'check' : 'minus'" />
         </div>
 
         <Loader v-if="state.loaderDisplayMap[list.uri] ?? false" />
@@ -180,10 +312,43 @@ async function clicked (list: TTList) {
     }
 
     .list-card {
-      cursor: pointer;
       flex-direction: row;
       align-items: flex-end;
       grid-gap: 1em;
+      &:not([data-purpose="referencelist"]) {
+        cursor: pointer;
+      }
+
+      // リファレンスリストは追加／削除ボタンを詳細情報の下に配置
+      &[data-purpose="referencelist"] {
+        flex-direction: column;
+        align-items: stretch;
+        margin-left: 2.5rem;
+
+        .list-card__detail {
+          order: 0;
+        }
+
+        .list-card__reference-buttons {
+          order: 1;
+        }
+      }
+    }
+
+    // リファレンスリストの追加／削除ボタン
+    .list-card__reference-buttons {
+      display: flex;
+      justify-content: flex-end;
+      grid-gap: 0.5em;
+
+      & > button {
+        display: flex;
+        align-items: center;
+        grid-gap: 0.375em;
+        cursor: pointer;
+        font-size: 0.875em;
+        white-space: nowrap;
+      }
     }
   }
 
@@ -198,4 +363,3 @@ async function clicked (list: TTList) {
   }
 }
 </style>
-

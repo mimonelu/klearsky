@@ -590,6 +590,8 @@ export default () => ({
   "listDescription": "Description",
   "listUserManagement": "Liste",
   "listUserManagementDetail": "Ajouter/supprimer des utilisateurs",
+  "listUserNotFoundInList": "Cet utilisateur ne figure pas dans cette liste.",
+  "listUserAlreadyInList": "Cet utilisateur figure déjà dans cette liste.",
   "listMuted": "cachée",
   "listMuting": "cacher par liste",
   "listBlocked": "Bloquée",
