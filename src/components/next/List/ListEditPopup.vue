@@ -204,11 +204,13 @@ async function makeAvatarBlobRef (): Promise<Error | undefined | BlobRef> {
   // サムネイルが指定されていない場合、かつ既存のサムネイルが存在する場合は再取得
   if (props.list?.avatar != null) {
     const uri = props.list.avatar
-    const blocks = uri.match(/\/([^/]+?)@/)
-    if (blocks == null || blocks[1] == null) {
+
+    // リストのアバターURLには「@拡張子」が付与されないことがあるため、
+    // 末尾のパスセグメントから「@」以降を除去して CID を抽出する
+    const cid = uri.split("/").pop()?.split("@")[0]
+    if (cid == null || cid === "") {
       return Error("makeAvatarBlobRefError")
     }
-    const cid = blocks[1]
     const blob = await mainState.atp.fetchBlob(cid)
     if (blob instanceof Error) {
       return blob
