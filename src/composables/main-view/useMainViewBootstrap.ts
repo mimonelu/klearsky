@@ -28,20 +28,22 @@ export function useMainViewBootstrap (options: Options) {
 
     window.scrollTo(0, 0)
 
-    const tasks: Array<Promise<unknown>> = []
-
     // プリファレンスの取得
     const cachedPreferences = loadCachedPreferences()
     if (cachedPreferences != null) {
       applyPreferences(cachedPreferences)
-    }
-    const preferencesPromise = fetchPreferencesFromNetwork()
-    if (cachedPreferences == null) {
-      tasks.push(preferencesPromise)
+
+      // キャッシュを最新化するため背景で更新
+      fetchPreferencesFromNetwork()
+        .catch((error) => {
+          $error("useMainViewBootstrap", "Failed to update preferences in background", error)
+        })
     } else {
-      preferencesPromise.catch((error) => {
-        $error("useMainViewBootstrap", "Failed to update preferences in background", error)
-      })
+      // カスタムフィードやリストの取得にプリファレンスが必要なため await している
+      await fetchPreferencesFromNetwork()
+        .catch((error) => {
+          $error("useMainViewBootstrap", "Failed to update preferences in background", error)
+        })
     }
 
     // ユーザープロフィールの取得
@@ -49,33 +51,18 @@ export function useMainViewBootstrap (options: Options) {
     if (cachedUserProfile != null) {
       applyUserProfile(cachedUserProfile)
     }
-    const userProfilePromise = fetchUserProfileFromNetwork()
-    if (cachedUserProfile == null) {
-      tasks.push(userProfilePromise)
-    } else {
-      userProfilePromise.catch((error) => {
+
+    // キャッシュの有無に関わらず背景で更新（キャッシュが無ければ初回反映も兼ねる）
+    fetchUserProfileFromNetwork()
+      .catch((error) => {
         $error("useMainViewBootstrap", "Failed to update user profile in background", error)
       })
-    }
-
-    await Promise.allSettled(tasks)
 
     // 通知設定の取得
     state.fetchNotificationPreferences()
       .catch((error) => {
         $error("useMainViewBootstrap", "Failed to fetch notification preferences", error)
       })
-
-    // ラベラーの取得
-    if (state.myLabeler!.labelers.length === 0) {
-      // `atproto-accept-labelers` 構築のために非同期としている
-      // TODO: これもキャッシュで制御したい
-      await state.myLabeler!.updateMyLabelers()
-        .then(() => {
-          state.myLabeler!.setAtprotoAcceptLabelers()
-          state.myWorker?.setSessionCache("myLabeler", state.myLabeler!.labelers)
-        })
-    }
 
     // カスタムフィードの取得
     if (state.myFeeds!.items.length === 0) {
@@ -184,6 +171,17 @@ export function useMainViewBootstrap (options: Options) {
 
     // サーバ情報の取得
     state.fetchCurrentServerInfo()
+
+    // ラベラーの取得
+    // `atproto-accept-labelers` 構築のために await している
+    if (state.myLabeler!.labelers.length === 0) {
+      // TODO: これもキャッシュで制御したい
+      await state.myLabeler!.updateMyLabelers()
+        .then(() => {
+          state.myLabeler!.setAtprotoAcceptLabelers()
+          state.myWorker?.setSessionCache("myLabeler", state.myLabeler!.labelers)
+        })
+    }
 
     changeSetting()
     if (router.currentRoute.value.name === "home") {
