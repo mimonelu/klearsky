@@ -55,10 +55,14 @@ const labelsOfPostTabButton: { [k: string]: string } = {
 
 const state = reactive<{
   handleHistoryPopupDisplay: boolean
-  profilePostPopverDisplay: boolean
+  profilePostPopoverDisplay: boolean
+  profileFollowingPopoverDisplay: boolean
+  profileFollowerPopoverDisplay: boolean
 }>({
   handleHistoryPopupDisplay: false,
-  profilePostPopverDisplay: false,
+  profilePostPopoverDisplay: false,
+  profileFollowingPopoverDisplay: false,
+  profileFollowerPopoverDisplay: false,
 })
 
 const loaderDisplay = computed((): boolean => {
@@ -252,16 +256,16 @@ function makeLabelWithSuffix (label: string, value?: number): string {
 
 // プロフィールポストポップオーバー
 
-const popover = ref(null)
+const postPopover = ref(null)
 
-async function openProfilePostPopver ($event: Event) {
+async function openProfilePostPopover ($event: Event) {
   Util.blurElement()
-  state.profilePostPopverDisplay = true
+  state.profilePostPopoverDisplay = true
   await nextTick()
-  if (popover.value == null) {
+  if (postPopover.value == null) {
     return
   }
-  (popover.value as typeof Popover).open(
+  (postPopover.value as typeof Popover).open(
     $event.target,
     {
       positionX: "left",
@@ -276,8 +280,68 @@ async function openProfilePostPopver ($event: Event) {
   )
 }
 
-function closeProfilePostPopver () {
-  state.profilePostPopverDisplay = false
+function closeProfilePostPopover () {
+  state.profilePostPopoverDisplay = false
+}
+
+// プロフィールフォローイングポップオーバー
+
+const followingPopover = ref(null)
+
+async function openProfileFollowingPopover ($event: Event) {
+  Util.blurElement()
+  state.profileFollowingPopoverDisplay = true
+  await nextTick()
+  if (followingPopover.value == null) {
+    return
+  }
+  (followingPopover.value as typeof Popover).open(
+    $event.target,
+    {
+      positionX: "right",
+      positionY: "bottom",
+      directionX: "left",
+      directionY: "down",
+      collideX: true,
+      collideY: true,
+      animationDirection: "down",
+      isChild: false,
+    }
+  )
+}
+
+function closeProfileFollowingPopover () {
+  state.profileFollowingPopoverDisplay = false
+}
+
+// プロフィールフォロワーポップオーバー
+
+const followerPopover = ref(null)
+
+async function openProfileFollowerPopover ($event: Event) {
+  Util.blurElement()
+  state.profileFollowerPopoverDisplay = true
+  await nextTick()
+  if (followerPopover.value == null) {
+    return
+  }
+  (followerPopover.value as typeof Popover).open(
+    $event.target,
+    {
+      positionX: "right",
+      positionY: "bottom",
+      directionX: "left",
+      directionY: "down",
+      collideX: true,
+      collideY: true,
+      animationDirection: "down",
+      isChild: false,
+    }
+  )
+}
+
+function closeProfileFollowerPopover () {
+  state.profileFollowerPopoverDisplay = false
 }
 
 // 固定ポスト
@@ -646,18 +710,18 @@ function removeThisPost () {
               : ''
           "
           to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
-          @click.stop.self="openProfilePostPopver"
+          @click.stop.self="openProfilePostPopover"
         >
           <SVGIcon :name="svgIconNameOfPostTabButton" />
           <span>{{ $t(labelOfPostTabButton) }}</span>
-          <SVGIcon :name="state.profilePostPopverDisplay ? 'cursorUp' : 'cursorDown'" />
+          <SVGIcon :name="state.profilePostPopoverDisplay ? 'cursorUp' : 'cursorDown'" />
 
           <!-- プロフィールポストポップオーバー -->
           <Popover
-            v-if="state.profilePostPopverDisplay"
+            v-if="state.profilePostPopoverDisplay"
             class="profile-post-popover"
-            ref="popover"
-            @close="closeProfilePostPopver"
+            ref="postPopover"
+            @close="closeProfilePostPopover"
           >
             <menu class="list-menu">
               <!-- ポストページリンク -->
@@ -666,7 +730,7 @@ function removeThisPost () {
                 class="list-menu__item"
                 :disabled="isPagePostFeeds"
                 :to="{ path: '/profile/feeds', query: { account: mainState.currentProfile?.did } }"
-                @click.stop="closeProfilePostPopver"
+                @click.stop="closeProfilePostPopover"
               >
                 <SVGIcon name="post" />
                 <span>{{ $t("posts") }}</span>
@@ -678,7 +742,7 @@ function removeThisPost () {
                 class="list-menu__item"
                 :disabled="isPagePostFeedsWithReplies"
                 :to="{ path: '/profile/feeds-with-replies', query: { account: mainState.currentProfile?.did } }"
-                @click.stop="closeProfilePostPopver"
+                @click.stop="closeProfilePostPopover"
               >
                 <SVGIcon name="posts" />
                 <span>{{ $t("postWithReplies") }}</span>
@@ -690,7 +754,7 @@ function removeThisPost () {
                 class="list-menu__item"
                 :disabled="isPagePostFeedsWithMedia"
                 :to="{ path: '/profile/feeds-with-media', query: { account: mainState.currentProfile?.did } }"
-                @click.stop="closeProfilePostPopver"
+                @click.stop="closeProfilePostPopover"
               >
                 <SVGIcon name="image" />
                 <span>{{ $t("postWithMedia") }}</span>
@@ -702,7 +766,7 @@ function removeThisPost () {
                 class="list-menu__item"
                 :disabled="isPagePostFeedsWithVideo"
                 :to="{ path: '/profile/feeds-with-video', query: { account: mainState.currentProfile?.did } }"
-                @click.stop="closeProfilePostPopver"
+                @click.stop="closeProfilePostPopover"
               >
                 <SVGIcon name="video" />
                 <span>{{ $t("postWithVideo") }}</span>
@@ -714,7 +778,7 @@ function removeThisPost () {
                 class="list-menu__item"
                 :disabled="isPageRepostList"
                 :to="{ path: '/profile/repost', query: { account: mainState.currentProfile?.did } }"
-                @click.stop="closeProfilePostPopver"
+                @click.stop="closeProfilePostPopover"
               >
                 <SVGIcon name="repost" />
                 <span>{{ $t("reposts") }}</span>
@@ -727,7 +791,7 @@ function removeThisPost () {
                 class="list-menu__item"
                 :disabled="isPageLikeList"
                 :to="{ path: '/profile/like', query: { account: mainState.currentProfile?.did } }"
-                @click.stop="closeProfilePostPopver"
+                @click.stop="closeProfilePostPopover"
               >
                 <SVGIcon name="like" />
                 <span>{{ $t("likes") }}</span>
@@ -783,24 +847,120 @@ function removeThisPost () {
         </RouterLink>
 
         <!-- フォローイングタブボタン -->
-        <RouterLink
-          class="tab__button"
-          :to="{ path: '/profile/following', query: { account: mainState.currentProfile?.did } }"
+        <button
+          type="button"
+          class="tab__button tab__button--post"
           :title="$t('followings')"
+          @click.stop.self="openProfileFollowingPopover"
         >
-          <SVGIcon name="person" />
+          <SVGIcon name="people" />
           <span>{{ $t("followings") }}</span>
-        </RouterLink>
+          <SVGIcon :name="state.profileFollowingPopoverDisplay ? 'cursorUp' : 'cursorDown'" />
+
+          <!-- プロフィールフォローイングポップオーバー -->
+          <Popover
+            v-if="state.profileFollowingPopoverDisplay"
+            class="profile-following-popover"
+            ref="followingPopover"
+            @close="closeProfileFollowingPopover"
+          >
+            <menu class="list-menu">
+              <!-- 新着順 -->
+              <Component
+                :is="mainState.currentFollowingsSort === 'latest' ? 'div' : 'RouterLink'"
+                class="list-menu__item"
+                :disabled="mainState.currentFollowingsSort === 'latest'"
+                :to="{
+                  path: '/profile/following',
+                  query: {
+                    account: mainState.currentProfile?.did,
+                    sort: 'latest',
+                  },
+                }"
+                @click.stop="closeProfileFollowingPopover"
+              >
+                <SVGIcon name="people" />
+                <span>{{ $t("followings") }}</span>
+              </Component>
+
+              <!-- 人気順 -->
+              <Component
+                :is="mainState.currentFollowingsSort === 'top' ? 'div' : 'RouterLink'"
+                class="list-menu__item"
+                :disabled="mainState.currentFollowingsSort === 'top'"
+                :to="{
+                  path: '/profile/following',
+                  query: {
+                    account: mainState.currentProfile?.did,
+                    sort: 'top',
+                  },
+                }"
+                @click.stop="closeProfileFollowingPopover"
+              >
+                <SVGIcon name="people" />
+                <span>{{ $t("topFollowings") }}</span>
+              </Component>
+            </menu>
+          </Popover>
+        </button>
 
         <!-- フォロワータブボタン -->
-        <RouterLink
-          class="tab__button"
-          :to="{ path: '/profile/follower', query: { account: mainState.currentProfile?.did } }"
+        <button
+          type="button"
+          class="tab__button tab__button--post"
           :title="$t('followers')"
+          @click.stop.self="openProfileFollowerPopover"
         >
-          <SVGIcon name="person" />
+          <SVGIcon name="people" />
           <span>{{ $t("followers") }}</span>
-        </RouterLink>
+          <SVGIcon :name="state.profileFollowerPopoverDisplay ? 'cursorUp' : 'cursorDown'" />
+
+          <!-- プロフィールフォロワーポップオーバー -->
+          <Popover
+            v-if="state.profileFollowerPopoverDisplay"
+            class="profile-follower-popover"
+            ref="followerPopover"
+            @close="closeProfileFollowerPopover"
+          >
+            <menu class="list-menu">
+              <!-- 新着順 -->
+              <Component
+                :is="mainState.currentFollowersSort === 'latest' ? 'div' : 'RouterLink'"
+                class="list-menu__item"
+                :disabled="mainState.currentFollowersSort === 'latest'"
+                :to="{
+                  path: '/profile/follower',
+                  query: {
+                    account: mainState.currentProfile?.did,
+                    sort: 'latest',
+                  },
+                }"
+                @click.stop="closeProfileFollowerPopover"
+              >
+                <SVGIcon name="people" />
+                <span>{{ $t("followers") }}</span>
+              </Component>
+
+              <!-- 人気順 -->
+              <Component
+                :is="mainState.currentFollowersSort === 'top' ? 'div' : 'RouterLink'"
+                class="list-menu__item"
+                :disabled="mainState.currentFollowersSort === 'top'"
+                :to="{
+                  path: '/profile/follower',
+                  query: {
+                    account: mainState.currentProfile?.did,
+                    sort: 'top',
+                  },
+                }"
+                @click.stop="closeProfileFollowerPopover"
+              >
+                <SVGIcon name="people" />
+                <span>{{ $t("topFollowers") }}</span>
+              </Component>
+            </menu>
+          </Popover>
+        </button>
       </div>
     </div>
 
@@ -1226,7 +1386,9 @@ function removeThisPost () {
   }
 }
 
-.profile-post-popover {
+.profile-post-popover,
+.profile-following-popover,
+.profile-follower-popover {
   &:deep() {
     & > .popover__content {
       padding: 0.5rem;

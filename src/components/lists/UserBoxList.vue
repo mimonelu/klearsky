@@ -25,11 +25,11 @@ async function fetchUsers (direction: "new" | "old") {
   try {
     switch (props.type) {
       case "follower": {
-        await mainState.fetchFollowers(direction)
+        await mainState.fetchFollowers(direction, mainState.currentFollowersSort)
         break
       }
       case "following": {
-        await mainState.fetchFollowings(direction)
+        await mainState.fetchFollowings(direction, mainState.currentFollowingsSort)
         break
       }
       case "suggestedFollows": {

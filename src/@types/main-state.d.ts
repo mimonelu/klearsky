@@ -138,8 +138,10 @@ interface MainState {
   currentAuthorLatestActivityDate?: string
   currentFollowers: Array<TTUser>
   currentFollowersCursor?: string
+  currentFollowersSort?: "latest" | "top"
   currentFollowings: Array<TTUser>
   currentFollowingsCursor?: string
+  currentFollowingsSort?: "latest" | "top"
   currentSuggestedFollows: Array<TTUser>
   // -------------------------------- resetProfileState() 対象エリア
   resetProfileState: () => void
@@ -153,8 +155,8 @@ interface MainState {
   fetchAuthorLikes: (direction: TTDirection) => Promise<void>
   fetchAuthorLists: (direction: "new" | "old") => Promise<void>
   fetchAuthorStarterPacks: (direction: "new" | "old") => Promise<void>
-  fetchFollowers: (direction: "new" | "old") => Promise<void>
-  fetchFollowings: (direction: "new" | "old") => Promise<void>
+  fetchFollowers: (direction: "new" | "old", sort?: "latest" | "top") => Promise<void>
+  fetchFollowings: (direction: "new" | "old", sort?: "latest" | "top") => Promise<void>
   fetchSuggestedFollows: () => Promise<void>
   fetchSuggestions: (direction: "new" | "old") => Promise<void>
 

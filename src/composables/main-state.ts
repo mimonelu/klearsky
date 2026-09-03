@@ -186,8 +186,10 @@ export const state: MainState = reactive<MainState>({
   currentAuthorLatestActivityDate: undefined,
   currentFollowers: [],
   currentFollowersCursor: undefined,
+  currentFollowersSort: undefined,
   currentFollowings: [],
   currentFollowingsCursor: undefined,
+  currentFollowingsSort: undefined,
   currentSuggestedFollows: [],
   // -------------------------------- resetProfileState() 対象エリア
 
@@ -1499,8 +1501,10 @@ function resetProfileState () {
   state.currentAuthorStarterPacksCursor = undefined
   resetArray(state, "currentFollowers")
   state.currentFollowersCursor = undefined
+  state.currentFollowersSort = undefined
   resetArray(state, "currentFollowings")
   state.currentFollowingsCursor = undefined
+  state.currentFollowingsSort = undefined
   resetArray(state, "currentSuggestedFollows")
   state.currentAuthorPostOfPinnedPost = undefined
   state.currentAuthorLatestActivityDate = undefined
@@ -1549,7 +1553,9 @@ async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
   state.currentAuthorLists.splice(0)
   state.currentAuthorFeedGenerators.splice(0)
   state.currentFollowers.splice(0)
+  state.currentFollowersSort = undefined
   state.currentFollowings.splice(0)
+  state.currentFollowingsSort = undefined
   state.currentSuggestedFollows.splice(0)
   state.currentAuthorPostOfPinnedPost = undefined
   state.currentAuthorLatestActivityDate = undefined
@@ -1823,7 +1829,7 @@ async function fetchAuthorStarterPacks (direction: "new" | "old") {
   state.currentAuthorStarterPacksCursor = cursor
 }
 
-async function fetchFollowers (direction: "new" | "old") {
+async function fetchFollowers (direction: "new" | "old", sort?: "latest" | "top") {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) {
     return
@@ -1839,10 +1845,17 @@ async function fetchFollowers (direction: "new" | "old") {
     return
   }
 
+  // ソート順が変わっても混在しないよう新規取得時にリセット
+  if (direction === "new") {
+    state.currentFollowers.splice(0)
+    state.currentFollowersCursor = undefined
+  }
+
   const cursor = await state.atp.fetchFollowers(
     state.currentFollowers,
     account,
     CONSTS.LIMIT_OF_FETCH_FOLLOWS,
+    sort,
     direction === "new" ? undefined : state.currentFollowersCursor
   )
   if (cursor instanceof Error) {
@@ -1851,9 +1864,10 @@ async function fetchFollowers (direction: "new" | "old") {
     return
   }
   state.currentFollowersCursor = cursor
+  state.currentFollowersSort = sort
 }
 
-async function fetchFollowings (direction: "new" | "old") {
+async function fetchFollowings (direction: "new" | "old", sort?: "latest" | "top") {
   const account = state.currentQuery.account as LocationQueryValue
   if (!account) {
     return
@@ -1869,10 +1883,17 @@ async function fetchFollowings (direction: "new" | "old") {
     return
   }
 
+  // ソート順が変わっても混在しないよう新規取得時にリセット
+  if (direction === "new") {
+    state.currentFollowings.splice(0)
+    state.currentFollowingsCursor = undefined
+  }
+
   const cursor = await state.atp.fetchFollowings(
     state.currentFollowings,
     account,
     CONSTS.LIMIT_OF_FETCH_FOLLOWS,
+    sort,
     direction === "new" ? undefined : state.currentFollowingsCursor
   )
   if (cursor instanceof Error) {
@@ -1881,6 +1902,7 @@ async function fetchFollowings (direction: "new" | "old") {
     return
   }
   state.currentFollowingsCursor = cursor
+  state.currentFollowingsSort = sort
 }
 
 async function fetchSuggestedFollows () {

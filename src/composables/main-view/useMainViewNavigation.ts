@@ -13,9 +13,17 @@ type TranslationFn = (key: string) => string
 
 export function useMainViewNavigation (router: Router, $t: TranslationFn) {
   function setupRouteGuards () {
-    const removeBeforeEach = router.beforeEach(async (to: RouteLocationNormalized) => {
+    const removeBeforeEach = router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
       if (to.name === "home") {
         return
+      }
+
+      // フォロー中・フォロワー一覧ページから離れる際にソート種別をリセット
+      if (from.name === "profile-following" && to.name !== "profile-following") {
+        state.currentFollowingsSort = undefined
+      }
+      if (from.name === "profile-follower" && to.name !== "profile-follower") {
+        state.currentFollowersSort = undefined
       }
 
       state.currentPath = to.path
@@ -316,8 +324,13 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
           if (response instanceof Error) {
             break
           }
-          if (!state.inSameProfilePage || state.currentFollowings.length === 0) {
-            await state.fetchFollowings("new")
+          const followingsSort = router.currentRoute.value.query.sort as undefined | "latest" | "top"
+          if (
+            !state.inSameProfilePage ||
+            state.currentFollowings.length === 0 ||
+            state.currentFollowingsSort !== followingsSort
+          ) {
+            await state.fetchFollowings("new", followingsSort)
           }
           break
         }
@@ -326,8 +339,13 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
           if (response instanceof Error) {
             break
           }
-          if (!state.inSameProfilePage || state.currentFollowers.length === 0) {
-            await state.fetchFollowers("new")
+          const followersSort = router.currentRoute.value.query.sort as undefined | "latest" | "top"
+          if (
+            !state.inSameProfilePage ||
+            state.currentFollowers.length === 0 ||
+            state.currentFollowersSort !== followersSort
+          ) {
+            await state.fetchFollowers("new", followersSort)
           }
           break
         }

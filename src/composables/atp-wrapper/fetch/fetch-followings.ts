@@ -5,6 +5,7 @@ export default async function (
   users: Array<TTUser>,
   handle: string,
   limit?: number,
+  sort?: "latest" | "top",
   cursor?: string
 ): Promise<Error | undefined | string> {
   if (this.agent == null) {
@@ -16,6 +17,9 @@ export default async function (
   }
   if (cursor != null) {
     query.cursor = cursor
+  }
+  if (sort != null) {
+    query.sort = sort
   }
   const response: Error | AppBskyGraphGetFollows.Response =
     await this.agent.getFollows(query)

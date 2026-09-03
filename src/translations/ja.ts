@@ -208,6 +208,8 @@ export default () => ({
   "followings": "フォロー中",
   "followingCount": "フォロー",
   "followersCount": "フォロワー",
+  "topFollowings": "人気のフォロー中",
+  "topFollowers": "人気のフォロワー",
   "muteOn": "ミュートする",
   "muteOff": "ミュートを解除する",
   "muting": "ミュート中",

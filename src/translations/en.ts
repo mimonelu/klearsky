@@ -208,6 +208,8 @@ export default () => ({
   "followings": "Followings",
   "followingCount": "Following",
   "followersCount": "Followers",
+  "topFollowings": "Popular Following",
+  "topFollowers": "Popular Followers",
   "muteOn": "Mute",
   "muteOff": "Unmute",
   "muting": "Muting",

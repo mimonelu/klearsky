@@ -208,6 +208,8 @@ export default () => ({
   "followings": "Folgt",
   "followingCount": "Folgt",
   "followersCount": "Follower",
+  "topFollowings": "Beliebt Gefolgt",
+  "topFollowers": "Beliebte Follower",
   "muteOn": "Stummschalten",
   "muteOff": "Stummschaltung aufheben",
   "muting": "Stummgeschaltet",

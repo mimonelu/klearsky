@@ -139,9 +139,9 @@ interface TIAtpWrapper {
   fetchFirstPost
     (handle: string): Promise<Error | undefined | TTPost>
   fetchFollowers
-    (users: Array<TTUser> | Array<TTUser>, handle: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
+    (users: Array<TTUser> | Array<TTUser>, handle: string, limit?: number, sort?: "latest" | "top", cursor?: string): Promise<Error | undefined | string>
   fetchFollowings
-    (users: Array<TTUser> | Array<TTUser>, handle: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
+    (users: Array<TTUser> | Array<TTUser>, handle: string, limit?: number, sort?: "latest" | "top", cursor?: string): Promise<Error | undefined | string>
   fetchInviteCodes
     (): Promise<Error | TTInviteCode[]>
   fetchLabelers
