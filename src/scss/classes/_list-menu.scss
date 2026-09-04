@@ -77,7 +77,8 @@
     & > .svg-icon--share {
       --icon-color: var(--share-color);
     }
-    & > .svg-icon--like {
+    & > .svg-icon--like,
+    & > .svg-icon--star {
       --icon-color: var(--like-color);
     }
     & > .svg-icon--list {

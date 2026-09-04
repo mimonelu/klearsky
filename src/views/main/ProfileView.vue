@@ -73,6 +73,24 @@ const svgIconNameOfPostTabButton = computed((): string => {
   return svgIconNamesOfPostTabButton[(router.currentRoute.value.name ?? "") as string] ?? "post"
 })
 
+const svgIconNamesOfSortTabButton: { [k: string]: string } = {
+  latest: "fire",
+  top: "star",
+}
+
+const labelsOfSortTabButton: { [k: string]: string } = {
+  latest: "sortLatest",
+  top: "sortTop",
+}
+
+function svgIconNameOfSortTabButton (sort: undefined | "latest" | "top"): string {
+  return svgIconNamesOfSortTabButton[sort ?? ""] ?? "people"
+}
+
+function labelOfSortTabButton (sort: undefined | "latest" | "top", fallbackKey: string): string {
+  return labelsOfSortTabButton[sort ?? ""] ?? fallbackKey
+}
+
 const labelOfPostTabButton = computed((): string => {
   return labelsOfPostTabButton[(router.currentRoute.value.name ?? "") as string] ?? "post"
 })
@@ -99,6 +117,14 @@ const isPageRepostList = computed((): boolean => {
 
 const isPageLikeList = computed((): boolean => {
   return router.currentRoute.value.name === "profile-like"
+})
+
+const isPageFollowingList = computed((): boolean => {
+  return router.currentRoute.value.name === "profile-following"
+})
+
+const isPageFollowerList = computed((): boolean => {
+  return router.currentRoute.value.name === "profile-follower"
 })
 
 const isLabeler = computed((): boolean => {
@@ -842,7 +868,7 @@ function removeThisPost () {
           :to="{ path: '/profile/suggested-follows', query: { account: mainState.currentProfile?.did } }"
           :title="$t('suggestedFollows')"
         >
-          <SVGIcon name="person" />
+          <SVGIcon name="star" />
           <span>{{ $t("suggestedFollows") }}</span>
         </RouterLink>
 
@@ -850,11 +876,11 @@ function removeThisPost () {
         <button
           type="button"
           class="tab__button tab__button--post"
-          :title="$t('followings')"
+          :class="isPageFollowingList ? 'router-link-active' : ''"
           @click.stop.self="openProfileFollowingPopover"
         >
-          <SVGIcon name="people" />
-          <span>{{ $t("followings") }}</span>
+          <SVGIcon :name="svgIconNameOfSortTabButton(mainState.currentFollowingsSort)" />
+          <span>{{ $t(labelOfSortTabButton(mainState.currentFollowingsSort, 'followings')) }}</span>
           <SVGIcon :name="state.profileFollowingPopoverDisplay ? 'cursorUp' : 'cursorDown'" />
 
           <!-- プロフィールフォローイングポップオーバー -->
@@ -879,8 +905,8 @@ function removeThisPost () {
                 }"
                 @click.stop="closeProfileFollowingPopover"
               >
-                <SVGIcon name="people" />
-                <span>{{ $t("followings") }}</span>
+                <SVGIcon name="fire" />
+                <span>{{ $t("sortLatest") }}</span>
               </Component>
 
               <!-- 人気順 -->
@@ -897,8 +923,8 @@ function removeThisPost () {
                 }"
                 @click.stop="closeProfileFollowingPopover"
               >
-                <SVGIcon name="people" />
-                <span>{{ $t("topFollowings") }}</span>
+                <SVGIcon name="star" />
+                <span>{{ $t("sortTop") }}</span>
               </Component>
             </menu>
           </Popover>
@@ -908,11 +934,11 @@ function removeThisPost () {
         <button
           type="button"
           class="tab__button tab__button--post"
-          :title="$t('followers')"
+          :class="isPageFollowerList ? 'router-link-active' : ''"
           @click.stop.self="openProfileFollowerPopover"
         >
-          <SVGIcon name="people" />
-          <span>{{ $t("followers") }}</span>
+          <SVGIcon :name="svgIconNameOfSortTabButton(mainState.currentFollowersSort)" />
+          <span>{{ $t(labelOfSortTabButton(mainState.currentFollowersSort, 'followers')) }}</span>
           <SVGIcon :name="state.profileFollowerPopoverDisplay ? 'cursorUp' : 'cursorDown'" />
 
           <!-- プロフィールフォロワーポップオーバー -->
@@ -937,8 +963,8 @@ function removeThisPost () {
                 }"
                 @click.stop="closeProfileFollowerPopover"
               >
-                <SVGIcon name="people" />
-                <span>{{ $t("followers") }}</span>
+                <SVGIcon name="fire" />
+                <span>{{ $t("sortLatest") }}</span>
               </Component>
 
               <!-- 人気順 -->
@@ -955,8 +981,8 @@ function removeThisPost () {
                 }"
                 @click.stop="closeProfileFollowerPopover"
               >
-                <SVGIcon name="people" />
-                <span>{{ $t("topFollowers") }}</span>
+                <SVGIcon name="star" />
+                <span>{{ $t("sortTop") }}</span>
               </Component>
             </menu>
           </Popover>
@@ -1374,6 +1400,8 @@ function removeThisPost () {
   // SPレイアウトではタブボタンを小さめに
   @include media-sp-layout() {
     .tab__button {
+      grid-gap: 0.375rem;
+
       & > .svg-icon,
       & > span {
         font-size: 0.875rem;
