@@ -6,6 +6,8 @@ type TTPost = {
     translatedText?: string
     unmask?: boolean
     quotePostDisplay?: boolean
+    opThreadPostIndex?: number
+    opThreadPostCount?: number
   }
 
   author: TTUser

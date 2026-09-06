@@ -1200,7 +1200,18 @@ function toggleQuotePostDisplay () {
             :data-is-text-only-emoji="isTextOnlyEmoji"
             @onActivateHashTag="(tag) => onActivateHashTag(tag as string)"
             @translate="onForceTranslate"
-          />
+          >
+            <!-- ポストスレッドインデックス -->
+            <template
+              v-if="
+                post.__custom?.opThreadPostIndex != null &&
+                post.__custom?.opThreadPostCount != null
+              "
+              #after
+            >
+              &nbsp;<span class="post-thread-index">{{ post.__custom.opThreadPostIndex }}/{{ post.__custom.opThreadPostCount }}</span>
+            </template>
+          </HtmlText>
           <div
             v-else
             class="text--slim"
@@ -2073,6 +2084,13 @@ function toggleQuotePostDisplay () {
     font-size: 2.5em;
     line-height: 1;
   }
+}
+
+.post-thread-index {
+  color: rgb(var(--fg-color), 0.5);
+  font-size: min(0.875em, 0.875rem);
+  padding: 0.125em 0.25em;
+  line-height: var(--line-height-low);
 }
 
 .omit-images {

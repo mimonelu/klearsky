@@ -7,7 +7,11 @@ export default function (responses: Array<any>) {
       response?.reply != null
     ) {
       if (response.post != null) {
-        sanitizePost(response.post)
+        sanitizePost(
+          response.post,
+          response.opThreadPostIndex,
+          response.opThreadPostCount
+        )
       }
       if (response.reply?.root != null) {
         sanitizePost(response.reply.root)
@@ -33,10 +37,18 @@ export default function (responses: Array<any>) {
   }
 }
 
-function sanitizePost (post: any) {
+function sanitizePost (post: any, opThreadPostIndex?: number, opThreadPostCount?: number) {
   // `post.__custom` の追加
   if (post.__custom == null) {
     post.__custom = {}
+  }
+
+  // ポストスレッドのインデックスとカウント
+  if (opThreadPostIndex != null) {
+    post.__custom.opThreadPostIndex = opThreadPostIndex
+  }
+  if (opThreadPostCount != null) {
+    post.__custom.opThreadPostCount = opThreadPostCount
   }
 
   // 引用RP - `embeds[0]` -> `embed`

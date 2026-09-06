@@ -192,6 +192,8 @@ function validateUrl (urlObject: URL, text: string): boolean {
       <template v-else>{{ segment.text }}</template>
     </template>
 
+    <slot name="after" />
+
     <!-- 翻訳リンク -->
     <template v-if="hasTranslateLink">&nbsp;<a
         v-if="hasTranslateLink"
