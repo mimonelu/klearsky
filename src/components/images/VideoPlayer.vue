@@ -24,7 +24,11 @@ onMounted(async () => {
   }
 
   // SEE: https://www.npmjs.com/package/hls.js
-  hls = new HLS()
+  // 初期帯域推定値を上げて、再生開始時から高画質を選択させる
+  // デフォルト (500kbps) では最初のセグメントが最低画質で読み込まれてしまう
+  hls = new HLS({
+    abrEwmaDefaultEstimate: 2_000_000,
+  })
 
   // playlist の存在フラグ
   let isPlaylistExisting: undefined | boolean
