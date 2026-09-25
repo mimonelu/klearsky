@@ -1086,6 +1086,9 @@ function saveSettings () {
   if (state.settings[did].videoPreload == null) {
     state.settings[did].videoPreload = "metadata"
   }
+  if (state.settings[did].videoQuality == null) {
+    state.settings[did].videoQuality = "high"
+  }
   if (state.settings[did].linkcardLayout == null) {
     state.settings[did].linkcardLayout = "vertical"
   }

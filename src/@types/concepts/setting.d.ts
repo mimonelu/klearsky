@@ -42,6 +42,7 @@ type TTSetting = {
   uiLanguage?: string
   userSearchKeywordHistory?: Array<string>
   videoPreload?: "none" | "metadata"
+  videoQuality?: "high" | "auto"
   wordMute?: Array<TIWordMute>
   [k: string]: any
 }

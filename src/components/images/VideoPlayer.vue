@@ -13,6 +13,7 @@ const props = defineProps<{
   cid?: string
   poster?: string
   preload?: string
+  quality?: string
 }>()
 
 const video = ref()
@@ -26,14 +27,16 @@ onMounted(async () => {
   // SEE: https://www.npmjs.com/package/hls.js
   hls = new HLS()
 
-  // 再生開始時は最高画質を選択させる
+  // 画質優先の場合、再生開始時は最高画質を選択させる
   // デフォルトでは初期帯域推定値に基づくため、最初のセグメントが低画質で読み込まれてしまう
   // 以降は ABR により回線状況に応じて画質が切り替わる
-  hls.on(HLS.Events.MANIFEST_PARSED, (_, data) => {
-    if (hls != null) {
-      hls.startLevel = data.levels.length - 1
-    }
-  })
+  if (props.quality !== "auto") {
+    hls.on(HLS.Events.MANIFEST_PARSED, (_, data) => {
+      if (hls != null) {
+        hls.startLevel = data.levels.length - 1
+      }
+    })
+  }
 
   // playlist の存在フラグ
   let isPlaylistExisting: undefined | boolean

@@ -1298,6 +1298,7 @@ function toggleQuotePostDisplay () {
                     :cid="embedVideo.cid ?? embedVideo.video?.ref?.toString()"
                     :poster="embedVideo.thumbnail"
                     :preload="mainState.currentSetting.videoPreload"
+                    :quality="mainState.currentSetting.videoQuality"
                     :style="{ 'aspect-ratio': Util.getAspectRatio(embedVideo?.aspectRatio, mainState.currentSetting.imageMaxHeightRatio) }"
                     @updateVideoType="(videoType) => updateVideoType(videoType as string)"
                     @click.stop

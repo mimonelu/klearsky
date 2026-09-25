@@ -185,6 +185,18 @@ const mainState = inject("state") as MainState
               layout="horizontal"
               @update="$emit('saveSetting')"
             />
+
+            <!-- メディア - 動画の画質 -->
+            <div class="settings-popup__form__header">
+              <span>{{ $t("videoQuality") }}</span>
+            </div>
+            <Radios
+              :state="mainState.currentSetting"
+              model="videoQuality"
+              :options="SETTINGS.VIDEO_QUALITY"
+              layout="horizontal"
+              @update="$emit('saveSetting')"
+            />
           </div>
         </div>
 
