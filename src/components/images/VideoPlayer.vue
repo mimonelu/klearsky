@@ -24,10 +24,15 @@ onMounted(async () => {
   }
 
   // SEE: https://www.npmjs.com/package/hls.js
-  // 初期帯域推定値を上げて、再生開始時から高画質を選択させる
-  // デフォルト (500kbps) では最初のセグメントが最低画質で読み込まれてしまう
-  hls = new HLS({
-    abrEwmaDefaultEstimate: 2_000_000,
+  hls = new HLS()
+
+  // 再生開始時は最高画質を選択させる
+  // デフォルトでは初期帯域推定値に基づくため、最初のセグメントが低画質で読み込まれてしまう
+  // 以降は ABR により回線状況に応じて画質が切り替わる
+  hls.on(HLS.Events.MANIFEST_PARSED, (_, data) => {
+    if (hls != null) {
+      hls.startLevel = data.levels.length - 1
+    }
   })
 
   // playlist の存在フラグ
