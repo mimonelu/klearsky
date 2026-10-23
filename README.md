@@ -96,7 +96,7 @@ src/
 └── scss/              # Global styles and variables
 ```
 
-For detailed architectural information, see [CLAUDE.md](./CLAUDE.md).
+For detailed architectural information, see [AGENTS.md](./AGENTS.md).
 
 ## 🌐 Deployment
 
