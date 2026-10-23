@@ -19,6 +19,7 @@ import mergeFeeds from "@/composables/util/merge-feeds"
 import officialUrl from "@/composables/util/official-url"
 import parseOgp from "@/composables/util/parse-ogp"
 import safeJson from "@/composables/util/safe-json"
+import safeExternalUrl from "@/composables/util/safe-external-url"
 import safeUrl from "@/composables/util/safe-url"
 import setArray from "@/composables/util/set-array"
 import sortFeeds from "@/composables/util/sort-feeds"
@@ -59,6 +60,7 @@ export default {
   officialUrl,
   parseOgp,
   ...safeJson,
+  safeExternalUrl,
   safeUrl,
   setArray,
   sortFeeds,

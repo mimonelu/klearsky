@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 
 const props = defineProps<{
   external: TTExternal
@@ -14,6 +15,13 @@ const props = defineProps<{
 }>()
 
 const mainState = inject("state") as MainState
+
+const { openInvalidUrlPopup, onClickExternalLink } = useSafeExternalUrl()
+
+// 許可されないスキーム（`javascript:` 等）の場合は `undefined` となり、リンクにしない
+const safeHref = computed((): undefined | string => {
+  return Util.safeExternalUrl(props.external.uri)
+})
 
 const embeddedType = computed((): string => {
   if (props.noEmbedded) return ""
@@ -43,6 +51,11 @@ function getEmbeddedContentId () {
   const url: undefined | URL = Util.safeUrl(props.external.uri)
   if (url == null) {
     isInvalidUrl = true
+    return
+  }
+
+  // 許可されないスキームは埋込型にせず、通常のリンクカードとして情報のみ表示する
+  if (Util.safeExternalUrl(props.external.uri) == null) {
     return
   }
 
@@ -196,7 +209,12 @@ function openSourceUrl () {
   if (uri == null) {
     return
   }
-  window.open(uri, "_blank", "noopener,noreferrer")
+  const safeUri = Util.safeExternalUrl(uri)
+  if (safeUri == null) {
+    openInvalidUrlPopup(uri)
+    return
+  }
+  window.open(safeUri, "_blank", "noopener,noreferrer")
 }
 </script>
 
@@ -220,10 +238,10 @@ function openSourceUrl () {
       v-else-if="embeddedType === ''"
       :is="noLink ? 'div' : 'a'"
       class="external--default"
-      :href="external.uri"
+      :href="safeHref"
       rel="noreferrer"
       target="_blank"
-      @click.stop
+      @click.stop="!noLink && onClickExternalLink($event, external.uri)"
     >
       <div class="external__main">
         <LazyImage
@@ -246,6 +264,14 @@ function openSourceUrl () {
           <div class="external__meta__uri">
             <SVGIcon name="link" />
             <span>{{ external.uri }}</span>
+          </div>
+
+          <!-- 通常のリンクカード - 許可されないスキーム -->
+          <div
+            v-if="safeHref == null"
+            class="external__meta__caution textlabel__text--alert"
+          >
+            <SVGIcon name="alert" />{{ $t("invalidUrlError") }}
           </div>
         </div>
       </div>
@@ -455,10 +481,10 @@ function openSourceUrl () {
       <!-- 埋込型リンクカードの情報 -->
       <a
         class="external__meta"
-        :href="external.uri"
+        :href="safeHref"
         rel="noreferrer"
         target="_blank"
-        @click.stop
+        @click.stop="onClickExternalLink($event, external.uri)"
       >
         <div class="external__meta__title">
           <span>{{ external.title || "" }}</span>
@@ -597,6 +623,12 @@ function openSourceUrl () {
       & > span {
         line-height: var(--line-height-low);
       }
+    }
+
+    &__caution {
+      font-size: 0.75em;
+      font-weight: bold;
+      margin-top: 0.5em;
     }
   }
   .external__main {

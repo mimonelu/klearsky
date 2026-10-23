@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
+import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -7,12 +9,20 @@ const props = defineProps<{
   actorStatus?: TIActorStatus
 }>()
 
+const { openInvalidUrlPopup } = useSafeExternalUrl()
+
 async function onActivate () {
   emit("close")
-  if (!props.actorStatus?.embed?.external?.uri) {
+  const uri = props.actorStatus?.embed?.external?.uri
+  if (!uri) {
     return
   }
-  window.open(props.actorStatus.embed.external.uri, "_blank")
+  const safeUri = Util.safeExternalUrl(uri)
+  if (safeUri == null) {
+    openInvalidUrlPopup(uri)
+    return
+  }
+  window.open(safeUri, "_blank")
 }
 </script>
 

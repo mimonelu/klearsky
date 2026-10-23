@@ -3,6 +3,7 @@ import { inject } from "vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -11,6 +12,8 @@ const props = defineProps<{
 }>()
 
 const mainState = inject("state") as MainState
+
+const { onClickExternalLink } = useSafeExternalUrl()
 
 const rootLog = props.log != null
   ? Array.isArray(props.log)
@@ -114,9 +117,10 @@ function getLabelerEndpoint (item: any): undefined | string {
               <a
                  v-if="endpoints[itemIndex] != null"
                 class="endpoint__atproto"
-                :href="endpoints[itemIndex]"
+                :href="Util.safeExternalUrl(endpoints[itemIndex])"
                 rel="noreferrer"
                 target="_blank"
+                @click="onClickExternalLink($event, endpoints[itemIndex])"
               >
                 <SVGIcon name="database" />
                 <span translate="no">{{ endpoints[itemIndex] }}</span>
@@ -129,9 +133,10 @@ function getLabelerEndpoint (item: any): undefined | string {
               <a
                 v-if="labelerEndpoints[itemIndex] != null"
                 class="endpoint__labeler"
-                :href="labelerEndpoints[itemIndex]"
+                :href="Util.safeExternalUrl(labelerEndpoints[itemIndex])"
                 rel="noreferrer"
                 target="_blank"
+                @click="onClickExternalLink($event, labelerEndpoints[itemIndex])"
               >
                 <SVGIcon name="labeler" />
                 <span translate="no">{{ labelerEndpoints[itemIndex] }}</span>

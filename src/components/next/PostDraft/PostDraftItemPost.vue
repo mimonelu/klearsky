@@ -5,6 +5,8 @@ import { loadMedia } from "@/components/next/PostDraft/post-draft-media-store"
 import HtmlText from "@/components/labels/HtmlText.vue"
 import LabelTags from "@/components/buttons/LabelTags.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
+import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 
 const emit = defineEmits<{
   (event: "close"): void
@@ -13,6 +15,8 @@ const emit = defineEmits<{
 const props = defineProps<{
   draftPost: AppBskyDraftDefs.DraftPost
 }>()
+
+const { onClickExternalLink } = useSafeExternalUrl()
 
 const imageUrls = ref<Array<string>>([])
 const videoUrls = ref<Array<string>>([])
@@ -101,9 +105,10 @@ function close () {
     >
       <a
         class="tag--link"
-        :href="draftPost.embedExternals[0].uri"
+        :href="Util.safeExternalUrl(draftPost.embedExternals[0].uri)"
         rel="noreferrer"
         target="_blank"
+        @click="onClickExternalLink($event, draftPost.embedExternals[0].uri)"
       >
         <SVGIcon name="link" />
         <span>{{ draftPost.embedExternals[0].uri }}</span>

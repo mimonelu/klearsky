@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import type { Facet } from "@atproto/api"
 import { RichText } from "@atproto/api"
 import Util from "@/composables/util"
+import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 
 type RichParam = {
   type: "externalLink" | "internalLink" | "mention" | "tag" | "text"
@@ -23,6 +24,8 @@ const props = defineProps<{
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const { openInvalidUrlPopup } = useSafeExternalUrl()
 
 const richTextSegments = computed(() => {
   if (props.richText != null) {
@@ -100,16 +103,24 @@ function transformInternalLink (uri: string): undefined | string {
 async function openWindowIfCan (segment: RichParam) {
   const urlObject: undefined | URL = Util.safeUrl(segment.param ?? "")
   if (urlObject == null) return
+
+  // 許可されないスキーム（`javascript:` 等）は確認ポップアップを経ずに拒否し、URL のみ表示する
+  const safeUrl = Util.safeExternalUrl(segment.param)
+  if (safeUrl == null) {
+    openInvalidUrlPopup(segment.param)
+    return
+  }
+
   const valid = validateUrl(urlObject, segment.text)
   if (valid || await mainState.openConfirmationPopup({
     title: $t("confirmUrl"),
     text: $t("confirmUrlNotification"),
     detail: segment.param,
   })) {
-    if (segment.param.startsWith("lightning:"))
-      location.href = segment.param
+    if (urlObject.protocol === "lightning:")
+      location.href = safeUrl
     else
-      window.open(segment.param, "_blank")
+      window.open(safeUrl, "_blank")
   }
 }
 

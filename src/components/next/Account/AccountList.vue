@@ -4,6 +4,7 @@ import { format } from "date-fns/format"
 import AccountButton from "@/components/next/Account/AccountButton.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 
 defineProps<{
   isAtLoginPopup: boolean
@@ -12,6 +13,8 @@ defineProps<{
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const { onClickExternalLink } = useSafeExternalUrl()
 
 const state = reactive<{
   sessionCount: ComputedRef<number>
@@ -166,9 +169,10 @@ function onClickFileBox (event: Event) {
         <a
           v-if="mainState.currentServerInfo?.links?.privacyPolicy"
           class="textlink--icon"
-          :href="mainState.currentServerInfo?.links?.privacyPolicy"
+          :href="Util.safeExternalUrl(mainState.currentServerInfo?.links?.privacyPolicy)"
           rel="noreferrer"
           target="_blank"
+          @click="onClickExternalLink($event, mainState.currentServerInfo?.links?.privacyPolicy)"
         >
           <SVGIcon name="cursorRight" />
           <span>{{ $t("privacyPolicy") }}</span>
@@ -178,9 +182,10 @@ function onClickFileBox (event: Event) {
         <a
           v-if="mainState.currentServerInfo?.links?.privacyPolicy"
           class="textlink--icon"
-          :href="mainState.currentServerInfo?.links?.termsOfService"
+          :href="Util.safeExternalUrl(mainState.currentServerInfo?.links?.termsOfService)"
           rel="noreferrer"
           target="_blank"
+          @click="onClickExternalLink($event, mainState.currentServerInfo?.links?.termsOfService)"
         >
           <SVGIcon name="cursorRight" />
           <span>{{ $t("termsOfService") }}</span>

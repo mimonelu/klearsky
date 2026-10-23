@@ -3,6 +3,8 @@ import { computed, inject } from "vue"
 import { differenceInDays } from "date-fns"
 import LazyImage from "@/components/images/LazyImage.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
+import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 import CONSTS from "@/consts/consts.json"
 
 const props = defineProps<{
@@ -24,6 +26,8 @@ const props = defineProps<{
 const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const { openInvalidUrlPopup } = useSafeExternalUrl()
 
 const hasNoUnauthenticated = computed((): boolean => {
   if (props.labels == null) {
@@ -104,12 +108,17 @@ function getLabelerAvatar (label?: TILabelSetting): string {
 }
 
 async function openBridgyOriginalUrl () {
+  const safeUrl = Util.safeExternalUrl(props.bridgyOriginalUrl)
+  if (safeUrl == null) {
+    openInvalidUrlPopup(props.bridgyOriginalUrl)
+    return
+  }
   if (await mainState.openConfirmationPopup({
     title: $t("confirmUrl"),
     text: $t("confirmUrlNotification"),
     detail: props.bridgyOriginalUrl,
   })) {
-    window.open(props.bridgyOriginalUrl, "_blank")
+    window.open(safeUrl, "_blank")
   }
 }
 </script>

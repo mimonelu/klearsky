@@ -4,6 +4,8 @@ import { computedAsync } from "@vueuse/core"
 import AtmosphereHelper from "@/components/next/Atmosphere/script"
 import AtmosphereItem from "@/components/next/Atmosphere/AtmosphereItem.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
+import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 import { ATMOSPHERE_SERVICE_FAVICONS } from "@/consts/consts.json"
 
 const NUMBER_OF_FETCH_RECORDS = 1
@@ -13,6 +15,8 @@ const props = defineProps<{
 }>()
 
 const mainState = inject("state") as MainState
+
+const { onClickExternalLink } = useSafeExternalUrl()
 
 const processing = ref(false)
 
@@ -71,9 +75,10 @@ const records = computedAsync<Array<any>>(async () => {
         <a
           v-if="record.url"
           class="linkat__link textlink--icon"
-          :href="record.url"
+          :href="Util.safeExternalUrl(record.url)"
           rel="noreferrer"
           target="_blank"
+          @click="onClickExternalLink($event, record.url)"
         >
           <i v-if="record.emoji">{{ record.emoji }}</i>
           <SVGIcon
