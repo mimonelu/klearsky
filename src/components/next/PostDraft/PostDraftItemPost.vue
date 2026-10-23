@@ -102,7 +102,7 @@ function close () {
       <a
         class="tag--link"
         :href="draftPost.embedExternals[0].uri"
-        ref="norefferer"
+        rel="noreferrer"
         target="_blank"
       >
         <SVGIcon name="link" />

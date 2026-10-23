@@ -11,7 +11,7 @@ defineProps<{
     <a
       class="textlink--icon"
       :href="url"
-      ref="norefferer"
+      rel="noreferrer"
       target="_blank"
     >
       <SVGIcon name="earth" />

@@ -35,7 +35,8 @@ export default defineConfig({
       output: {
         manualChunks (id: string) {
           // Vue関連を分離
-          if (id.includes("vue")) {
+          // NOTICE: 単に "vue" を含むかで判定すると src/**/*.vue まで含まれてしまう
+          if (/[\\/]node_modules[\\/](@vue[\\/]|@vueuse[\\/]|vue|portal-vue)/.test(id)) {
             return "vue"
           }
           // その他のnode_modules
@@ -46,8 +47,13 @@ export default defineConfig({
       },
       treeshake: {
         moduleSideEffects: (id) => {
-          // Logger は除外
-          if (id.includes("composables/logger")) {
+          // Logger と polyfill は除外
+          // NOTICE: 副作用のみの import（`import "..."`）を追加する場合はここに追記すること。
+          //         追記しないとビルド時に削除される
+          if (
+            id.includes("composables/logger") ||
+            id.includes("composables/util/polyfills")
+          ) {
             return true
           }
 

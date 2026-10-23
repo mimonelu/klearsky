@@ -977,7 +977,7 @@ async function fetchCurrentServerInfo () {
 
 function resetSettings () {
   const did = state.atp.session?.did
-  if (did == null) return
+  if (did == null || state.settings[did] == null) return
   Object.keys(state.settings[did]).forEach((key: string) => {
     delete state.settings[did][key]
   })
@@ -1328,12 +1328,15 @@ function updateNotificationInterval () {
 
 async function updateNotifications () {
   const response = await state.atp.fetchNotificationCount()
-  const count = response instanceof Error ? 0 : response
-  const canFetched = state.notificationCount < count
-  if (count > 0) {
-    state.notificationCount = count
-    state.updatePageTitle()
+  if (response instanceof Error) {
+    return
   }
+  const count = response
+  const canFetched = state.notificationCount < count
+
+  // 他クライアントでの既読化（0 件）も反映する
+  state.notificationCount = count
+  state.updatePageTitle()
   if (canFetched) {
     // NOTICE: 念のため + 1 している
     await state.fetchNotifications(Math.min(CONSTS.LIMIT_OF_FETCH_NOTIFICATIONS, count + 1), "new")
@@ -1642,7 +1645,13 @@ async function updateCurrentRepo () {
     // state.openErrorPopup(response, "mainState/updateCurrentRepo")
     return
   }
-  const json = await response.json()
+  if (!(response instanceof Response) || !response.ok) {
+    return
+  }
+  const json = await response.json().catch(() => undefined)
+  if (json == null) {
+    return
+  }
   if (state.currentProfile == null) {
     return // await 中に初期化される恐れがあるため
   }
@@ -1658,10 +1667,10 @@ async function fetchLatestActivityDate (did: string) {
   if (response instanceof Error) {
     return
   }
-  if (!(response instanceof Response)) {
+  if (!(response instanceof Response) || !response.ok) {
     return
   }
-  const json = await response.json()
+  const json = await response.json().catch(() => undefined)
   if (json?.rev == null) {
     return
   }

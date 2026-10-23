@@ -1,8 +1,6 @@
 export default function (json: unknown, title?: string) {
   const windowObject = window.open()
-  const jsonHtml = JSON.stringify(json, null, 2)
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
+  const jsonHtml = escapeHtml(JSON.stringify(json, null, 2) ?? "")
   windowObject?.document.write(`
 <!DOCTYPE html>
 <html lang="en">
@@ -33,8 +31,16 @@ export default function (json: unknown, title?: string) {
     </style>
   </head>
   <body>
-    ${title ? "<h1>" + title + "</h1>" : ""}
+    ${title ? "<h1>" + escapeHtml(title) + "</h1>" : ""}
     <pre>${jsonHtml}</pre>
   </body>
 </html>`)
+}
+
+function escapeHtml (text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
 }

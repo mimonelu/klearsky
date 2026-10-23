@@ -976,6 +976,7 @@ export default () => ({
   "unhandledRejectionError": "Erreur de rejet non gérée.",
   "rejectionHandledError": "Erreur de rejet gérée.",
   "apiError": "Erreur de connexion à l'API.",
+  "accountImportError": "Échec de la lecture des données de compte.",
   "cidEncodeError": "Erreur d'encodage CID.",
   "downloadImageError": "Erreur de téléchargement d'images.",
   "fetchOgpError": "Erreur de récupération OGP. URL invalide ou serveur down.",

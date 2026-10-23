@@ -166,9 +166,9 @@ async function activate (type: string) {
     }
     case "listRepos": {
       response = await mainState.atp.fetchWithoutAgent({
-        path: "com.atproto.sync.listBlobs",
+        path: "com.atproto.sync.listRepos",
         did: props.user.did,
-        query: { did: props.user.did },
+        query: {},
       })
         .then((value) => value)
         .catch((error) => error)

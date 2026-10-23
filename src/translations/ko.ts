@@ -976,6 +976,7 @@ export default () => ({
   "unhandledRejectionError": "Unhandled rejection 오류가 발생했습니다.",
   "rejectionHandledError": "Rejection handled 오류가 발생했습니다.",
   "apiError": "API 연결 중 오류가 발생했습니다.",
+  "accountImportError": "계정 데이터를 읽지 못했습니다.",
   "cidEncodeError": "CID 인코딩에서 오류가 발생했습니다.",
   "downloadImageError": "이미지 다운로드 중 오류가 발생했습니다.",
   "fetchOgpError": "OGP 가져오기에서 오류가 발생했습니다. URL이 잘못되었거나 Bluesky 링크 서버가 다운되었을 수 있습니다.",

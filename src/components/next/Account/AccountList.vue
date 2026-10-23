@@ -78,8 +78,11 @@ function importAccounts (event: Event) {
   reader.onload = async (event: Event) => {
     const contents = (event.target as null | any)?.result ?? null
     if (contents == null) return
-    const jsonData = JSON.parse(contents)
-    if (jsonData == null) return
+    const jsonData = Util.parse(contents)
+    if (jsonData == null || typeof jsonData !== "object") {
+      mainState.openErrorPopup("accountImportError", "AccountList/importAccounts")
+      return
+    }
     if (!await mainState.openConfirmationPopup({
       title: $t("accountImport"),
       text: $t("accountImportNotification"),
@@ -91,7 +94,12 @@ function importAccounts (event: Event) {
       if (mainState.mySession?.did === did) continue
 
       const importedSession = jsonData[did] as TTSession
-      const existingSession = mainState.mySession?.sessions[did]
+
+      // DID を持たないデータは現在のセッションを上書きしてしまうためスキップ
+      if (typeof importedSession?.did !== "string" || !importedSession.did) continue
+      if (mainState.mySession?.did === importedSession.did) continue
+
+      const existingSession = mainState.mySession?.sessions[importedSession.did]
       const authType = inferAuthType(importedSession, existingSession)
 
       // MySession経由でセッションを更新（カレントセッションは変更しない）
