@@ -2,7 +2,7 @@
 
 > API 仕様: [searchPostsV2 レキシコン](https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/searchPostsV2.json)
 
-## searchPostsV2 への移行（未着手）
+## searchPostsV2 への移行（未着手、#56）
 
 検索UIへの統合は未実施。着手時に検討すべき点:
 - 認証必須化への対応（未ログイン時のフォールバック）
