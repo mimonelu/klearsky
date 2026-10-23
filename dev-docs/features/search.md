@@ -1,6 +1,6 @@
 # 投稿検索（Klearsky 実装）
 
-> API 仕様は [searchPostsV2 仕様メモ](../atproto/search-posts-v2.md) を参照
+> API 仕様: [searchPostsV2 レキシコン](https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/searchPostsV2.json)
 
 ## searchPostsV2 への移行（未着手）
 
@@ -8,6 +8,7 @@
 - 認証必須化への対応（未ログイン時のフォールバック）
 - 既存の検索パラメータ（単数）からV2（複数配列）へのUI変更
 - 新規フィルタ（`hasMedia`, `hasVideo`, `following`, `allTime`など）をUIにどこまで露出するか
+- V2 の `since`/`until` は `createdAt` ではなく `sortAt` 基準。デフォルトソートは `top`（V1 は `latest`）
 
 ## 現状のklearsky検索実装（V1ベース、2026-07-16調査）
 

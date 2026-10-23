@@ -55,25 +55,15 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 
 作業対象に関係するものを着手前に読むこと。
 
-### 機能実装（Klearsky 固有）
-
 - [features/oauth.md](dev-docs/features/oauth.md) — OAuth ログイン・セッション管理・マルチアカウント
 - [features/chat.md](dev-docs/features/chat.md) — チャットの構成、`getLog` による新着監視、カーソル管理
 - [features/post-draft.md](dev-docs/features/post-draft.md) — ポスト下書きと IndexedDB メディアストア
 - [features/search.md](dev-docs/features/search.md) — 投稿検索の現状実装と searchPostsV2 移行の検討
-
-### AT Protocol / Bluesky 調査メモ
-
-- [atproto/oauth.md](dev-docs/atproto/oauth.md) — AT Protocol OAuth 仕様（PKCE, DPoP, スコープ）
-- [atproto/search-posts-v2.md](dev-docs/atproto/search-posts-v2.md) — `app.bsky.feed.searchPostsV2` 仕様
-- [atproto/trends-2026.md](dev-docs/atproto/trends-2026.md) — 2026 年のエコシステム動向
-
-### その他
-
 - [backlog.md](dev-docs/backlog.md) — 保留中のタスクと検討状況
 
 ## ドキュメントの更新ルール
 
-- 設計判断や調査結果など、コードから読み取れない知見は `dev-docs/` に残す
-- Klearsky 固有の実装は `features/`、外部仕様の調査は `atproto/` に置き、本ファイルの索引に追記する
+- 設計判断や注意点など、コードから読み取れない知見は `dev-docs/` に残す
+- 機能ごとの実装メモは `features/` に置き、本ファイルの索引に追記する
+- 外部仕様の調査結果そのものは置かず、Klearsky に関わる判断や注意点だけを残す
 - 本ファイルには全作業で必要な情報だけを書き、詳細は `dev-docs/` に分離する
