@@ -180,7 +180,7 @@ function onClickFileBox (event: Event) {
 
         <!-- 現在のサーバ情報 - 利用規約 -->
         <a
-          v-if="mainState.currentServerInfo?.links?.privacyPolicy"
+          v-if="mainState.currentServerInfo?.links?.termsOfService"
           class="textlink--icon"
           :href="Util.safeExternalUrl(mainState.currentServerInfo?.links?.termsOfService)"
           rel="noreferrer"
