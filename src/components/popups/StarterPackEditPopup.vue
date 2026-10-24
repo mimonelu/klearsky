@@ -5,6 +5,7 @@ import extend from "extend"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Generations from "@/composables/main-state/generations"
 import Util from "@/composables/util"
 import DESIGN_CONSTS from "@/consts/design-consts.json"
 
@@ -147,6 +148,10 @@ async function submitCallback () {
     return
   }
   state.loaderDisplay = true
+
+  // 待機中に別のプロフィールへ遷移した場合に備え、世代番号を先に控えておく
+  const generation = Generations.profile.current()
+
   const query = props.starterPack == null
     ? {
       $type: "app.bsky.graph.starterpack",
@@ -191,7 +196,10 @@ async function submitCallback () {
     }
 
     // ユーザーのスターターパックに追加
-    mainState.currentAuthorStarterPacks.unshift(newStarterPack)
+    // 別のプロフィールへ遷移していた場合は追加しない
+    if (Generations.profile.isCurrent(generation)) {
+      mainState.currentAuthorStarterPacks.unshift(newStarterPack)
+    }
 
   // 更新
   } else if (props.mode === "edit") {
