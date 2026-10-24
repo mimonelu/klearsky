@@ -122,9 +122,9 @@ import initOAuth from "@/composables/atp-wrapper/session/init-oauth"
 import login from "@/composables/atp-wrapper/session/login"
 import logout from "@/composables/atp-wrapper/session/logout"
 import muteChatConvo from "@/composables/atp-wrapper/chat/mute-chat-convo"
-import refreshSession from "@/composables/atp-wrapper/session/refresh-session"
 import resumeSession from "@/composables/atp-wrapper/session/resume-session"
 import signUp from "@/composables/atp-wrapper/session/sign-up"
+import syncSession from "@/composables/atp-wrapper/session/sync-session"
 import unmuteChatConvo from "@/composables/atp-wrapper/chat/unmute-chat-convo"
 import updateBlockToDisable from "@/composables/atp-wrapper/update/update-block-to-disable"
 import updateBlockToEnable from "@/composables/atp-wrapper/update/update-block-to-enable"
@@ -354,9 +354,9 @@ class AtpWrapper implements TIAtpWrapper {
   login = login
   logout = logout
   muteChatConvo = muteChatConvo
-  refreshSession = refreshSession
   resumeSession = resumeSession
   signUp = signUp
+  syncSession = syncSession
   unmuteChatConvo = unmuteChatConvo
   updateBlockToDisable = updateBlockToDisable
   updateBlockToEnable = updateBlockToEnable

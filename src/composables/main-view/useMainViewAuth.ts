@@ -131,7 +131,7 @@ export function useMainViewAuth (options: Options) {
         undefined,
         undefined,
         undefined,
-        onRefreshSession
+        onSessionExpired
       )
       if (response instanceof Error) {
         const errorMessage = typeof(response.message) === "string"
@@ -208,7 +208,7 @@ export function useMainViewAuth (options: Options) {
       identifier,
       password,
       authFactorToken,
-      onRefreshSession
+      onSessionExpired
     )
     if (response instanceof Error) {
       if (response.message === "AuthFactorTokenRequired") {
@@ -231,6 +231,13 @@ export function useMainViewAuth (options: Options) {
     state.myWorker?.setSessionCache("session", state.atp.session)
   }
 
+  // 利用中にセッションが失効した場合は再ログインを促す
+  function onSessionExpired () {
+    state.openErrorPopup($t("refreshSessionError"), "MainView/onSessionExpired")
+    state.loginFormInitialSession = state.mySession?.current
+    state.loginPopupDisplay = true
+  }
+
   function clearUpdateJwtInterval () {
     if (updateJwtTimer != null) {
       clearInterval(updateJwtTimer)
@@ -241,7 +248,7 @@ export function useMainViewAuth (options: Options) {
   function setupUpdateJwtInterval () {
     clearUpdateJwtInterval()
     updateJwtTimer = setInterval(() => {
-      state.atp.updateJwt(onRefreshSession)
+      state.atp.updateJwt()
     }, CONSTS.INTERVAL_OF_UPDATE_JWT)
   }
 

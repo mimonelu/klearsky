@@ -17,7 +17,7 @@ interface TIAtpWrapper {
   createAgentWithOAuth
     (oauthSession: import("@atproto/oauth-client-browser").OAuthSession): boolean
   createAgentWithPassword
-    (service: string, pdsUrl?: string): boolean
+    (service: string, pdsUrl?: string, onSessionExpired?: () => void): boolean
   createChatDeclaration
     (repo: string, allowIncoming: TTAllowIncoming, allowGroupInvites: TTAllowGroupInvites): Promise<Error | TTCidUri>
   createChatMessage
@@ -249,17 +249,17 @@ interface TIAtpWrapper {
   leaveChatConvo
     (convoId: string): Promise<Error | undefined>
   login
-    (service?: string, identifier?: string, password?: string, authFactorToken?: string, onRefreshSession?: () => void): Promise<Error | undefined>
+    (service?: string, identifier?: string, password?: string, authFactorToken?: string, onSessionExpired?: () => void): Promise<Error | undefined>
   logout
     ()
   muteChatConvo
     (convoId: string): Promise<Error | undefined>
-  refreshSession
-    (): Promise<Error | undefined>
   resumeSession
     (session: TTSession): Promise<Error | ComAtprotoServerGetSession.OutputSchema>
   signUp
     (service: string, email: string, handle: string, password: string, inviteCode?: string): Promise<Error | undefined>
+  syncSession
+    (session: TTSession): void
   unmuteChatConvo
     (convoId: string): Promise<Error | undefined>
   updateBlockToDisable
@@ -273,7 +273,7 @@ interface TIAtpWrapper {
   updateDraft
     (this: TIAtpWrapper, id: string, draft: import("@atproto/api").AppBskyDraftDefs.Draft): Promise<Error | undefined>
   updateJwt
-    (onRefreshSession?: () => void): Promise<Error | undefined>
+    (): Promise<Error | undefined>
   updateList
     (list: TTList, avatarBlobRef?: BlobRef): Promise<Error | undefined>
   updateListBlockToDisable

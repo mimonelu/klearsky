@@ -14,6 +14,7 @@ import getGraphemeLength from "@/composables/util/get-grapheme-length"
 import getRkey from "@/composables/util/get-rkey"
 import getUserLanguage from "@/composables/util/get-user-language"
 import injectFoldingToFeeds from "@/composables/util/inject-folding-to-feeds"
+import isNewerJwt from "@/composables/util/is-newer-jwt"
 import makeCustomLinks from "@/composables/util/make-custom-links"
 import makeLightningLinks from "@/composables/util/make-lightning-links"
 import mergeFeeds from "@/composables/util/merge-feeds"
@@ -56,6 +57,7 @@ export default {
   getRkey,
   getUserLanguage,
   injectFoldingToFeeds,
+  isNewerJwt,
   makeCustomLinks,
   makeLightningLinks,
   mergeFeeds,

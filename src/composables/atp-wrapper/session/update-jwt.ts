@@ -1,3 +1,4 @@
+import type { ComAtprotoServerRefreshSession } from "@atproto/api"
 import { jwtDecode, type JwtPayload } from "jwt-decode"
 import { state } from "@/composables/main-state"
 
@@ -5,32 +6,29 @@ import { state } from "@/composables/main-state"
  * JWT（アクセス・リフレッシュトークン）の有効期限をチェックし、必要に応じて更新
  *
  * 役割:
- * 1. accessJwtとrefreshJwtの有効期限をチェック（5分前バッファ付き）
- * 2. accessJwtが期限切れの場合、refreshSessionを呼び出してトークン更新
- * 3. refreshJwtが期限切れの場合、エラーを返す（再ログインが必要）
+ * 1. エージェントが保持する accessJwt と refreshJwt の有効期限をチェック（5分前バッファ付き）
+ * 2. accessJwt が期限切れの場合、エージェント（ CredentialSession ）にトークンを更新させる
+ * 3. refreshJwt が期限切れの場合、エラーを返す（再ログインが必要）
+ *
+ * 更新後のトークンは persistSession 経由で MySession に保存され、他タブへ共有される
+ * エージェントは期限切れのレスポンスを受けてから自動更新するが、
+ * 一部のリクエスト（ストリームを body に持つもの）は再送されないため事前に更新している
  *
  * 使用場面:
- * - API呼び出し前のトークン有効性確認
- * - 定期的なセッション維持（MainView.vueから定期実行）
- * - 自動ログイン時のトークン検証
+ * - 定期的なセッション維持（useMainViewAuth.ts から定期実行）
  */
-export default async function (
-  this: TIAtpWrapper,
-  onRefreshSession?: () => void
-): Promise<Error | undefined> {
+export default async function (this: TIAtpWrapper): Promise<Error | undefined> {
   // OAuth認証の場合はライブラリが自動的にトークンを更新するためスキップ
   if (state.mySession?.authType === "oauth") {
     return
   }
 
-  const session = this.session
+  if (this.agent == null) {
+    return Error("noAgentError")
+  }
+  const session = this.agent.session
   if (session == null) {
     return Error("noSessionError")
-  }
-  if (session.refreshJwt == null ||
-      session.accessJwt == null
-  ) {
-    return Error("noJwtError")
   }
   let refreshJwt: JwtPayload
   let accessJwt: JwtPayload
@@ -62,14 +60,13 @@ export default async function (
     accessDate.setTime(accessJwt.exp * 1000)
     $warn("updateJwt", `accessJwt was expired at ${accessDate.toLocaleString()}.`)
 
-    const response = await this.refreshSession()
+    const response: Error | ComAtprotoServerRefreshSession.Response =
+      await this.agent.sessionManager.refreshSession()
+        .then((value) => value)
+        .catch((error) => error)
     if (response instanceof Error) {
-      return response
-    }
-
-    // TODO: Error でなければ onRefreshSession を実行するように修正
-    if (onRefreshSession != null) {
-      onRefreshSession()
+      $warn("updateJwt", response)
+      return Error("refreshSessionError")
     }
   }
 }

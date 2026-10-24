@@ -52,12 +52,7 @@ export default class {
 
         // セッションキャッシュの反映 - セッションデータ
         if (sessionCache.session != null) {
-          const authType = sessionCache.session.__authType ?? "password"
-          this.mainState.mySession?.updateSession(
-            sessionCache.session,
-            authType,
-            sessionCache.session.__service
-          )
+          this.mainState.atp.syncSession(sessionCache.session)
         }
 
         // セッションキャッシュの反映 - 設定

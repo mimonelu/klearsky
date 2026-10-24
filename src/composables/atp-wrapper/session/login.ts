@@ -7,12 +7,12 @@ export default async function (
   identifier?: string,
   password?: string,
   authFactorToken?: string,
-  onRefreshSession?: () => void
+  onSessionExpired?: () => void
 ): Promise<Error | undefined> {
   // MySessionからセッション取得（フォールバックとして従来のthis.dataも参照）
   const session = state.mySession?.current ?? this.data.sessions[this.data.did]
   service ??= session?.__service ?? "https://bsky.social"
-  if (!this.createAgentWithPassword(service, session?.__pdsUrl)) {
+  if (!this.createAgentWithPassword(service, session?.__pdsUrl, onSessionExpired)) {
     return Error("noAgentError")
   }
 
@@ -21,15 +21,8 @@ export default async function (
     if (session == null) {
       return Error("noSessionError")
     }
-    const responseOfUpdateJwt = await this.updateJwt(onRefreshSession)
 
-    // 自動ログイン時に有効なセッションがないケースはスルー
-    if (responseOfUpdateJwt instanceof Error &&
-        responseOfUpdateJwt.message !== "noSessionError"
-    ) {
-      return responseOfUpdateJwt
-    }
-
+    // resumeSession は必ずトークンを更新するため、事前の updateJwt は不要
     const responseOfResumeSession = await this.resumeSession(session)
     if (responseOfResumeSession instanceof Error) {
       return responseOfResumeSession
