@@ -48,7 +48,9 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
         }
       }
 
-      state.currentPosts?.splice(0)
+      // 遷移前に開始したポストスレッドの取得結果を破棄する
+      Generations.postThread.next()
+      state.currentPosts = []
 
       state.repostUsersPopupDisplay = false
       state.quoteRepostsPopupDisplay = false

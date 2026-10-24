@@ -1996,6 +1996,7 @@ async function fetchSuggestions (direction: "new" | "old") {
 // ポストスレッド
 
 async function fetchPostThread () {
+  const generation = Generations.postThread.current()
   let uri = state.currentQuery.uri as LocationQueryValue
   if (!uri) {
     // uri パラメータがない場合は handle と rkey パラメータがあるものとみなす
@@ -2008,6 +2009,9 @@ async function fetchPostThread () {
     // 渡されたのがDIDではない場合
     if (!identifier.startsWith("did:")) {
       const did = await state.atp.fetchDid(identifier)
+      if (!Generations.postThread.isCurrent(generation)) {
+        return
+      }
       if (did instanceof Error) {
         return
       }
@@ -2018,6 +2022,9 @@ async function fetchPostThread () {
   }
   state.currentPosts?.splice(0)
   const posts = await state.atp.fetchPostThread(uri, CONSTS.LIMIT_OF_FETCH_POST_THREAD) ?? []
+  if (!Generations.postThread.isCurrent(generation)) {
+    return
+  }
   if (posts instanceof Error) {
     // TODO:
     // state.openErrorPopup(posts, "mainState/fetchPostThread")
