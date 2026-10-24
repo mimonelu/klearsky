@@ -210,17 +210,17 @@ export function useMainViewAuth (options: Options) {
       authFactorToken,
       onSessionExpired
     )
-    if (response instanceof Error) {
-      if (response.message === "AuthFactorTokenRequired") {
-        state.loaderDisplay = false
-        ;(loginPopup.value as any)?.setHasAuthFactorToken(true)
-        return
-      }
-      if (!state.atp.hasLogin()) {
-        state.loaderDisplay = false
-        state.openErrorPopup($t("getSessionError"), "MainView/manualLogin")
-        return
-      }
+    if (response instanceof Error &&
+        response.message === "AuthFactorTokenRequired"
+    ) {
+      state.loaderDisplay = false
+      ;(loginPopup.value as any)?.setHasAuthFactorToken(true)
+      return
+    }
+    if (response instanceof Error || !state.atp.hasLogin()) {
+      state.loaderDisplay = false
+      state.openErrorPopup($t("getSessionError"), "MainView/manualLogin")
+      return
     }
     state.loginPopupDisplay = false
     await processAfterLogin()
