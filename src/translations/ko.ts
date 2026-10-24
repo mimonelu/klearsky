@@ -1002,7 +1002,7 @@ export default () => ({
   "offlineError": "인터넷에 연결되지 않았습니다.",
   "parseOgpError": "OGP 파싱 중 오류가 발생했습니다. 웹페이지가 OGP를 지원하지 않을 수 있습니다. OGP 이미지를 첨부하지 않고 다시 전송하세요.",
   "refreshJwtExpired": "refreshJWT가 만료되었습니다. 다시 로그인하세요.",
-  "refreshSessionError": "세션 업데이트 중 오류가 발생했습니다. 다시 로그인하세요.",
+  "refreshSessionError": "세션이 무효화되었습니다. 다시 로그인하세요.",
   "resumeSessionError": "세션 복구 중 오류가 발생했습니다.\n세션이 끊어졌을 수 있습니다. 다시 로그인하세요.",
   "translationError": "번역 중 오류가 발생했습니다.",
 

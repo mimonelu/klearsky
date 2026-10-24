@@ -1002,7 +1002,7 @@ export default () => ({
   "offlineError": "インターネットに接続されていません。",
   "parseOgpError": "OGPの解析中にエラーが発生しました。WebページがOGPに対応していない可能性があります。OGP画像を添付せずに再度送信してください。",
   "refreshJwtExpired": "refreshJWTの期限が切れました。再ログインしてください。",
-  "refreshSessionError": "セッションの更新中にエラーが発生しました。再ログインしてください。",
+  "refreshSessionError": "セッションが無効になりました。再ログインしてください。",
   "resumeSessionError": "セッションの復帰中にエラーが発生しました。\nセッションが切れている可能性があります。再ログインしてください。",
   "translationError": "翻訳中にエラーが発生しました。",
 

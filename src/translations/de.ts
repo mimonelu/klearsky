@@ -1002,7 +1002,7 @@ export default () => ({
   "offlineError": "Keine Internetverbindung.",
   "parseOgpError": "Ein Fehler ist beim Parsen von OGP aufgetreten. Die Webseite verwendet möglicherweise kein OGP. Bitte senden Sie erneut ohne das angehängte OGP-Bild.",
   "refreshJwtExpired": "refreshJWT ist abgelaufen. Bitte melden Sie sich erneut an.",
-  "refreshSessionError": "Ein Fehler ist beim Aktualisieren der Sitzung aufgetreten. Bitte melden Sie sich erneut an.",
+  "refreshSessionError": "Die Sitzung ist nicht mehr gültig. Bitte melden Sie sich erneut an.",
   "resumeSessionError": "Ein Fehler ist beim Wiederherstellen der Sitzung aufgetreten.\nDie Sitzung kann abgelaufen sein. Bitte melden Sie sich erneut an.",
   "translationError": "Ein Fehler ist bei der Übersetzung aufgetreten.",
 

@@ -1002,7 +1002,7 @@ export default () => ({
   "offlineError": "Pas de connexion Internet.",
   "parseOgpError": "Erreur d'analyse OGP. OGP peut être absent.",
   "refreshJwtExpired": "refreshJWT expiré. Reconnecte-toi.",
-  "refreshSessionError": "Erreur de rafraîchissement. Reconnecte-toi.",
+  "refreshSessionError": "Session invalide. Reconnecte-toi.",
   "resumeSessionError": "Erreur de restauration.\nSession peut être expirée. Reconnecte-toi.",
   "translationError": "Erreur de traduction.",
 
