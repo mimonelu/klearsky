@@ -225,7 +225,7 @@ interface MainState {
   currentListItemsCursor?: string
   currentListFeeds: Array<TTFeed>
   currentListFeedsCursor?: string
-  fetchCurrentList: (listUri: string) => Promise<boolean>
+  fetchCurrentList: (listUri: string, generation?: number) => Promise<boolean>
   fetchCurrentListItems: (direction: "old" | "new") => Promise<boolean>
   fetchCurrentListFeeds: (direction: TTDirection, middleCursor?: string) => Promise<boolean>
 

@@ -29,13 +29,20 @@ async function fetchContinuousResults (direction: "new" | "old") {
   Util.blurElement()
   if (state.processing) return
   state.processing = true
+  const uri = mainState.currentLikeUsersUri as string
   const cursor = await mainState.atp.fetchLikeUsers(
     mainState.currentLikeUsers as Array<TTUser>,
-    mainState.currentLikeUsersUri as string,
+    uri,
     CONSTS.LIMIT_OF_FETCH_LIKE_USERS,
     direction === "old" ? mainState.currentLikeUsersCursor : undefined
   )
   state.processing = false
+
+  // await 中に別のポストのポップアップに切り替わった場合は反映しない
+  if (mainState.currentLikeUsersUri !== uri) {
+    return
+  }
+
   if (cursor instanceof Error) {
     mainState.openErrorPopup(cursor, "LikeUsersPopup/fetchContinuousResults")
     return

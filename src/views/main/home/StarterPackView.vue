@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted } from "vue"
+import { computed, inject } from "vue"
 import { type RouteLocationRaw } from "vue-router"
 import Feed from "@/components/compositions/Feed.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
@@ -29,29 +29,6 @@ const listLocation = computed((): undefined | RouteLocationRaw => {
       displayName: mainState.currentStarterPack?.record.name,
     },
   }
-})
-
-onMounted(async () => {
-  const uri = mainState.currentQuery.uri
-  if (uri == null ||
-      !Util.isStarterPackAtUri(uri) ||
-      mainState.currentStarterPack?.uri === uri
-  ) {
-    return
-  }
-
-  mainState.currentStarterPack = undefined
-  mainState.centerLoaderDisplay = true
-  const starterPack = await mainState.atp.fetchStarterPack(uri)
-  mainState.centerLoaderDisplay = false
-  if (starterPack instanceof Error) {
-    mainState.openErrorPopup(starterPack, "StarterPackView/fetchStarterPack")
-    return
-  }
-  mainState.currentStarterPack = starterPack
-
-  mainState.currentStarterPackListFeeds.splice(0)
-  await fetchFeeds("new")
 })
 
 async function fetchFeeds (direction: TTDirection, middleCursor?: string) {

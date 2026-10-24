@@ -7,6 +7,7 @@ import type {
 } from "vue-router"
 import { state } from "@/composables/main-state"
 import Generations from "@/composables/main-state/generations"
+import Util from "@/composables/util"
 import { PROFILE_ERRORS } from "@/consts/errors.json"
 import OWN_DOMAIN from "@/consts/own-domain"
 
@@ -373,15 +374,25 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
           break
         }
         case "list-feeds-home": {
-          await updateCurrentList()
+          const response = await updateCurrentList()
+          if (response instanceof Error) {
+            break
+          }
           if (state.currentListFeeds.length === 0)
             await state.fetchCurrentListFeeds("new")
           break
         }
         case "list-users-home": {
-          await updateCurrentList()
+          const response = await updateCurrentList()
+          if (response instanceof Error) {
+            break
+          }
           if (state.currentListItems.length === 0)
             await state.fetchCurrentListItems("new")
+          break
+        }
+        case "starter-pack-home": {
+          await updateCurrentStarterPack()
           break
         }
         case "post": {
@@ -440,7 +451,7 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
     }
   }
 
-  async function updateCurrentList () {
+  async function updateCurrentList (): Promise<Error | undefined> {
     const listUri: undefined | string = state.currentQuery.list
     if (listUri == null) {
       return
@@ -449,9 +460,11 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
       return
     }
 
-    state.currentListFeeds.splice(0)
+    // 前のリストに対する進行中の取得結果を破棄する
+    const generation = Generations.list.next()
+    state.currentListFeeds = []
     state.currentListFeedsCursor = undefined
-    state.currentListItems.splice(0)
+    state.currentListItems = []
     state.currentListItemsCursor = undefined
 
     state.currentList = undefined
@@ -463,9 +476,46 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
         return list.uri === listUri
       })
       if (state.currentList == null) {
-        await state.fetchCurrentList(listUri)
+        await state.fetchCurrentList(listUri, generation)
+
+        // await 中に別のリストへ遷移した場合は以降の処理を打ち切る
+        if (!Generations.list.isCurrent(generation)) {
+          return Error("staleListError")
+        }
       }
     }
+  }
+
+  async function updateCurrentStarterPack (): Promise<Error | undefined> {
+    const uri: undefined | string = state.currentQuery.uri
+    if (uri == null || !Util.isStarterPackAtUri(uri)) {
+      return
+    }
+    if (state.currentStarterPack?.uri === uri) {
+      return
+    }
+
+    // 前のスターターパックに対する進行中の取得結果を破棄する
+    const generation = Generations.starterPack.next()
+    state.currentStarterPack = undefined
+    state.currentStarterPackListFeeds = []
+    state.currentStarterPackListFeedsCursor = undefined
+
+    state.centerLoaderDisplay = true
+    const starterPack = await state.atp.fetchStarterPack(uri)
+    state.centerLoaderDisplay = false
+
+    // await 中に別のスターターパックへ遷移した場合は以降の処理を打ち切る
+    if (!Generations.starterPack.isCurrent(generation)) {
+      return Error("staleStarterPackError")
+    }
+
+    if (starterPack instanceof Error) {
+      state.openErrorPopup(starterPack, "useMainViewNavigation/fetchStarterPack")
+      return starterPack
+    }
+    state.currentStarterPack = starterPack
+    await state.fetchCurrentStarterPackListFeeds("new")
   }
 
   function scrollToFocused () {

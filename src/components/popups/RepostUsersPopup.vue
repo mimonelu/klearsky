@@ -31,13 +31,20 @@ async function fetchContinuousResults (direction: "new" | "old") {
     return
   }
   state.processing = true
+  const uri = mainState.currentRepostUsersUri as string
   const cursor = await mainState.atp.fetchRepostUsers(
     mainState.currentRepostUsers as Array<TTUser>,
-    mainState.currentRepostUsersUri as string,
+    uri,
     CONSTS.LIMIT_OF_FETCH_REPOST_USERS,
     direction === "old" ? mainState.currentRepostUsersCursor : undefined
   )
   state.processing = false
+
+  // await 中に別のポストのポップアップに切り替わった場合は反映しない
+  if (mainState.currentRepostUsersUri !== uri) {
+    return
+  }
+
   if (cursor instanceof Error) {
     mainState.openErrorPopup(cursor, "RepostUsersPopup/fetchContinuousResults")
     return

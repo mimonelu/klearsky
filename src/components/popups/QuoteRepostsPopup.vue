@@ -42,12 +42,20 @@ async function fetchContinuousResults () {
     return
   }
   state.processing = true
+  const uri = mainState.currentQuoteRepostsUri
   const cursor = await mainState.atp.fetchQuoteReposts(
     mainState.currentQuoteReposts,
-    mainState.currentQuoteRepostsUri,
+    uri,
     CONSTS.LIMIT_OF_FETCH_QUOTE_REPOSTS,
     mainState.currentQuoteRepostsCursor
   )
+
+  // await 中に別のポストのポップアップに切り替わった場合は反映しない
+  if (mainState.currentQuoteRepostsUri !== uri) {
+    state.processing = false
+    return
+  }
+
   if (cursor instanceof Error) {
     mainState.openErrorPopup(cursor, "QuoteRepostsPopup/fetchContinuousResults")
     return

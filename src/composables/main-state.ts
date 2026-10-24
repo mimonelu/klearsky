@@ -2210,8 +2210,11 @@ function removeFeedPreferenceByUri (type: TTPreferenceFeedType, uri: string): bo
 
 // リスト
 
-async function fetchCurrentList (listUri: string): Promise<boolean> {
+async function fetchCurrentList (listUri: string, generation = Generations.list.current()): Promise<boolean> {
   const response = await state.atp.fetchList(listUri)
+  if (!Generations.list.isCurrent(generation)) {
+    return false
+  }
   if (response instanceof Error) {
     state.openErrorPopup(response, "mainState/fetchList")
     return false
@@ -2222,12 +2225,16 @@ async function fetchCurrentList (listUri: string): Promise<boolean> {
 
 async function fetchCurrentListItems (direction: "old" | "new"): Promise<boolean> {
   if (state.currentList == null) return false
+  const generation = Generations.list.current()
   const cursor = await state.atp.fetchListItems(
     state.currentListItems,
     state.currentList.uri,
     CONSTS.LIMIT_OF_FETCH_LIST_ITEMS,
     direction === "old" ? state.currentListItemsCursor : undefined
   )
+  if (!Generations.list.isCurrent(generation)) {
+    return false
+  }
   if (cursor instanceof Error) {
     state.openErrorPopup(cursor, "mainState/fetchListItems")
     return false
@@ -2240,6 +2247,7 @@ async function fetchCurrentListItems (direction: "old" | "new"): Promise<boolean
 
 async function fetchCurrentListFeeds (direction: TTDirection, middleCursor?: string): Promise<boolean> {
   if (state.currentList == null) return false
+  const generation = Generations.list.current()
   const cursor = await state.atp.fetchListFeeds(
     state.currentListFeeds,
     state.currentList.uri,
@@ -2249,8 +2257,11 @@ async function fetchCurrentListFeeds (direction: TTDirection, middleCursor?: str
     CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
     direction === "old" ? state.currentListFeedsCursor : middleCursor,
     direction,
-    (listUri: any): boolean => listUri === state.currentList?.uri,
+    (): boolean => Generations.list.isCurrent(generation),
   )
+  if (!Generations.list.isCurrent(generation)) {
+    return false
+  }
   if (cursor instanceof Error) {
     state.openErrorPopup(cursor, "mainState/fetchListFeeds")
     return false
@@ -2270,6 +2281,7 @@ async function fetchCurrentStarterPackListFeeds (
   if (state.currentStarterPack?.list == null) {
     return false
   }
+  const generation = Generations.starterPack.current()
   const cursor = await state.atp.fetchListFeeds(
     state.currentStarterPackListFeeds,
     state.currentStarterPack.list.uri,
@@ -2279,8 +2291,11 @@ async function fetchCurrentStarterPackListFeeds (
     CONSTS.LIMIT_OF_FETCH_LIST_FEEDS,
     direction === "old" ? state.currentStarterPackListFeedsCursor : middleCursor,
     direction,
-    (listUri: any): boolean => listUri === state.currentStarterPack?.list?.uri,
+    (): boolean => Generations.starterPack.isCurrent(generation),
   )
+  if (!Generations.starterPack.isCurrent(generation)) {
+    return false
+  }
   if (cursor instanceof Error) {
     state.openErrorPopup(cursor, "mainState/fetchCurrentStarterPackListFeeds")
     return false
