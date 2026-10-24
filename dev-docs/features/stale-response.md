@@ -19,6 +19,10 @@ if (!Generations.profile.isCurrent(generation)) {
 |---|---|---|
 | `profile` | `resetProfileState()`（`beforeEach` で別プロフィールと判定された時） | プロフィール本体・各タブの一覧・固定ポスト・ハンドル履歴・ラベラー等 |
 | `postThread` | `beforeEach`（毎遷移） | `fetchPostThread()` |
+| `list` | `updateCurrentList()`（URL のリストが `currentList` と異なる時） | `fetchCurrentList()` / `fetchCurrentListFeeds()` / `fetchCurrentListItems()` |
+| `starterPack` | `updateCurrentStarterPack()`（URL のスターターパックが `currentStarterPack` と異なる時） | スターターパック本体・`fetchCurrentStarterPackListFeeds()` |
+
+ユーザーポップアップ（リポスト／いいね／引用リポスト）は世代番号を使わず、await 後に `currentXxxUri` が開始時と一致するかを比較する。
 
 ## 注意点
 
@@ -38,7 +42,12 @@ if (!Generations.profile.isCurrent(generation)) {
 
 - 後続の非同期処理（固定ポスト・ハンドル履歴等）にも世代を渡し、それぞれの await 後に照合する
 - エラー時の代入（`state.currentProfile = null` 等）やエラーポップアップも照合の対象
-- 呼び出し元の処理フロー（`processProfilePage()` → `processPage()`）も、await 後に世代が変わっていたら打ち切る
+- 呼び出し元の処理フロー（`processProfilePage()` / `updateCurrentList()` / `updateCurrentStarterPack()` → `processPage()`）も、await 後に世代が変わっていたら打ち切る
+
+### 取得処理は `onMounted` ではなく `processPage()` に置く
+
+- `HomeView` の `RouterView` は同一ルートのクエリ変更でコンポーネントを再生成しないため、`onMounted` での取得は同一ルート内の遷移（スターターパック画面から別のスターターパックへ、バック・フォワード）で再実行されない
+- `processPage()` は `afterEach` で毎回呼ばれる。スターターパック画面の取得はこのため `StarterPackView.vue` から `updateCurrentStarterPack()` に移した
 
 ### 配列リセットは差し替えを基本とする（多層防御）
 
@@ -62,6 +71,6 @@ if (!Generations.profile.isCurrent(generation)) {
 
 ## 未対応・関連
 
-- #72 リスト・スターターパック・ユーザーポップアップ
 - #73 検索（タブごとの世代、検索語のスナップショット）
-- #75 後から終わった `processPage()` の `finally` が `listLoaderDisplay = false` にし、現在のページの読み込み中にローダーが消える
+- #75 後から終わった `processPage()` の `finally` が `listLoaderDisplay = false` にし、現在のページの読み込み中にローダーが消える。`updateCurrentStarterPack()` の `centerLoaderDisplay` も同様
+- #74 引用リポスト一覧ポップアップで取得エラー後に追加読み込みができなくなる
