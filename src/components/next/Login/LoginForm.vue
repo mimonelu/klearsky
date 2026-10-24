@@ -31,7 +31,9 @@ const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
 
-const initialSession: undefined | TTSession = mainState.loginFormInitialSession
+// 未設定の場合はカレントセッション（アカウントリストでフォーカスされているアカウント）を初期値とする
+const initialSession: undefined | TTSession =
+  mainState.loginFormInitialSession ?? mainState.atp.session
 
 mainState.loginFormInitialSession = undefined
 
