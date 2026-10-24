@@ -30,17 +30,23 @@ export default class MySession {
   /**
    * セッション情報の更新（一元化）
    * 全てのセッション更新はここを通る
-   * @param switchToCurrent true の場合は更新したセッションをカレントにする（デフォルト）
+   * @param options.switchToCurrent true の場合は更新したセッションをカレントにする（デフォルト）
+   * @param options.background true の場合はユーザー操作によらない更新（トークン更新・他タブとの同期）として扱う
    * @returns JWT強制削除が発生した場合はError、それ以外はundefined
    */
   updateSession (
     newData: Partial<TTSession>,
     authType: "oauth" | "password",
     service?: string,
-    switchToCurrent: boolean = true
+    options?: {
+      switchToCurrent?: boolean
+      background?: boolean
+    }
   ): Error | undefined {
     const did = newData.did ?? this.current?.did
     if (!did) return
+    const switchToCurrent = options?.switchToCurrent ?? true
+    const background = options?.background ?? false
 
     const existing = this.sessions[did] ?? {}
 
@@ -67,7 +73,7 @@ export default class MySession {
       delete updatedSession.accessJwt
       delete updatedSession.refreshJwt
       this.sessions[did] = updatedSession
-      this.persist()
+      this.persist(did, false, background)
       const error = Error("jwtUpdateError")
       $log("MySession.updateSession", error)
       return error
@@ -76,7 +82,7 @@ export default class MySession {
         delete updatedSession.accessJwt
         delete updatedSession.refreshJwt
         this.sessions[did] = updatedSession
-        this.persist()
+        this.persist(did, false, background)
         const error = Error("jwtUpdateError")
         $log("MySession.updateSession", error)
         return error
@@ -93,9 +99,10 @@ export default class MySession {
     }
 
     // 永続化
-    this.persist()
+    // ユーザー操作によらない更新では、次回起動時のアカウントを変更しない
+    this.persist(did, switchToCurrent && !background, background)
 
-    $log("MySession.updateSession", { did, authType, switchToCurrent })
+    $log("MySession.updateSession", { did, authType, switchToCurrent, background })
   }
 
   /**
@@ -110,7 +117,7 @@ export default class MySession {
     this.authType = session.__authType ?? "password"
 
     // 永続化
-    this.persist()
+    this.persist(undefined, true)
 
     $log("MySession.switchAccount", { did })
     return true
@@ -121,12 +128,13 @@ export default class MySession {
    */
   removeAccount (did: string): void {
     delete this.sessions[did]
-    if (this.did === did) {
+    const isCurrent = this.did === did
+    if (isCurrent) {
       this.did = ""
       this.current = undefined
       this.authType = "password"
     }
-    this.persist()
+    this.persist(did, isCurrent)
     $log("MySession.removeAccount", { did })
   }
 
@@ -191,7 +199,7 @@ export default class MySession {
     this.did = ""
     this.current = undefined
     this.authType = "password"
-    this.persist()
+    this.persist(undefined, true)
     $log("MySession.clearCurrentSession")
   }
 
@@ -200,10 +208,11 @@ export default class MySession {
    * ログアウト時に使用（再ログイン時にパスワード入力が必要になる）
    */
   invalidateCurrentSession (): void {
-    if (this.current) {
+    const did = this.current?.did
+    if (did != null) {
       // JWTをクリア（アカウント情報は残す）
-      this.sessions[this.current.did] = {
-        ...this.sessions[this.current.did],
+      this.sessions[did] = {
+        ...this.sessions[did],
         accessJwt: undefined,
         refreshJwt: undefined,
         active: false,
@@ -212,7 +221,7 @@ export default class MySession {
     this.did = ""
     this.current = undefined
     this.authType = "password"
-    this.persist()
+    this.persist(did, true)
     $log("MySession.invalidateCurrentSession")
   }
 
@@ -220,13 +229,64 @@ export default class MySession {
 
   /**
    * 永続化
+   *
+   * 他タブの変更を失わないよう、保存済みのデータを読み直して指定した DID のエントリだけを反映する
+   * 読み直した他の DID のエントリはメモリにも取り込む（カレントのエントリはタブごとに保持する）
+   * @param did エントリを反映する DID。メモリに無ければ削除する（省略時はエントリを変更しない）
+   * @param saveCurrentDid true の場合はカレントの DID を次回起動時のアカウントとして保存する
+   * @param background true の場合はユーザー操作によらない更新として扱う
    */
-  private persist (): void {
-    const data = {
-      did: this.did,
-      sessions: this.sessions,
+  private persist (did: undefined | string, saveCurrentDid: boolean, background: boolean = false): void {
+    const stored = Util.loadStorage("atp")
+    const sessions: { [did: string]: TTSession } = stored?.sessions ?? {}
+    let currentDid: string = stored?.did ?? ""
+
+    if (did) {
+      const session = this.sessions[did]
+      const storedSession = sessions[did]
+      if (session == null) {
+        delete sessions[did]
+      } else if (!background) {
+        sessions[did] = session
+
+      // ユーザー操作によらない更新では、他タブで削除・無効化されたエントリを復活させない
+      } else if (storedSession != null && storedSession.active !== false) {
+        // 他タブで更新された新しいトークンは残す
+        sessions[did] = Util.isNewerJwt(storedSession.refreshJwt, session.refreshJwt)
+          ? {
+            ...session,
+            accessJwt: storedSession.accessJwt,
+            refreshJwt: storedSession.refreshJwt,
+          }
+          : session
+      }
     }
-    Util.saveStorage("atp", data)
+
+    if (saveCurrentDid) {
+      currentDid = this.did
+    }
+
+    // 削除されたアカウントを次回起動時のアカウントにしない
+    if (sessions[currentDid] == null) {
+      currentDid = ""
+    }
+
+    Util.saveStorage("atp", {
+      did: currentDid,
+      sessions,
+    })
+
+    // 他タブの変更をメモリに取り込む
+    for (const key in this.sessions) {
+      if (key !== this.did && sessions[key] == null) {
+        delete this.sessions[key]
+      }
+    }
+    for (const key in sessions) {
+      if (key !== this.did) {
+        this.sessions[key] = sessions[key]
+      }
+    }
   }
 
   /**

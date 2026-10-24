@@ -110,7 +110,7 @@ function importAccounts (event: Event) {
         { ...existingSession, ...importedSession },
         authType,
         importedSession.__service,
-        false // switchToCurrent
+        { switchToCurrent: false }
       )
     }
 

@@ -18,7 +18,10 @@ interface TIMySession {
     newData: Partial<TTSession>,
     authType: "oauth" | "password",
     service?: string,
-    switchToCurrent?: boolean
+    options?: {
+      switchToCurrent?: boolean
+      background?: boolean
+    }
   ) => Error | undefined
   switchAccount: (did: string) => boolean
   removeAccount: (did: string) => void

@@ -106,6 +106,18 @@ session = await oauthClient.initRestore()
 `Util.saveStorage("atp", { did, sessions })` で localStorage に保存。  
 OAuth トークン（DPoP キー、アクセストークン等）は `BrowserOAuthClient` が内部で IndexedDB に管理するため、Klearsky 側では保存・復元しない。
 
+#### 複数タブでの保存（`MySession.persist()`）
+
+localStorage はタブ間で共有されるが、メモリ上の `sessions` はタブを開いた時点のもの。丸ごと書き込むと他タブでの追加・削除・ログアウト・トークン更新を巻き戻すため、次のようにしている。
+
+- 保存済みのデータを読み直し、変更した DID のエントリだけを反映する。読み直した他の DID のエントリはメモリにも取り込む
+- メモリ上の `did` / `current` はそのタブで使用中のアカウントで、`atp.data.did` として「自分」の判定に使われる。他タブの変更で書き換えない
+- localStorage の `did` は次回起動時のアカウント。ユーザー操作（ログイン・切り替え・ログアウト等）の時だけ書き込む
+- ユーザー操作によらない更新（`updateSession` の `background`。トークン更新・`expired` 時の復旧・`syncSession`）は裏で頻繁に起きるため、次のようにする
+  - localStorage の `did` を書き込まない
+  - 他タブで削除・無効化（`active: false`）されたエントリを復活させない
+  - 保存済みのトークンの方が新しければ（`Util.isNewerJwt`）それを残す
+
 ### 認証方式の判定
 
 `MySession.authType` で判定。`"oauth"` か `"password"` のみ。デフォルトは `"password"`。  

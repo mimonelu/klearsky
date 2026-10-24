@@ -13,14 +13,14 @@ export default function (this: TIAtpWrapper, session: TTSession) {
 
   // OAuth認証の場合はライブラリがトークンを管理するため、セッション情報のみ反映
   if (authType === "oauth") {
-    state.mySession?.updateSession(session, authType, session.__service)
+    state.mySession?.updateSession(session, authType, session.__service, { background: true })
     return
   }
 
   if (Util.isNewerJwt(state.mySession?.current?.refreshJwt, session.refreshJwt)) {
     return
   }
-  state.mySession?.updateSession(session, authType, session.__service)
+  state.mySession?.updateSession(session, authType, session.__service, { background: true })
 
   // エージェントのトークンを差し替え
   // 未ログイン時と更新中は差し替えない（ログイン処理・更新処理と競合するため）

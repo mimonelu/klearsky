@@ -38,7 +38,10 @@ export default function (
     (session as TTSession).__loggedinVersion = CONSTS.LOGGEDIN_VERSION
 
     // MySessionでセッション管理
-    state.mySession?.updateSession(session as TTSession, "password", service)
+    // ログイン（create）以外はトークン更新等によるものなので、ユーザー操作によらない更新として扱う
+    state.mySession?.updateSession(session as TTSession, "password", service, {
+      background: event !== "create",
+    })
 
     // セッションの確立・更新時は他タブへ共有
     if (event === "create" || event === "update") {
@@ -62,7 +65,7 @@ export default function (
       stored.refreshJwt != null &&
       Util.isNewerJwt(stored.refreshJwt, current.refreshJwt)
     ) {
-      state.mySession?.updateSession(stored, "password", service)
+      state.mySession?.updateSession(stored, "password", service, { background: true })
       credentialSession.resumeSession({
         active: true,
         accessJwt: stored.accessJwt,
