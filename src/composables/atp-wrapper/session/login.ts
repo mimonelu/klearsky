@@ -12,12 +12,16 @@ export default async function (
   // MySessionからセッション取得（フォールバックとして従来のthis.dataも参照）
   const session = state.mySession?.current ?? this.data.sessions[this.data.did]
   service ??= session?.__service ?? "https://bsky.social"
-  if (!this.createAgentWithPassword(service, session?.__pdsUrl, onSessionExpired)) {
+
+  // 新規ログイン時はカレントセッション（別アカウントの可能性がある）の PDS URL を使わない
+  const isAutoLogin = identifier == null || password == null
+  const pdsUrl = isAutoLogin ? session?.__pdsUrl : undefined
+  if (!this.createAgentWithPassword(service, pdsUrl, onSessionExpired)) {
     return Error("noAgentError")
   }
 
   // 自動ログイン
-  if (identifier == null || password == null) {
+  if (isAutoLogin) {
     if (session == null) {
       return Error("noSessionError")
     }
