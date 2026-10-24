@@ -32,8 +32,10 @@ OAuthフロー全体:
 |---------|------|
 | `session/init-oauth.ts` | OAuthクライアント初期化・セッション取得のメインエントリ |
 | `create/create-agent-with-oauth.ts` | OAuthSessionから`Agent`インスタンスを生成 |
+| `create/create-agent-with-password.ts` | パスワード認証の`AtpAgent`を生成。`persistSession`でトークンを保存・共有 |
 | `session/fetch-wrapper.ts` | atproto-proxyヘッダー付与（OAuth時はapp.bskyをスキップ） |
 | `session/update-jwt.ts` | JWT更新（OAuth時はスキップ） |
+| `session/sync-session.ts` | 他タブで更新されたセッションの反映 |
 | `delete/delete-session.ts` | セッション削除（OAuth時は`oauthClient.revoke()`） |
 | `composables/main-state/my-session.ts` | セッション状態管理・永続化 |
 | `composables/main-view/useMainViewAuth.ts` | ログインフロー制御 |
@@ -158,6 +160,19 @@ Preferences API は、カスタム AppView を使っている場合でも公式 
 `update-jwt.ts` は OAuth 時は即 `return`（何もしない）。  
 `BrowserOAuthClient` がトークンの期限切れを自動検出・自動リフレッシュする。  
 `setupUpdateJwtInterval()` は引き続き動くが、実質 no-op。
+
+### パスワード認証
+
+トークンは `CredentialSession`（`create-agent-with-password.ts`）だけが保持・更新する。更新結果は `persistSession` で `MySession` に保存し、`create` / `update` 時はワーカー経由で他タブへ共有する。
+
+- 自前で `refreshSession` API を呼んで `MySession` だけを更新しないこと。エージェントが古い refreshJwt を持ち続け、使用済みのトークンで更新を試みることになる
+  - PDS は使用済み refreshJwt の再利用を最初の使用から 2 時間だけ許容する（accessJwt の寿命も 2 時間）。普段はこれで動いてしまうが、スリープ等で 2 時間を超えるとエージェントのセッションが失効する
+- `updateJwt` は accessJwt の期限 5 分前にエージェントの `sessionManager.refreshSession()` を呼ぶ。期限切れ後の自動更新に任せると、ストリームを body に持つリクエストが再送されないため
+- 自動ログインでは `resumeSession` が必ずトークンを更新するため、事前に `updateJwt` しない
+- 他タブから受け取ったセッションは `syncSession` でエージェントにも反映する
+  - 手元より古いトークン（JWT の `iat` で比較）は反映しない。ワーカーのキャッシュは localStorage より古いことがある
+  - 未ログイン時と更新中はエージェントを差し替えない（`resumeSession` / `refreshSession` と競合するため）
+- `persistSession` の `expired`（refreshJwt の失効）では、他タブが localStorage に保存した新しいトークンがあればそれで再開する。なければ利用中の失効に限り `onSessionExpired` で再ログインを促す（自動ログイン時の失敗は `login()` の呼び出し元が処理する）
 
 ---
 
