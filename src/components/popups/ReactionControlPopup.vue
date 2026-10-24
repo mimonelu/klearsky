@@ -239,6 +239,7 @@ async function update () {
       state.existingPostgate?.detachedEmbeddingUris
     )
     if (responseOfPostgate instanceof Error) {
+      state.loaderDisplay = false
       mainState.openErrorPopup(responseOfPostgate, "ReactionControlPopup/update")
       return
     }
@@ -266,6 +267,7 @@ async function update () {
       listUris
     )
     if (responseOfUpdate instanceof Error) {
+      state.loaderDisplay = false
       mainState.openErrorPopup(responseOfUpdate, "ReactionControlPopup/update")
       return
     }

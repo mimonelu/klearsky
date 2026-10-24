@@ -191,7 +191,10 @@ async function submitCallback () {
     const newStarterPack: Error | TIStarterPack =
       await mainState.atp.fetchStarterPack(result.uri)
     if (newStarterPack instanceof Error) {
+      // 作成自体は成功しているため、再送信による重複作成を避けてポップアップを閉じる
+      state.loaderDisplay = false
       mainState.openErrorPopup(newStarterPack, "StarterPackEditPopup/fetchStarterPack")
+      close()
       return
     }
 
@@ -221,7 +224,10 @@ async function submitCallback () {
     const newStarterPack: Error | TIStarterPack =
       await mainState.atp.fetchStarterPack(props.starterPack.uri)
     if (newStarterPack instanceof Error) {
+      // 更新自体は成功しているため、ポップアップを閉じる
+      state.loaderDisplay = false
       mainState.openErrorPopup(newStarterPack, "StarterPackEditPopup/fetchStarterPack")
+      close()
       return
     }
 
