@@ -20,7 +20,7 @@ export default withVueTs(
   {
     rules: {
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": ["warn", { caughtErrors: "none" }],
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", caughtErrors: "none" }],
       "vue/multi-word-component-names": "off",
     },
   },

@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import type { ComponentCustomProperties } from "vue";
+export {};
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {

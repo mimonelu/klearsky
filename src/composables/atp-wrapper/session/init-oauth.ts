@@ -49,7 +49,7 @@ export default async function (this: TIAtpWrapper, targetDid?: string): Promise<
     fetch: this.fetchWrapper.bind(this),
   })
 
-  let session: OAuthSession | null = null
+  let session: OAuthSession | null
 
   // OAuthコールバック（新規ログイン）の場合
   if (callbackParams) {

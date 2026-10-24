@@ -1,4 +1,4 @@
-import { jwtDecode } from "jwt-decode"
+import { jwtDecode, type JwtPayload } from "jwt-decode"
 import { state } from "@/composables/main-state"
 
 /**
@@ -32,8 +32,8 @@ export default async function (
   ) {
     return Error("noJwtError")
   }
-  let refreshJwt = undefined
-  let accessJwt = undefined
+  let refreshJwt: JwtPayload
+  let accessJwt: JwtPayload
   try {
     refreshJwt = jwtDecode(session.refreshJwt)
     accessJwt = jwtDecode(session.accessJwt)

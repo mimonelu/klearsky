@@ -295,7 +295,7 @@ function makeEmbedImages (images: AppBskyEmbedImages.Image[]): AppBskyEmbedImage
 }
 
 function convertFeedGeneratorUriToAtUri (uri: string): null | string {
-  const matches = uri.match(/^https?:\/\/[\w\.\-]+\/profile\/(did:\w+:[\w\.\-]+)\/feed\/([\w\.\-]+)$/)
+  const matches = uri.match(/^https?:\/\/[\w.-]+\/profile\/(did:\w+:[\w.-]+)\/feed\/([\w.-]+)$/)
   if (matches?.[1] == null || matches?.[2] == null) return null
   const did = matches[1]
   const rkey = matches[2]
@@ -303,7 +303,7 @@ function convertFeedGeneratorUriToAtUri (uri: string): null | string {
 }
 
 function convertListUriToAtUri (uri: string): null | string {
-  const matches = uri.match(/^https?:\/\/[\w\.\-]+\/profile\/(did:\w+:[\w\.\-]+)\/lists\/([\w\.\-]+)$/)
+  const matches = uri.match(/^https?:\/\/[\w.-]+\/profile\/(did:\w+:[\w.-]+)\/lists\/([\w.-]+)$/)
   if (matches?.[1] == null || matches?.[2] == null) return null
   const did = matches[1]
   const rkey = matches[2]
@@ -311,7 +311,7 @@ function convertListUriToAtUri (uri: string): null | string {
 }
 
 function convertStarterPackUriToAtUri (uri: string): null | string {
-  const matches = uri.match(/^https?:\/\/[\w\.\-]+\/starter-pack\/(did:\w+:[\w\.\-]+)\/([\w\.\-]+)$/)
+  const matches = uri.match(/^https?:\/\/[\w.-]+\/starter-pack\/(did:\w+:[\w.-]+)\/([\w.-]+)$/)
   if (matches?.[1] == null || matches?.[2] == null) return null
   const did = matches[1]
   const rkey = matches[2]

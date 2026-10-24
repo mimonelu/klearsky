@@ -243,6 +243,8 @@ function openMyFeedsSortPopover ($event: Event) {
   mainState.openMyFeedsSortPopover($event.target)
 }
 
+// TODO: 後で関連実装ごと削除すること
+/*
 async function mergeV1ToV2 () {
   Util.blurElement()
   if (!(await mainState.openConfirmationPopup({
@@ -257,14 +259,13 @@ async function mergeV1ToV2 () {
   mainState.loaderDisplay = true
   await mainState.myFeeds?.fetchItems()
   mainState.loaderDisplay = false
-  /*
-  if (!response) {
-    mainState.openErrorPopup("myFeedsFetchItemsError", "MyFeedsPopup/mergeV1ToV2")
-    return
-  }
-  */
+  // if (!response) {
+  //   mainState.openErrorPopup("myFeedsFetchItemsError", "MyFeedsPopup/mergeV1ToV2")
+  //   return
+  // }
   state.orderChanged = true
 }
+*/
 </script>
 
 <template>

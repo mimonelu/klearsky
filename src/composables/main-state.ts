@@ -1364,7 +1364,7 @@ function updateTimelineInterval () {
 }
 
 async function updateTimeline () {
-  let response = await state.atp.fetchTimelineNewArrival()
+  const response = await state.atp.fetchTimelineNewArrival()
   if (response instanceof Error) {
     return
   }
@@ -1376,9 +1376,6 @@ async function updateTimeline () {
   }
 
   const latestPostUri = response[0].post?.uri
-
-  // @ts-ignore
-  response = null
 
   if (latestPostUri == null) {
     state.hasTimelineNewArrival = false

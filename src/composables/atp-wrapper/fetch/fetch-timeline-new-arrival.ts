@@ -13,7 +13,7 @@ export default async function (
     limit: 1,
     cursor: undefined,
   }
-  let response: Error | AppBskyFeedGetTimeline.Response =
+  const response: Error | AppBskyFeedGetTimeline.Response =
     await this.agent.getTimeline(query)
       .then((value) => value)
       .catch((error) => error)
@@ -25,10 +25,5 @@ export default async function (
     $log("getTimeline", response)
     return Error("apiError")
   }
-  const feed = response.data.feed as Array<TTFeed>
-
-  // @ts-ignore
-  response = null
-
-  return feed
+  return response.data.feed as Array<TTFeed>
 }

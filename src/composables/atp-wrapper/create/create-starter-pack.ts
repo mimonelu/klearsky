@@ -1,5 +1,4 @@
 import type { ComAtprotoRepoCreateRecord } from "@atproto/api"
-import Util from "@/composables/util"
 
 export default async function (
   this: TIAtpWrapper,

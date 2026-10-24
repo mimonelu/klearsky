@@ -1,4 +1,4 @@
-import type { AppBskyFeedPostgate, ComAtprotoRepoGetRecord } from "@atproto/api"
+import type { ComAtprotoRepoGetRecord } from "@atproto/api"
 import Util from "@/composables/util"
 
 export default async function (

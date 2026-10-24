@@ -2,8 +2,6 @@ const ports: Array<MessagePort> = []
 
 const sessionCaches: TIMyWorkerSessionCaches = {}
 
-const notificationTimerNows: { [did: string]: number } = {}
-
 function main () {
   (self as any).onconnect = (event: MessageEvent) => {
     onConnect(event)
@@ -78,6 +76,8 @@ function onMessage (event: MessageEvent, currentPort: MessagePort) {
 }
 
 /*
+const notificationTimerNows: { [did: string]: number } = {}
+
 function startPeriodicProcess () {
   setInterval(() => {
     const now = Date.now()
