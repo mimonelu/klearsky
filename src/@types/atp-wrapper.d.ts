@@ -245,7 +245,7 @@ interface TIAtpWrapper {
   hasLogin
     (): boolean
   initOAuth
-    (targetDid?: string): Promise<TTSession | undefined>
+    (targetDid?: string, onSessionExpired?: () => void): Promise<Error | TTSession | undefined>
   leaveChatConvo
     (convoId: string): Promise<Error | undefined>
   login

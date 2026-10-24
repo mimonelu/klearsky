@@ -161,6 +161,23 @@ Preferences API は、カスタム AppView を使っている場合でも公式 
 `BrowserOAuthClient` がトークンの期限切れを自動検出・自動リフレッシュする。  
 `setupUpdateJwtInterval()` は引き続き動くが、実質 no-op。
 
+### OAuth セッションの失効
+
+トークン更新の失敗や失効で `BrowserOAuthClient` がセッションを削除すると `deleted` イベントが発行される。`initOAuth()` はセッション確立後にこれを監視し、カレントアカウントの DID であれば `onSessionExpired` で再ログインを促す（パスワード認証の `expired` と同じ導線）。
+
+- 自タブでのログアウト（`revoke()`）は `cause` が `TokenRevokedError` になるので除外する
+- 他タブからのイベントは BroadcastChannel 経由で届き、`cause` の型が失われる。他タブで同じアカウントをログアウトした場合も再ログインを促す対象になる
+- 削除後も API 呼び出しのたびに `deleted`（"deleted by another process"）が発行されるため、通知は一度だけ行う
+- 自動ログイン時の復元失敗は `initOAuth()` の呼び出し元が処理する（リスナーは復元成功後に登録する）
+
+### 自動ログイン時の復元失敗
+
+`initOAuth()` は復元に失敗した原因でこの 2 つを区別して返す。
+
+- `TokenRefreshError` / `TokenRevokedError` / `TokenInvalidError`: セッションは `BrowserOAuthClient` のストアから削除済み。`Error` を返し、`tryOAuthAutoLogin()` がカレントセッションを無効化して再ログインを促す
+  - 無効化しないとカレントのまま残り、リロードやアカウント選択のたびに復元に失敗し続ける（他タブで同じアカウントをログアウトした場合などに起きる）
+- それ以外（ネットワークエラー等）: セッションが残っているため `undefined` を返し、状態を保持して再接続後のリロードで復元できるようにする
+
 ### パスワード認証
 
 トークンは `CredentialSession`（`create-agent-with-password.ts`）だけが保持・更新する。更新結果は `persistSession` で `MySession` に保存し、`create` / `update` 時はワーカー経由で他タブへ共有する。

@@ -1,5 +1,11 @@
 import type { ComAtprotoServerGetSession } from "@atproto/api"
-import { BrowserOAuthClient, type OAuthSession } from "@atproto/oauth-client-browser"
+import {
+  BrowserOAuthClient,
+  TokenInvalidError,
+  TokenRefreshError,
+  TokenRevokedError,
+  type OAuthSession,
+} from "@atproto/oauth-client-browser"
 import { type OAuthClientMetadataInput } from "@atproto/oauth-types"
 import { LOGGEDIN_VERSION } from "@/consts/consts.json"
 
@@ -36,7 +42,56 @@ function createOAuthClientMetadata (): Readonly<OAuthClientMetadataInput> {
   }
 }
 
-export default async function (this: TIAtpWrapper, targetDid?: string): Promise<TTSession | undefined> {
+/**
+ * BrowserOAuthClient によるセッション削除（トークン更新の失敗や失効）を監視
+ *
+ * 削除イベントは他タブからも届き、削除後の API 呼び出しのたびにも発行されるため、通知は一度だけ行う
+ */
+function watchSessionDeleted (
+  oauthClient: BrowserOAuthClient,
+  did: string,
+  onSessionExpired: () => void
+) {
+  let handled = false
+  oauthClient.addEventListener("deleted", (event) => {
+    if (handled || event.detail.sub !== did) {
+      return
+    }
+    handled = true
+
+    // 自タブでのログアウト（revoke）は除外する
+    // 他タブからのイベントは cause の型が失われるため、他タブでのログアウトは再ログインを促す対象になる
+    if (event.detail.cause instanceof TokenRevokedError) {
+      return
+    }
+
+    $warn("initOAuth: session deleted", event.detail.cause)
+    onSessionExpired()
+  })
+}
+
+/**
+ * セッションが失われたことを示すエラーか（BrowserOAuthClient はこれらのエラーでセッションをストアから削除する）
+ *
+ * ネットワークエラー等はセッションが残っているため含めない
+ */
+function isSessionLostError (error: unknown): boolean {
+  return error instanceof TokenRefreshError ||
+    error instanceof TokenRevokedError ||
+    error instanceof TokenInvalidError
+}
+
+/**
+ * OAuth クライアントを初期化し、セッションを取得する
+ *
+ * セッションが失われている場合（他タブでのログアウト等）は Error を返す
+ * ネットワークエラー等で復元できなかった場合は undefined を返す
+ */
+export default async function (
+  this: TIAtpWrapper,
+  targetDid?: string,
+  onSessionExpired?: () => void
+): Promise<Error | TTSession | undefined> {
   // OAuthコールバックパラメータを取得
   const callbackParams = new URLSearchParams(location.search).has("code")
     ? new URLSearchParams(location.search)
@@ -63,7 +118,7 @@ export default async function (this: TIAtpWrapper, targetDid?: string): Promise<
       session = await this.oauthClient.restore(targetDid)
     } catch (error) {
       $warn("initOAuth: restore failed", error)
-      return
+      return isSessionLostError(error) ? Error("noSessionError") : undefined
     }
   }
 
@@ -74,13 +129,16 @@ export default async function (this: TIAtpWrapper, targetDid?: string): Promise<
       session = result?.session ?? null
     } catch (error) {
       $warn("initOAuth: initRestore failed", error)
-      return
+      return isSessionLostError(error) ? Error("noSessionError") : undefined
     }
   }
 
   if (session != null) {
     $log("OAuth 🔑", session.did)
     this.createAgentWithOAuth(session)
+    if (onSessionExpired != null) {
+      watchSessionDeleted(this.oauthClient, session.did, onSessionExpired)
+    }
 
     // 各種セッション情報の取得
     let handle = ""

@@ -74,11 +74,26 @@ export function useMainViewAuth (options: Options) {
   async function tryOAuthAutoLogin (): Promise<boolean> {
     // 期待するDIDを渡して、そのアカウントのセッションを復元
     const targetDid = state.mySession?.did
-    let oauthSession: TTSession | undefined
+    let oauthSession: Error | TTSession | undefined
     try {
-      oauthSession = await state.atp.initOAuth(targetDid || undefined)
+      oauthSession = await state.atp.initOAuth(targetDid || undefined, onSessionExpired)
     } catch (error) {
       state.openErrorPopup(error as Error, "MainView/tryOAuthAutoLogin")
+      return false
+    }
+
+    // OAuth セッションが失われている場合（他タブでのログアウト等）は再ログインを促す
+    // カレントセッションを無効化しないと、リロードやアカウント選択のたびに復元に失敗し続ける
+    if (oauthSession instanceof Error) {
+      const session = state.mySession?.current
+      if (session != null) {
+        state.openMessagePopup({
+          title: $t("reLoginFailed"),
+          text: $t(oauthSession.message),
+        })
+        state.loginFormInitialSession = session
+        state.mySession?.invalidateCurrentSession()
+      }
       return false
     }
     if (oauthSession != null) {
