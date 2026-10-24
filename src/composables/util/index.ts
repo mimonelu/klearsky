@@ -4,6 +4,7 @@ import cipher from "@/composables/util/cipher"
 import debounce from "@/composables/util/debounce"
 import sanitizePostsOrFeeds from "@/composables/util/sanitize-posts-or-feeds"
 import createEmbed from "@/composables/util/create-embed"
+import createGeneration from "@/composables/util/create-generation"
 import displayJson from "@/composables/util/display-json"
 import downloadBlob from "@/composables/util/download-blob"
 import downloadImage from "@/composables/util/download-image"
@@ -45,6 +46,7 @@ export default {
   debounce,
   sanitizePostsOrFeeds,
   createEmbed,
+  createGeneration,
   displayJson,
   downloadBlob,
   downloadImage,

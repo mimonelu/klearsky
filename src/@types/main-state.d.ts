@@ -148,7 +148,7 @@ interface MainState {
   isMyProfile: () => boolean
   fetchUserProfile: () => Promise<void>
   updateUserProfile: (profile: TTUpdateProfileParams) => Promise<void>
-  fetchCurrentProfile: (did: string) => Promise<Error | undefined>
+  fetchCurrentProfile: (did: string, generation?: number) => Promise<Error | undefined>
   fetchCurrentAuthorFeedGenerators: (direction: "new" | "old") => Promise<void>
   fetchCurrentAuthorFeed: (direction: TTDirection, filter?: string, middleCursor?: string) => Promise<void>
   fetchAuthorReposts: (direction: TTDirection) => Promise<void>

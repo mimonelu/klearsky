@@ -122,8 +122,15 @@ export default class MyLabeler {
     return response[0]
   }
 
-  async updateCurrentLabeler (did: string): Promise<boolean> {
-    this.mainState.currentLabeler = await this.fetchLabeler(did)
+  async updateCurrentLabeler (did: string, isCurrent?: () => boolean): Promise<boolean> {
+    const labeler = await this.fetchLabeler(did)
+
+    // await 中に別のプロフィールへ遷移した場合は反映しない
+    if (isCurrent != null && !isCurrent()) {
+      return false
+    }
+
+    this.mainState.currentLabeler = labeler
     return this.mainState.currentLabeler != null
   }
 

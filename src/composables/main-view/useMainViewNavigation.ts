@@ -6,6 +6,7 @@ import type {
   LocationQueryValue
 } from "vue-router"
 import { state } from "@/composables/main-state"
+import Generations from "@/composables/main-state/generations"
 import { PROFILE_ERRORS } from "@/consts/errors.json"
 import OWN_DOMAIN from "@/consts/own-domain"
 
@@ -405,11 +406,18 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
     if (account == null) {
       return
     }
+    const generation = Generations.profile.current()
     if (
       account !== state.currentProfile?.handle &&
       account !== state.currentProfile?.did
     ) {
-      const response = await state.fetchCurrentProfile(account)
+      const response = await state.fetchCurrentProfile(account, generation)
+
+      // await 中に別のプロフィールへ遷移した場合は以降の処理を打ち切る
+      if (!Generations.profile.isCurrent(generation)) {
+        return Error("staleProfileError")
+      }
+
       if (response instanceof Error) {
         return response
       }
@@ -423,7 +431,10 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
       }
     }
     if (state.currentProfile?.associated?.labeler && state.currentLabeler == null) {
-      state.myLabeler!.updateCurrentLabeler(state.currentProfile.did)
+      state.myLabeler!.updateCurrentLabeler(
+        state.currentProfile.did,
+        () => Generations.profile.isCurrent(generation)
+      )
     }
   }
 

@@ -28,6 +28,7 @@ import VerifierIcon from "@/components/next/Verification/VerifierIcon.vue"
 import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
 import WebsiteLink from "@/components/buttons/WebsiteLink.vue"
+import Generations from "@/composables/main-state/generations"
 import Util from "@/composables/util"
 import { useContentLabels } from "@/composables/util/use-content-labels"
 
@@ -236,12 +237,15 @@ async function toggleNoUnauthenticated () {
     }
   }
 
+  // 待機中に別のプロフィールへ遷移した場合に備え、世代番号を先に控えておく
+  const generation = Generations.profile.current()
+
   mainState.centerLoaderDisplay = true
   await mainState.updateUserProfile(params)
   const did = mainState.atp.session?.did
   if (did != null) {
     await Util.wait(1000)
-    await mainState.fetchCurrentProfile(did)
+    await mainState.fetchCurrentProfile(did, generation)
   }
   mainState.centerLoaderDisplay = false
 }

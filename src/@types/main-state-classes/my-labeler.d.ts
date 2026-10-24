@@ -11,7 +11,7 @@ interface TIMyLabeler {
   getMyLabelerPreferences (): Array<{ did: string }>
   makeMyLabelerPreferenceDids (): string[]
   fetchLabeler (did: string): Promise<undefined | TILabeler>
-  updateCurrentLabeler (did: string): Promise<boolean>
+  updateCurrentLabeler (did: string, isCurrent?: () => boolean): Promise<boolean>
   updateMyLabelers(): Promise<boolean>
   updateLabelMap (): void
   getProperLocale (locales: Array<TILabelerDefinitionLocale>): undefined | TILabelerDefinitionLocale

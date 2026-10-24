@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
+import Generations from "@/composables/main-state/generations"
 import Util from "@/composables/util"
 
 const $t = inject("$t") as Function
@@ -154,6 +155,10 @@ async function submit () {
   Util.blurElement()
   if (state.processing) return
   state.processing = true
+
+  // 待機中に別のプロフィールへ遷移した場合に備え、世代番号を先に控えておく
+  const generation = Generations.profile.current()
+
   try {
     await mainState.updateUserProfile({
       ...state as TTUpdateProfileParams,
@@ -164,7 +169,7 @@ async function submit () {
     const did = mainState.atp.session?.did
     if (did != null) {
       await Util.wait(500)
-      await mainState.fetchCurrentProfile(did)
+      await mainState.fetchCurrentProfile(did, generation)
     }
     await router.push({ name: "profile-feeds", query: { account: did } })
   } finally {

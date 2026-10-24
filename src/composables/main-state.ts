@@ -7,6 +7,7 @@ import { computed, nextTick, reactive } from "vue"
 import type { LocationQueryValue } from "vue-router"
 import AtpWrapper from "@/composables/atp-wrapper"
 import attachFilesToPost from "@/composables/main-state/attach-files-to-post"
+import Generations from "@/composables/main-state/generations"
 import MyChat from "@/composables/main-state/my-chat"
 import MyFeeds from "@/composables/main-state/my-feeds"
 import MyLabeler from "@/composables/main-state/my-labeler"
@@ -1484,6 +1485,7 @@ function updateAtprotoProxy (proxy?: string) {
 // プロフィール
 
 function resetProfileState () {
+  Generations.profile.next()
   resetArray(state, "currentAuthorFeeds")
   state.currentAuthorFeedsCursor = undefined
   resetArray(state, "currentAuthorFeedsWithReplies")
@@ -1513,10 +1515,9 @@ function resetProfileState () {
   state.currentAuthorLatestActivityDate = undefined
 }
 
+// 進行中のリクエストが古い配列に書き込んでも影響しないよう、 `splice(0)` ではなく差し替える
 function resetArray (state: any, key: string) {
-  state[key] == null
-    ? state[key] = []
-    : state[key].splice(0)
+  state[key] = []
 }
 
 function isMyProfile (): boolean {
@@ -1548,7 +1549,12 @@ async function updateUserProfile (profile: TTUpdateProfileParams) {
   }
 }
 
-async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
+async function fetchCurrentProfile (did: string, generation = Generations.profile.current()): Promise<Error | undefined> {
+  // 呼び出し元の意図が生まれた後に別プロフィールへ遷移していれば何もしない
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
+
   // 各種プロフィール関連データの初期化
   state.currentProfile = null
   state.currentAuthorReposts.splice(0)
@@ -1565,11 +1571,17 @@ async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
 
   // プロフィールデータの取得
   const currentProfile = await state.atp.fetchProfile(did)
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (currentProfile instanceof Error) {
     state.currentProfile = null
     return currentProfile
   }
   state.currentProfile = currentProfile
+
+  // 後続の非同期処理で書き込み先とする（リアクティブなプロキシを渡すこと）
+  const profile = state.currentProfile
 
   // 現在のプロフィールがユーザープロフィールの場合
   if (did === state.atp.session?.did) {
@@ -1580,22 +1592,25 @@ async function fetchCurrentProfile (did: string): Promise<Error | undefined> {
   }
 
   // 固定ポストのインポート
-  fetchPinnedPost(state.currentProfile)
+  fetchPinnedPost(profile, generation)
 
   // ハンドル履歴の取得
-  updateCurrentLog()
+  updateCurrentLog(profile, generation)
     .then(() => {
       // describeRepo の取得
-      updateCurrentRepo()
+      updateCurrentRepo(profile, generation)
     })
 
   // 最終アクティビティ日時の取得（非同期、awaitしない）
-  fetchLatestActivityDate(did)
+  fetchLatestActivityDate(did, generation)
 }
 
-async function fetchPinnedPost (profile?: TTProfile) {
-  if (profile?.pinnedPost?.uri != null) {
+async function fetchPinnedPost (profile: TTProfile, generation: number) {
+  if (profile.pinnedPost?.uri != null) {
     const posts = await state.atp.fetchPosts([profile.pinnedPost.uri])
+    if (!Generations.profile.isCurrent(generation)) {
+      return
+    }
     if (posts instanceof Error) {
       // TODO:
       // state.openErrorPopup(posts, "mainState/fetchPinnedPost")
@@ -1609,28 +1624,25 @@ async function fetchPinnedPost (profile?: TTProfile) {
   }
 }
 
-async function updateCurrentLog () {
-  if (state.currentProfile == null) {
+async function updateCurrentLog (profile: TTProfile, generation: number) {
+  const logJson = await state.atp.fetchLogAudit(profile.did)
+  if (!Generations.profile.isCurrent(generation)) {
     return
   }
-  const logJson = await state.atp.fetchLogAudit(state.currentProfile.did)
   if (logJson instanceof Error || logJson == null) {
     return
   }
-  if (state.currentProfile == null) {
-    return // await 中に初期化される恐れがあるため
-  }
-  state.currentProfile.__log = logJson
+  profile.__log = logJson
 }
 
-async function updateCurrentRepo () {
-  if (state.currentProfile == null) {
+async function updateCurrentRepo (profile: TTProfile, generation: number) {
+  if (!Generations.profile.isCurrent(generation)) {
     return
   }
   const response = await state.atp.fetchWithoutAgent({
     path: "com.atproto.repo.describeRepo",
-    did: state.currentProfile.did,
-    query: { repo: state.currentProfile.did },
+    did: profile.did,
+    query: { repo: profile.did },
   })
     .then((value) => value)
     .catch((error) => error)
@@ -1646,21 +1658,24 @@ async function updateCurrentRepo () {
     return
   }
   const json = await response.json().catch(() => undefined)
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (json == null) {
     return
   }
-  if (state.currentProfile == null) {
-    return // await 中に初期化される恐れがあるため
-  }
-  state.currentProfile.__repo = json
+  profile.__repo = json
 }
 
-async function fetchLatestActivityDate (did: string) {
+async function fetchLatestActivityDate (did: string, generation: number) {
   const response = await state.atp.fetchWithoutAgent({
     path: "com.atproto.sync.getLatestCommit",
     did,
     query: { did },
   })
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (response instanceof Error) {
     return
   }
@@ -1668,6 +1683,9 @@ async function fetchLatestActivityDate (did: string) {
     return
   }
   const json = await response.json().catch(() => undefined)
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (json?.rev == null) {
     return
   }
@@ -1680,6 +1698,7 @@ async function fetchLatestActivityDate (did: string) {
 
 async function fetchCurrentAuthorFeedGenerators (direction: "new" | "old") {
   const account = state.currentQuery.account as LocationQueryValue
+  const generation = Generations.profile.current()
   if (!account) return
 
   // ブロックしている
@@ -1694,6 +1713,9 @@ async function fetchCurrentAuthorFeedGenerators (direction: "new" | "old") {
     CONSTS.LIMIT_OF_FETCH_AUTHOR_CUSTOM_FEEDS,
     direction === "old" ? state.currentAuthorFeedGeneratorsCursor : undefined
   )
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (cursor instanceof Error) {
     // TODO:
     // state.openErrorPopup(cursor, "mainState/fetchCurrentAuthorFeedGenerators")
@@ -1706,6 +1728,7 @@ async function fetchCurrentAuthorFeedGenerators (direction: "new" | "old") {
 
 async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, middleCursor?: string) {
   const account = state.currentQuery.account as LocationQueryValue
+  const generation = Generations.profile.current()
   if (!account) return
 
   // ブロックしている
@@ -1738,6 +1761,9 @@ async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, 
     filter ?? "posts_no_replies",
     direction
   )
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (resultCursor instanceof Error) {
     // TODO:
     // state.openErrorPopup(resultCursor, "mainState/fetchCurrentAuthorFeed")
@@ -1756,6 +1782,7 @@ async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, 
 
 async function fetchAuthorReposts (direction: TTDirection) {
   const account = state.currentQuery.account as LocationQueryValue
+  const generation = Generations.profile.current()
   if (!account) {
     return
   }
@@ -1765,6 +1792,9 @@ async function fetchAuthorReposts (direction: TTDirection) {
     CONSTS.LIMIT_OF_FETCH_AUTHOR_REPOSTS,
     direction === "new" ? undefined : state.currentAuthorRepostsCursor
   )
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (cursor instanceof Error) {
     // TODO:
     // state.openErrorPopup(cursor, "mainState/fetchAuthorReposts")
@@ -1775,6 +1805,7 @@ async function fetchAuthorReposts (direction: TTDirection) {
 
 async function fetchAuthorLikes (direction: TTDirection) {
   const account = state.currentQuery.account as LocationQueryValue
+  const generation = Generations.profile.current()
   if (!account) return
   const cursor = await state.atp.fetchAuthorLikes(
     state.currentAuthorLikes,
@@ -1782,6 +1813,9 @@ async function fetchAuthorLikes (direction: TTDirection) {
     CONSTS.LIMIT_OF_FETCH_AUTHOR_LIKES,
     direction === "new" ? undefined : state.currentAuthorLikesCursor
   )
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (cursor instanceof Error) {
     // TODO:
     // state.openErrorPopup(cursor, "mainState/fetchAuthorLikes")
@@ -1792,6 +1826,7 @@ async function fetchAuthorLikes (direction: TTDirection) {
 
 async function fetchAuthorLists (direction: "new" | "old") {
   const account = state.currentQuery.account as LocationQueryValue
+  const generation = Generations.profile.current()
   if (!account) return
 
   // ブロックしている
@@ -1806,6 +1841,9 @@ async function fetchAuthorLists (direction: "new" | "old") {
     CONSTS.LIMIT_OF_FETCH_AUTHOR_LIST,
     direction === "new" ? undefined : state.currentAuthorListsCursor
   )
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (cursor instanceof Error) {
     // TODO:
     // state.openErrorPopup(cursor, "mainState/fetchAuthorLists")
@@ -1816,6 +1854,7 @@ async function fetchAuthorLists (direction: "new" | "old") {
 
 async function fetchAuthorStarterPacks (direction: "new" | "old") {
   const account = state.currentQuery.account as LocationQueryValue
+  const generation = Generations.profile.current()
   if (!account) return
 
   // ブロックしている
@@ -1830,6 +1869,9 @@ async function fetchAuthorStarterPacks (direction: "new" | "old") {
     CONSTS.LIMIT_OF_FETCH_AUTHOR_STARTER_PACKS,
     direction === "new" ? undefined : state.currentAuthorStarterPacksCursor
   )
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (cursor instanceof Error) {
     // TODO:
     // state.openErrorPopup(cursor, "mainState/fetchAuthorStarterPacks")
@@ -1840,6 +1882,7 @@ async function fetchAuthorStarterPacks (direction: "new" | "old") {
 
 async function fetchFollowers (direction: "new" | "old", sort?: "latest" | "top") {
   const account = state.currentQuery.account as LocationQueryValue
+  const generation = Generations.profile.current()
   if (!account) {
     return
   }
@@ -1867,6 +1910,9 @@ async function fetchFollowers (direction: "new" | "old", sort?: "latest" | "top"
     sort,
     direction === "new" ? undefined : state.currentFollowersCursor
   )
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (cursor instanceof Error) {
     // TODO:
     // state.openErrorPopup(cursor, "mainState/fetchFollowers")
@@ -1878,6 +1924,7 @@ async function fetchFollowers (direction: "new" | "old", sort?: "latest" | "top"
 
 async function fetchFollowings (direction: "new" | "old", sort?: "latest" | "top") {
   const account = state.currentQuery.account as LocationQueryValue
+  const generation = Generations.profile.current()
   if (!account) {
     return
   }
@@ -1905,6 +1952,9 @@ async function fetchFollowings (direction: "new" | "old", sort?: "latest" | "top
     sort,
     direction === "new" ? undefined : state.currentFollowingsCursor
   )
+  if (!Generations.profile.isCurrent(generation)) {
+    return
+  }
   if (cursor instanceof Error) {
     // TODO:
     // state.openErrorPopup(cursor, "mainState/fetchFollowings")
