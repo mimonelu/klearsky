@@ -4,14 +4,14 @@ interface TIMyChat {
   myConvos: Array<MyConvo>
   unread: number
   logsCursor: undefined | string
-  async updateDisabled (): Promise<void>
-  async checkNewLogs (): Promise<Array<string>>
-  async setAllowIncoming (allowIncoming: TTAllowIncoming): Promise<boolean>
-  async setAllowGroupInvites (allowGroupInvites: TTAllowGroupInvites): Promise<boolean>
-  async setDeclaration (allowIncoming: TTAllowIncoming, allowGroupInvites: TTAllowGroupInvites): Promise<boolean>
-  async fetchMyConvo (dids: Array<string>): Promise<undefined | TIMyConvo>
-  async updateConvos (convoIds: Array<string>): Promise<void>
-  async updateConvosAll (): Promise<boolean>
+  updateDisabled (): Promise<void>
+  checkNewLogs (): Promise<Array<string>>
+  setAllowIncoming (allowIncoming: TTAllowIncoming): Promise<boolean>
+  setAllowGroupInvites (allowGroupInvites: TTAllowGroupInvites): Promise<boolean>
+  setDeclaration (allowIncoming: TTAllowIncoming, allowGroupInvites: TTAllowGroupInvites): Promise<boolean>
+  fetchMyConvo (dids: Array<string>): Promise<undefined | TIMyConvo>
+  updateConvos (convoIds: Array<string>): Promise<void>
+  updateConvosAll (): Promise<boolean>
   sortMyConvos(): void
   updateUnread(): void
 }

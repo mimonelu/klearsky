@@ -47,14 +47,14 @@ interface MainState {
   fetchNotifications: (limit: number, direction: "new" | "old") => Promise<void>
 
   // 新着通知タイマー
-  notificationTimer: null | NodeJS.Timeout = null
+  notificationTimer: null | NodeJS.Timeout
   clearNotificationInterval: () => void
   updateNotifications: () => Promise<void>
   updateNotificationInterval: () => void
 
   // 新着フォロー中フィードタイマー
   hasTimelineNewArrival: boolean
-  timelineTimer: null | NodeJS.Timeout = null
+  timelineTimer: null | NodeJS.Timeout
   clearTimelineInterval: () => void
   updateTimeline: () => Promise<void>
   updateTimelineInterval: () => void

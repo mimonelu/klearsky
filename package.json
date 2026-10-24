@@ -8,7 +8,7 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "lint": "eslint . --fix",
     "make-icon": "npx sharp-cli -i public/favicon.svg -o public/apple-touch-icon.png resize 180 180"
   },
   "browserslist": [
@@ -19,7 +19,7 @@
   "dependencies": {
     "@atproto/api": "^0.29.1",
     "@atproto/oauth-client-browser": "^0.3.39",
-    "@vueuse/core": "^10.11.1",
+    "@vueuse/core": "^15.0.0",
     "browser-image-compression": "^2.0.2",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
@@ -36,13 +36,15 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@types/node": "^20.16.5",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "~22.16.0",
     "@vitejs/plugin-vue": "^5.2.1",
-    "@vue/eslint-config-typescript": "^11.0.3",
+    "@vue/eslint-config-typescript": "^14.9.0",
     "@vue/tsconfig": "^0.7.0",
     "autoprefixer": "^10.4.20",
-    "eslint": "^8.43.0",
-    "eslint-plugin-vue": "^9.19.2",
+    "eslint": "^10.13.0",
+    "eslint-plugin-vue": "^10.11.1",
+    "globals": "^17.13.0",
     "postcss": "^8.5.1",
     "sass": "^1.63.6",
     "typescript": "^5.7.2",

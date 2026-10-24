@@ -5,14 +5,14 @@ interface TIMyConvo {
   logsCursor?: string
   messagesCursor?: string
   getMemberNames (): Array<string>
-  async createMessage (params: TTCreatePostParams): Promise<boolean>
-  async updateMessages (limit?: number, isNew = true): Promise<number>
-  async deleteMessage (messageId: string): Promise<boolean>
-  async checkNewMessages (): Promise<boolean>
-  async updateRead (messageId?: string): Promise<boolean>
-  async mute (): Promise<boolean>
-  async unmute (): Promise<boolean>
-  async accept (): Promise<boolean>
-  async leave (): Promise<boolean>
+  createMessage (params: TTCreatePostParams): Promise<boolean>
+  updateMessages (limit?: number, isNew?: boolean): Promise<number>
+  deleteMessage (messageId: string): Promise<boolean>
+  checkNewMessages (): Promise<boolean>
+  updateRead (messageId?: string): Promise<boolean>
+  mute (): Promise<boolean>
+  unmute (): Promise<boolean>
+  accept (): Promise<boolean>
+  leave (): Promise<boolean>
   findMember (did: string): undefined | TTUser
 }
