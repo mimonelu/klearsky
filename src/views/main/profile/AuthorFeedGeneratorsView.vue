@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive } from "vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
@@ -8,18 +8,31 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
+// 追加読み込み中フラグ
+// 初回の読み込み中は `mainState.listLoaderDisplay` （ `processPage()` が管理）
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false,
+})
+
+// 初回の読み込み中または追加読み込み中
+const listLoading = computed((): boolean => {
+  return mainState.listLoaderDisplay || state.processing
+})
+
 async function fetchAuthorFeedGenerators (direction: "new" | "old") {
   Util.blurElement()
-  mainState.listLoaderDisplay = true
+  state.processing = true
   await mainState.fetchCurrentAuthorFeedGenerators(direction)
-  mainState.listLoaderDisplay = false
+  state.processing = false
 }
 
 // スクロールオブザーバー
 function onScrolledToBottom () {
   if (
     mainState.atp.hasLogin() &&
-    !mainState.listLoaderDisplay
+    !listLoading.value
   ) {
     fetchAuthorFeedGenerators("old")
   }
@@ -30,13 +43,13 @@ function onScrolledToBottom () {
   <div class="author-feed-generators-view">
     <LoadButton
       direction="new"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchAuthorFeedGenerators('new')"
     />
 
     <!-- 空のコンテンツメッセージ -->
     <div
-      v-if="!mainState.listLoaderDisplay && mainState.currentAuthorFeedGenerators?.length === 0"
+      v-if="!listLoading && mainState.currentAuthorFeedGenerators?.length === 0"
       class="textlabel margin1"
     >
       <div class="textlabel__text">
@@ -57,7 +70,7 @@ function onScrolledToBottom () {
     </div>
     <LoadButton
       direction="old"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchAuthorFeedGenerators('old')"
     />
 

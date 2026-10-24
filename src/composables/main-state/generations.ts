@@ -1,6 +1,11 @@
 import Util from "@/composables/util"
 
 export default {
+  // 遷移の世代番号
+  // 遷移時（ `beforeEach` ）でのみ進めること
+  // `processPage()` が `listLoaderDisplay` を戻してよいかの判定に使う
+  navigation: Util.createGeneration(),
+
   // プロフィールの世代番号
   // `resetProfileState()` でのみ進めること
   profile: Util.createGeneration(),

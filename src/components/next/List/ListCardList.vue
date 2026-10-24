@@ -13,6 +13,7 @@ const props = defineProps<{
   headerDisplay: boolean
   loaderDisplay: boolean
   isCompact: boolean
+  processing?: boolean
 }>()
 
 const $t = inject("$t") as Function
@@ -112,13 +113,13 @@ function clicked (list?: TTList) {
     <LoadButton
       v-if="loaderDisplay"
       direction="new"
-      :processing="mainState.listLoaderDisplay"
+      :processing="processing"
       @activate="fetchLists('new')"
     />
 
     <!-- 空リストメッセージ -->
     <div
-      v-if="!mainState.listLoaderDisplay && state.lists.length === 0"
+      v-if="!processing && state.lists.length === 0"
       class="textlabel list-card-list__nolist"
     >
       <div class="textlabel__text">
@@ -147,7 +148,7 @@ function clicked (list?: TTList) {
     <LoadButton
       v-if="loaderDisplay"
       direction="old"
-      :processing="mainState.listLoaderDisplay"
+      :processing="processing"
       @activate="fetchLists('old')"
     />
   </div>

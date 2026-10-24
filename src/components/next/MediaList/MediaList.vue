@@ -6,6 +6,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 const props = defineProps<{
   did?: string
   medias: Array<TTMedia>
+  processing?: boolean
 }>()
 
 const mainState = inject("state") as MainState
@@ -37,7 +38,7 @@ function onClickItem (mediaIndex: number) {
   <div class="media-list">
     <!-- 空のコンテンツメッセージ -->
     <div
-      v-if="!mainState.listLoaderDisplay && medias?.length === 0"
+      v-if="!processing && medias?.length === 0"
       class="textlabel margin1"
     >
       <div class="textlabel__text">

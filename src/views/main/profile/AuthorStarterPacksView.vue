@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject } from "vue"
+import { computed, inject, reactive } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
@@ -8,15 +8,28 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
+// 追加読み込み中フラグ
+// 初回の読み込み中は `mainState.listLoaderDisplay` （ `processPage()` が管理）
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false,
+})
+
+// 初回の読み込み中または追加読み込み中
+const listLoading = computed((): boolean => {
+  return mainState.listLoaderDisplay || state.processing
+})
+
 const numberOfStarterPacks = computed((): number => {
   return mainState.currentProfile?.associated?.starterPacks ?? 0
 })
 
 async function fetchStarterPacks (direction: "new" | "old") {
   Util.blurElement()
-  mainState.listLoaderDisplay = true
+  state.processing = true
   await mainState.fetchAuthorStarterPacks(direction)
-  mainState.listLoaderDisplay = false
+  state.processing = false
 }
 
 function openStarterPackEditPopup () {
@@ -31,7 +44,7 @@ function openStarterPackEditPopup () {
 function onScrolledToBottom () {
   if (
     mainState.atp.hasLogin() &&
-    !mainState.listLoaderDisplay
+    !listLoading.value
   ) {
     fetchStarterPacks("old")
   }
@@ -53,7 +66,7 @@ function onScrolledToBottom () {
 
     <LoadButton
       direction="new"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchStarterPacks('new')"
     />
     <div class="starter-pack-card__container">
@@ -81,7 +94,7 @@ function onScrolledToBottom () {
     </div>
     <LoadButton
       direction="old"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchStarterPacks('old')"
     />
 

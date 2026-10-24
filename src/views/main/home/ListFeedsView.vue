@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive } from "vue"
 import Feed from "@/components/compositions/Feed.vue"
 import ListCard from "@/components/next/List/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
@@ -8,11 +8,24 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
+// 追加読み込み中フラグ
+// 初回の読み込み中は `mainState.listLoaderDisplay` （ `processPage()` が管理）
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false,
+})
+
+// 初回の読み込み中または追加読み込み中
+const listLoading = computed((): boolean => {
+  return mainState.listLoaderDisplay || state.processing
+})
+
 async function fetchFeeds (direction: TTDirection, middleCursor?: string) {
   Util.blurElement()
-  mainState.listLoaderDisplay = true
+  state.processing = true
   await mainState.fetchCurrentListFeeds(direction, middleCursor)
-  mainState.listLoaderDisplay = false
+  state.processing = false
 }
 
 // マイリストの削除
@@ -53,7 +66,7 @@ function removeThisPost (uri: string) {
 function onScrolledToBottom () {
   if (
     mainState.atp.hasLogin() &&
-    !mainState.listLoaderDisplay
+    !listLoading.value
   ) {
     fetchFeeds("old")
   }
@@ -76,7 +89,7 @@ function onScrolledToBottom () {
     />
     <LoadButton
       direction="new"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchFeeds('new')"
     />
     <div class="feeds">
@@ -95,14 +108,14 @@ function onScrolledToBottom () {
         <LoadButton
           v-if="feed.__cursor != null"
           direction="middle"
-          :processing="mainState.listLoaderDisplay"
+          :processing="listLoading"
           @activate="fetchFeeds('middle', feed.__cursor)"
         />
       </template>
     </div>
     <LoadButton
       direction="old"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchFeeds('old')"
     />
 

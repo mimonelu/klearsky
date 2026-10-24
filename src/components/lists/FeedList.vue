@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive } from "vue"
 import Feed from "@/components/compositions/Feed.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
@@ -25,9 +25,22 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
+// 追加読み込み中フラグ
+// 初回の読み込み中は `mainState.listLoaderDisplay` （ `processPage()` が管理）
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false,
+})
+
+// 初回の読み込み中または追加読み込み中
+const listLoading = computed((): boolean => {
+  return mainState.listLoaderDisplay || state.processing
+})
+
 async function fetchFeeds (direction: TTDirection, middleCursor?: string) {
   Util.blurElement()
-  mainState.listLoaderDisplay = true
+  state.processing = true
   try {
     switch (props.type) {
       case "authorFeeds": {
@@ -64,7 +77,7 @@ async function fetchFeeds (direction: TTDirection, middleCursor?: string) {
       }
     }
   } finally {
-    mainState.listLoaderDisplay = false
+    state.processing = false
   }
 }
 
@@ -97,7 +110,7 @@ function removeThisPost (uri: string) {
 function onScrolledToBottom () {
   if (
     mainState.atp.hasLogin() &&
-    !mainState.listLoaderDisplay &&
+    !listLoading.value &&
     !props.disabledInfinitScroll
   ) {
     fetchFeeds("old")
@@ -110,13 +123,13 @@ function onScrolledToBottom () {
     <LoadButton
       v-if="hasLoadButton"
       direction="new"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchFeeds('new')"
     />
     <div class="feeds">
       <!-- 空のコンテンツメッセージ -->
       <div
-        v-if="!mainState.listLoaderDisplay && feeds?.length === 0"
+        v-if="!listLoading && feeds?.length === 0"
         class="textlabel margin1"
       >
         <div class="textlabel__text">
@@ -141,7 +154,7 @@ function onScrolledToBottom () {
         <LoadButton
           v-if="feed.__cursor != null"
           direction="middle"
-          :processing="mainState.listLoaderDisplay"
+          :processing="listLoading"
           @activate="fetchFeeds('middle', feed.__cursor)"
         />
       </template>
@@ -149,7 +162,7 @@ function onScrolledToBottom () {
     <LoadButton
       v-if="hasLoadButton"
       direction="old"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchFeeds('old')"
     />
 

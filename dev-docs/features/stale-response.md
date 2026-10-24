@@ -17,6 +17,7 @@ if (!Generations.profile.isCurrent(generation)) {
 
 | インスタンス | 進める場所 | 対象 |
 |---|---|---|
+| `navigation` | `beforeEach`（毎遷移） | `processPage()` による `listLoaderDisplay` の更新（下記「読み込み状態の所有者」） |
 | `profile` | `resetProfileState()`（`beforeEach` で別プロフィールと判定された時） | プロフィール本体・各タブの一覧・固定ポスト・ハンドル履歴・ラベラー等 |
 | `postThread` | `beforeEach`（毎遷移） | `fetchPostThread()` |
 | `list` | `updateCurrentList()`（URL のリストが `currentList` と異なる時） | `fetchCurrentList()` / `fetchCurrentListFeeds()` / `fetchCurrentListItems()` |
@@ -61,6 +62,21 @@ if (!Generations.profile.isCurrent(generation)) {
 - 述語関数で `state.currentList` 等の状態と比較すると、比較対象の状態自体が汚染された時に素通りする（#72）
 - 対象の識別子が正規で表記揺れのない場合（ユーザーポップアップの uri 等）は、識別子の比較で十分
 
+### 読み込み状態の所有者（#75）
+
+読み込み状態も、取得を始めた側だけが書き込む。共有のフラグを複数の処理が `true` / `false` すると、先に終わった古い処理が現在の処理の読み込み中に `false` にしてしまう。
+
+- 初回の読み込み（`state.listLoaderDisplay`）: `processPage()` だけが書き込む。`beforeEach` で `Generations.navigation` を進めて `false` に戻し、`processPage()` は自分の世代が最新の場合のみ `false` に戻す
+- 追加読み込み（ロードボタン・スクロール）: 各コンポーネントのローカルな `state.processing`。コンポーネントは遷移で破棄されるため、ページをまたいで干渉しない
+- 参照側は両者の OR（各コンポーネントの `listLoading`）で、ローダー表示・空表示の抑制・追加読み込みの排他を判定する
+- `centerLoaderDisplay` はミュート等の多重実行防止のロックも兼ねるため、遷移に紐づく読み込みには使わない（スターターパック画面は `listLoaderDisplay` と `currentStarterPack` で表示する）
+
+残る問題（既存の挙動）:
+
+- #76 初回取得中に同一プロフィールの別タブへ移ってすぐ戻ると、一覧がまだ 0 件のため新着取得が再度走る。データ枠ごとの読み込み状態が必要で、スコープオブジェクト化（下記）で扱う
+- 同一ルート内のクエリ変更ではコンポーネントが再生成されないため、前の対象の追加読み込みが終わるまでスクロール読み込みが止まる
+- フォロー中・フォロワー一覧の空表示は親ビューにあり、`UserBoxList` の追加読み込み中を参照しない（追加読み込みは一覧が空でない時に起きるため実害なし）
+
 ## 採らなかった案
 
 - 関数ごとの latest-wins: 呼ばれない関数の古いレスポンスを無効化できず、同一対象で新着と過去分の取得が並行すると正しいレスポンスを捨てる
@@ -72,5 +88,4 @@ if (!Generations.profile.isCurrent(generation)) {
 ## 未対応・関連
 
 - #73 検索（タブごとの世代、検索語のスナップショット）
-- #75 後から終わった `processPage()` の `finally` が `listLoaderDisplay = false` にし、現在のページの読み込み中にローダーが消える。`updateCurrentStarterPack()` の `centerLoaderDisplay` も同様
 - #74 引用リポスト一覧ポップアップで取得エラー後に追加読み込みができなくなる

@@ -1,11 +1,24 @@
 <script lang="ts" setup>
-import { computed, inject } from "vue"
+import { computed, inject, reactive } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import MediaList from "@/components/next/MediaList/MediaList.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+// 追加読み込み中フラグ
+// 初回の読み込み中は `mainState.listLoaderDisplay` （ `processPage()` が管理）
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false,
+})
+
+// 初回の読み込み中または追加読み込み中
+const listLoading = computed((): boolean => {
+  return mainState.listLoaderDisplay || state.processing
+})
 
 const medias = computed((): Array<TTMedia> => {
   const results: Array<TTMedia> = []
@@ -25,16 +38,16 @@ const medias = computed((): Array<TTMedia> => {
 
 async function fetchCurrentAuthorFeed (direction: "new" | "old") {
   Util.blurElement()
-  mainState.listLoaderDisplay = true
+  state.processing = true
   await mainState.fetchCurrentAuthorFeed(direction, "posts_with_media")
-  mainState.listLoaderDisplay = false
+  state.processing = false
 }
 
 // スクロールオブザーバー
 function onScrolledToBottom () {
   if (
     mainState.atp.hasLogin() &&
-    !mainState.listLoaderDisplay
+    !listLoading.value
   ) {
     fetchCurrentAuthorFeed("old")
   }
@@ -45,16 +58,17 @@ function onScrolledToBottom () {
   <div class="author-media-view">
     <LoadButton
       direction="new"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchCurrentAuthorFeed('new')"
     />
     <MediaList
       :did="mainState.currentProfile?.did"
       :medias="medias"
+      :processing="listLoading"
     />
     <LoadButton
       direction="old"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchCurrentAuthorFeed('old')"
     />
 

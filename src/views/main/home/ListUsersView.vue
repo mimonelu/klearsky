@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive } from "vue"
 import ListCard from "@/components/next/List/ListCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
@@ -9,11 +9,24 @@ import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
 
+// 追加読み込み中フラグ
+// 初回の読み込み中は `mainState.listLoaderDisplay` （ `processPage()` が管理）
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false,
+})
+
+// 初回の読み込み中または追加読み込み中
+const listLoading = computed((): boolean => {
+  return mainState.listLoaderDisplay || state.processing
+})
+
 async function fetchListItems (direction: "new" | "old") {
   Util.blurElement()
-  mainState.listLoaderDisplay = true
+  state.processing = true
   const result = await mainState.fetchCurrentListItems(direction)
-  mainState.listLoaderDisplay = false
+  state.processing = false
 
   // セッションキャッシュの更新
   if (result) mainState.myWorker!.setSessionCache("myList", mainState.myLists!.items)
@@ -35,7 +48,7 @@ function openListUserManagementPopup (user: TTUser) {
 function onScrolledToBottom () {
   if (
     mainState.atp.hasLogin() &&
-    !mainState.listLoaderDisplay
+    !listLoading.value
   ) {
     fetchListItems("old")
   }
@@ -58,7 +71,7 @@ function onScrolledToBottom () {
     />
     <LoadButton
       direction="new"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchListItems('new')"
     />
     <div class="list-users__list-item-container">
@@ -84,7 +97,7 @@ function onScrolledToBottom () {
     </div>
     <LoadButton
       direction="old"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchListItems('old')"
     />
 

@@ -16,6 +16,10 @@ type TranslationFn = (key: string) => string
 export function useMainViewNavigation (router: Router, $t: TranslationFn) {
   function setupRouteGuards () {
     const removeBeforeEach = router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+      // 遷移前に開始した `processPage()` がリストローダーを消さないようにする
+      Generations.navigation.next()
+      state.listLoaderDisplay = false
+
       if (to.name === "home") {
         return
       }
@@ -207,6 +211,7 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
   }
 
   async function processPage (pageName?: null | string) {
+    const generation = Generations.navigation.current()
     let account: undefined | string
     switch (pageName) {
       case "profile-feeds":
@@ -228,6 +233,11 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
         }
         break
       }
+    }
+
+    // await 中に遷移した場合は遷移先の `processPage()` に任せる
+    if (!Generations.navigation.isCurrent(generation)) {
+      return
     }
 
     state.listLoaderDisplay = true
@@ -403,7 +413,10 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
         }
       }
     } finally {
-      state.listLoaderDisplay = false
+      // 遷移後は遷移先の `processPage()` がリストローダーを所有する
+      if (Generations.navigation.isCurrent(generation)) {
+        state.listLoaderDisplay = false
+      }
     }
 
     if (
@@ -501,9 +514,7 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
     state.currentStarterPackListFeeds = []
     state.currentStarterPackListFeedsCursor = undefined
 
-    state.centerLoaderDisplay = true
     const starterPack = await state.atp.fetchStarterPack(uri)
-    state.centerLoaderDisplay = false
 
     // await 中に別のスターターパックへ遷移した場合は以降の処理を打ち切る
     if (!Generations.starterPack.isCurrent(generation)) {

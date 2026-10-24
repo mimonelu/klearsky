@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { computed, inject } from "vue"
+import { computed, inject, reactive } from "vue"
 import { type RouteLocationRaw } from "vue-router"
 import Feed from "@/components/compositions/Feed.vue"
 import FeedCard from "@/components/cards/FeedCard.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import Loader from "@/components/shells/Loader.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 import StarterPackCard from "@/components/cards/StarterPackCard.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -11,6 +12,19 @@ import UserSlider from "@/components/compositions/UserSlider.vue"
 import Util from "@/composables/util"
 
 const mainState = inject("state") as MainState
+
+// 追加読み込み中フラグ
+// 初回の読み込み中は `mainState.listLoaderDisplay` （ `processPage()` が管理）
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false,
+})
+
+// 初回の読み込み中または追加読み込み中
+const listLoading = computed((): boolean => {
+  return mainState.listLoaderDisplay || state.processing
+})
 
 const users = computed((): undefined | Array<TTUser> => {
   return mainState.currentStarterPack?.listItemsSample?.map((listItem) => {
@@ -33,9 +47,9 @@ const listLocation = computed((): undefined | RouteLocationRaw => {
 
 async function fetchFeeds (direction: TTDirection, middleCursor?: string) {
   Util.blurElement()
-  mainState.listLoaderDisplay = true
+  state.processing = true
   await mainState.fetchCurrentStarterPackListFeeds(direction, middleCursor)
-  mainState.listLoaderDisplay = false
+  state.processing = false
 }
 
 function updateThisPostThread (newPosts: Array<TTPost>) {
@@ -68,7 +82,7 @@ function removeThisPost (uri: string) {
 function onScrolledToBottom () {
   if (
     mainState.atp.hasLogin() &&
-    !mainState.listLoaderDisplay
+    !listLoading.value
   ) {
     fetchFeeds("old")
   }
@@ -86,7 +100,10 @@ function onScrolledToBottom () {
       :unclickable="false"
     />
 
-    <template v-if="!mainState.centerLoaderDisplay">
+    <!-- スターターパックのローダー -->
+    <Loader v-if="mainState.currentStarterPack == null && mainState.listLoaderDisplay" />
+
+    <template v-if="mainState.currentStarterPack != null">
       <!-- フィード -->
       <template v-if="(mainState.currentStarterPack?.feeds?.length ?? 0) > 0">
         <!-- フィード - ヘッダー -->
@@ -141,7 +158,7 @@ function onScrolledToBottom () {
       <!-- スターターパックリストフィード -->
       <LoadButton
         direction="new"
-        :processing="mainState.listLoaderDisplay"
+        :processing="listLoading"
         @activate="fetchFeeds('new')"
       />
       <div class="starter-pack-view__feed-container">
@@ -160,14 +177,14 @@ function onScrolledToBottom () {
           <LoadButton
             v-if="feed.__cursor != null"
             direction="middle"
-            :processing="mainState.listLoaderDisplay"
+            :processing="listLoading"
             @activate="fetchFeeds('middle', feed.__cursor)"
           />
         </template>
       </div>
       <LoadButton
         direction="old"
-        :processing="mainState.listLoaderDisplay"
+        :processing="listLoading"
         @activate="fetchFeeds('old')"
       />
     </template>

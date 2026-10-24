@@ -1,9 +1,22 @@
 <script lang="ts" setup>
-import { computed, inject } from "vue"
+import { computed, inject, reactive } from "vue"
 import ListCardList from "@/components/next/List/ListCardList.vue"
 import ScrollObserver from "@/components/next/ScrollObserver/ScrollObserver.vue"
 
 const mainState = inject("state") as MainState
+
+// 追加読み込み中フラグ
+// 初回の読み込み中は `mainState.listLoaderDisplay` （ `processPage()` が管理）
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false,
+})
+
+// 初回の読み込み中または追加読み込み中
+const listLoading = computed((): boolean => {
+  return mainState.listLoaderDisplay || state.processing
+})
 
 const lists = computed((): Array<TTList> => {
   return mainState.isMyProfile()
@@ -15,16 +28,16 @@ async function fetchLists (direction: "new" | "old") {
   // マイリストは起動時にすべて読み込むため取得不要
   if (mainState.isMyProfile()) return
 
-  mainState.listLoaderDisplay = true
+  state.processing = true
   await mainState.fetchAuthorLists(direction)
-  mainState.listLoaderDisplay = false
+  state.processing = false
 }
 
 // スクロールオブザーバー
 function onScrolledToBottom () {
   if (
     mainState.atp.hasLogin() &&
-    !mainState.listLoaderDisplay
+    !listLoading.value
   ) {
     fetchLists("old")
   }
@@ -39,6 +52,7 @@ function onScrolledToBottom () {
       :headerDisplay="mainState.isMyProfile()"
       :loaderDisplay="!mainState.isMyProfile()"
       :isCompact="false"
+      :processing="listLoading"
       @fetch="fetchLists as unknown"
     />
 

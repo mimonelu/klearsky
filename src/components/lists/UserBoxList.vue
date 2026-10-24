@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject } from "vue"
+import { computed, inject, reactive } from "vue"
 import FollowButton from "@/components/buttons/FollowButton.vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
 import Loader from "@/components/shells/Loader.vue"
@@ -13,6 +13,19 @@ const props = defineProps<{
 
 const mainState = inject("state") as MainState
 
+// 追加読み込み中フラグ
+// 初回の読み込み中は `mainState.listLoaderDisplay` （ `processPage()` が管理）
+const state = reactive<{
+  processing: boolean
+}>({
+  processing: false,
+})
+
+// 初回の読み込み中または追加読み込み中
+const listLoading = computed((): boolean => {
+  return mainState.listLoaderDisplay || state.processing
+})
+
 const currentUsers = props.type === "follower"
   ? mainState.currentFollowers
   : props.type === "following"
@@ -21,7 +34,7 @@ const currentUsers = props.type === "follower"
 
 async function fetchUsers (direction: "new" | "old") {
   Util.blurElement()
-  mainState.listLoaderDisplay = true
+  state.processing = true
   try {
     switch (props.type) {
       case "follower": {
@@ -38,7 +51,7 @@ async function fetchUsers (direction: "new" | "old") {
       }
     }
   } finally {
-    mainState.listLoaderDisplay = false
+    state.processing = false
   }
 }
 
@@ -46,7 +59,7 @@ async function fetchUsers (direction: "new" | "old") {
 function onScrolledToBottom () {
   if (
     mainState.atp.hasLogin() &&
-    !mainState.listLoaderDisplay &&
+    !listLoading.value &&
     props.type !== "suggestedFollows"
   ) {
     fetchUsers("old")
@@ -82,12 +95,12 @@ function onScrolledToBottom () {
     <LoadButton
       v-if="type !== 'suggestedFollows'"
       direction="old"
-      :processing="mainState.listLoaderDisplay"
+      :processing="listLoading"
       @activate="fetchUsers('old')"
     />
 
     <!-- おすすめユーザー用ローダー -->
-    <Loader v-if="type === 'suggestedFollows' && mainState.listLoaderDisplay" />
+    <Loader v-if="type === 'suggestedFollows' && listLoading" />
 
     <!-- スクロールオブザーバー -->
     <ScrollObserver
