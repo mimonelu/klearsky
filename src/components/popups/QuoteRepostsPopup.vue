@@ -49,10 +49,10 @@ async function fetchContinuousResults () {
     CONSTS.LIMIT_OF_FETCH_QUOTE_REPOSTS,
     mainState.currentQuoteRepostsCursor
   )
+  state.processing = false
 
   // await 中に別のポストのポップアップに切り替わった場合は反映しない
   if (mainState.currentQuoteRepostsUri !== uri) {
-    state.processing = false
     return
   }
 
@@ -63,7 +63,6 @@ async function fetchContinuousResults () {
   if (cursor != null) {
     mainState.currentQuoteRepostsCursor = cursor
   }
-  state.processing = false
 }
 
 function scrolledToBottom () {
