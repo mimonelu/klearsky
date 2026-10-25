@@ -43,7 +43,9 @@ export function useMainViewNavigation (router: Router, $t: TranslationFn) {
           state.profileFolding = false
           state.currentProfile = null
           state.currentLabeler = undefined
-        } else {
+
+        // プロフィール編集ページからの遷移時は折りたたまない
+        } else if (from.name !== "edit-profile") {
           state.profileFolding = true
         }
 
