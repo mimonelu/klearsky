@@ -1,6 +1,6 @@
 # サービスステータス（#87）
 
-Bluesky 公式のステータスページを定期的に取得し、障害中は画面左端にアイコンを表示する。取得間隔は時間設定で変えられ、既定は 10 分ごと。「取得しない」で監視を止められる。
+Bluesky 公式のステータスページを定期的に取得し、障害中はインジケーターを表示する。取得間隔は時間設定で変えられ、既定は 10 分ごと。「取得しない」で監視を止められる。
 
 ## 構成
 
@@ -9,7 +9,7 @@ Bluesky 公式のステータスページを定期的に取得し、障害中は
 | `src/composables/main-state/my-service-status.ts` | 状態・タイマー・表示条件（`state.myServiceStatus`） |
 | `src/composables/util/fetch-service-status.ts` | JSON の取得 |
 | `src/composables/util/sanitize-service-status.ts` | 応答を想定どおりの形に整える（型が合わない値は捨てる） |
-| `src/components/next/ServiceStatus/ServiceStatusIndicator.vue` | 画面左端のアイコンとメッセージ |
+| `src/components/next/ServiceStatus/ServiceStatusIndicator.vue` | インジケーター（アイコンとメッセージ） |
 | `src/components/next/ServiceStatus/ServiceStatusPopup.vue` | ステータスポップアップ（設定ポップオーバーからも開ける） |
 
 ## 取得元
@@ -22,13 +22,15 @@ Bluesky 公式のステータスページを定期的に取得し、障害中は
 ## 表示条件
 
 - アイコン: 監視が有効で、`page.status` が `UP` 以外（メンテナンス中を含む）
-- メッセージ「障害発生中」: アイコンの条件に加え、Network Infrastructure グループ（Relay・Jetstream）以外に `PARTIALOUTAGE` 以上のコンポーネントがあり、未確認のインシデントがある
+- 深刻な障害（`severe`）: Network Infrastructure グループ（Relay・Jetstream）以外に `PARTIALOUTAGE` 以上のコンポーネントがある。深刻かどうかでインジケーターの表示を変える
+- メッセージ「障害発生中」: アイコンの条件に加え、深刻な障害で、未確認のインシデントがある
   - インシデントの `impact` では判定しない。付け方が一貫しておらず、サイト全体の障害でも `PARTIALOUTAGE`、Jetstream の障害が `MAJOROUTAGE` になっている
   - `activeIncidents` には関係するコンポーネントが含まれないため、コンポーネントの状態で判定する
 - ポップアップを開いたら、その時点のインシデントを確認済みにしてメッセージを隠す。識別子はドキュメントの例に `id` がないため `url` を使う。確認済みの記録はメモリのみ（再読み込みで再表示される）
 
 ## 注意点
 
+- インジケーターは `main-view__main` の中に置き、`z-index: 1` にする。ルータービュー内で開くポップアップ（プロフィールリンクの編集等）も `main-view__main` の中で `z-index: 2` のため、それより下にする
 - 取得に失敗したら前回の状態を消す。誤報でアイコンが出続けるのを避けるため
 - タブが非表示の間はタイマーを止める。表示に戻った時は、前回の取得から取得間隔が経っていれば取得し、経っていなければ残り時間だけ待つ（タブを切り替えるたびに取得しないため）
 - タブごとに取得する。非表示のタブでは止めるため、SharedWorker での共有はしていない

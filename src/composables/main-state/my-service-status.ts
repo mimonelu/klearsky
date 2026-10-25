@@ -59,20 +59,24 @@ export default class MyServiceStatus {
     return this.interval !== 0 && this.hasIssue
   }
 
-  // メッセージの表示可否
-  // 影響の小さいグループ（Relay・Jetstream）以外に一部停止以上のコンポーネントがあり、未確認のインシデントがある場合
-  get messageDisplay (): boolean {
-    if (!this.indicatorDisplay) {
+  // 深刻な障害か
+  // 影響の小さいグループ（Relay・Jetstream）以外に、一部停止以上のコンポーネントがある場合
+  get severe (): boolean {
+    if (!this.hasIssue) {
       return false
     }
-    const hasOutage = this.components.some((component) => {
+    return this.components.some((component) => {
       if (component.status !== "PARTIALOUTAGE" && component.status !== "MAJOROUTAGE") {
         return false
       }
       const groupName = component.group?.name ?? component.name ?? ""
       return !CONSTS.SERVICE_STATUS_MINOR_GROUPS.includes(groupName)
     })
-    if (!hasOutage) {
+  }
+
+  // メッセージの表示可否。深刻な障害で、未確認のインシデントがある場合
+  get messageDisplay (): boolean {
+    if (!this.indicatorDisplay || !this.severe) {
       return false
     }
     return this.getIncidentKeys().some((key) => !this.seenIncidentKeys.includes(key))

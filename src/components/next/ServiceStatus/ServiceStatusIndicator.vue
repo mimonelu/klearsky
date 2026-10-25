@@ -10,11 +10,12 @@ const mainState = inject("state") as MainState
     v-if="mainState.myServiceStatus?.indicatorDisplay"
     type="button"
     class="service-status-indicator"
-    :data-status="mainState.myServiceStatus.summary?.page?.status"
+    :title="$t('serviceStatus')"
+    :data-severe="mainState.myServiceStatus.severe"
     @click.prevent="mainState.openServiceStatusPopup"
   >
     <div class="service-status-indicator__icon">
-      <SVGIcon name="alert" />
+      <SVGIcon name="pulse" />
     </div>
     <div
       v-if="mainState.myServiceStatus.messageDisplay"
@@ -24,62 +25,71 @@ const mainState = inject("state") as MainState
 </template>
 
 <style lang="scss" scoped>
-// 画面の左端。SP ではグローバルフッターの上に置く
+// 点滅。大半の時間は通常表示とし、周期の終わりに短く明度を変える（`step-end` でフェードさせない）
+@keyframes service-status-indicator-blink {
+  0% {
+    filter: none;
+  }
+  85%, 100% {
+    filter: brightness(1.25);
+  }
+}
+
 .service-status-indicator {
-  --indicator-color: var(--notice-color);
-  --indicator-size: 2.125rem;
+  --indicator-color: var(--orange-color);
+  --indicator-size: 2rem;
+
+  background-color: rgb(var(--indicator-color), 0.875);
+  border-radius: var(--indicator-size);
   cursor: pointer;
   display: flex;
   align-items: center;
-  grid-gap: 0.5rem;
+  grid-gap: 0.25rem;
+  padding: 0.5rem;
   position: fixed;
-  left: 0.5rem;
-  bottom: 0.5rem;
-  z-index: 2;
+  left: 1rem;
+  bottom: 1rem;
+  // NOTICE: `main-view__main` 内のポップアップ（`z-index: 2`、ルータービュー内で開くもの）より下にする
+  z-index: 1;
   max-width: calc(100% - 1rem);
 
   // SPレイアウト
   @include media-sp-layout() {
+    left: 0.5rem;
     bottom: calc(var(--sp-menu-height) + 0.5rem);
   }
 
-  &[data-status="UNDERMAINTENANCE"] {
-    --indicator-color: var(--accent-color);
+  &[data-severe="true"] {
+    --indicator-color: var(--notice-color);
   }
 
   &__icon {
-    background-color: rgb(var(--indicator-color));
-    border: 1px solid rgb(var(--bg-color));
-    border-radius: var(--border-radius-large);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: var(--indicator-size);
-    height: var(--indicator-size);
-
     .svg-icon {
-      fill: white;
-      font-size: 1.25rem;
+      fill: rgb(var(--white-color));
     }
   }
 
   &__message {
-    background-color: rgb(var(--indicator-color));
-    border: 1px solid rgb(var(--bg-color));
-    border-radius: var(--border-radius-large);
-    color: white;
+    color: rgb(var(--white-color));
     font-size: 0.875rem;
     font-weight: bold;
-    line-height: var(--line-height-low);
     overflow: hidden;
-    padding: 0.5rem 0.75rem;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    @include media-sp-layout() {
+      font-size: 0.75rem;
+    }
+  }
+
+  animation: service-status-indicator-blink 3s step-end infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
   }
 
   &:focus, &:hover {
-    filter: brightness(1.125);
+    animation: none;
+    background-color: rgb(var(--indicator-color));
   }
 }
 </style>

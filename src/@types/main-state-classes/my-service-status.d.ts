@@ -8,6 +8,7 @@ interface TIMyServiceStatus {
   readonly interval: number
   readonly hasIssue: boolean
   readonly indicatorDisplay: boolean
+  readonly severe: boolean
   readonly messageDisplay: boolean
   getIncidentKeys (): Array<string>
   markIncidentsAsSeen (): void
