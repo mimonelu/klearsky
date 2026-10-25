@@ -86,21 +86,32 @@ export default async function (
   try {
     await this.agent.upsertProfile(
       (existing: AppBskyActorProfile.Record | undefined): AppBskyActorProfile.Record => {
-        // アバター画像が未指定の場合、既存の画像を指定する
-        if (!params.detachAvatar.includes(true) &&
-            profileSchema.avatar == null &&
-            existing?.avatar != null) {
-          profileSchema.avatar = existing.avatar
+        // 本関数で扱わないフィールドは既存の値を引き継ぐ
+        const record: AppBskyActorProfile.Record = {
+          ...existing,
+          ...profileSchema,
         }
 
-        // バナー画像が未指定の場合、既存の画像を指定する
-        if (!params.detachBanner.includes(true) &&
-            profileSchema.banner == null &&
-            existing?.banner != null) {
-          profileSchema.banner = existing.banner
+        // 未指定のフィールドは削除する
+        if (profileSchema.website == null) {
+          delete record.website
+        }
+        if (profileSchema.labels == null) {
+          delete record.labels
+        }
+        if (profileSchema.pinnedPost == null) {
+          delete record.pinnedPost
         }
 
-        return profileSchema
+        // 画像が未指定の場合は既存の画像を引き継ぎ、取り外し指定時のみ削除する
+        if (params.detachAvatar.includes(true) && profileSchema.avatar == null) {
+          delete record.avatar
+        }
+        if (params.detachBanner.includes(true) && profileSchema.banner == null) {
+          delete record.banner
+        }
+
+        return record
       }
     )
   } catch (error: any) {
