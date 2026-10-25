@@ -6,6 +6,7 @@ type TTProfile = TTUser & {
   followsCount: number
   indexedAt?: string
   joinedViaStarterPack?: TIStarterPack
+  links?: Array<TTProfileLink>
   pinnedPost?: TTCidUri
   postsCount: number
   website?: string
@@ -24,6 +25,16 @@ type TTProfile = TTUser & {
 
   // WhiteWind
   __whiteWind?: Array<TICommonRecord>
+}
+
+// `app.bsky.actor.defs#profileLinkView`
+type TTProfileLink = {
+  uri: string
+  cid: string
+  url: string
+  title?: string
+  icon?: string
+  labels?: Array<TTLabel>
 }
 
 type TTUpdateProfileParams = {

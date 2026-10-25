@@ -22,12 +22,12 @@ import PageHeader from "@/components/shells/PageHeader.vue"
 import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/compositions/Post.vue"
+import ProfileLinkList from "@/components/next/ProfileLink/ProfileLinkList.vue"
 import RepostMuteButton from "@/components/next/RepostMute/RepostMuteButton.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import VerifierIcon from "@/components/next/Verification/VerifierIcon.vue"
 import VerifiedIcon from "@/components/next/Verification/VerifiedIcon.vue"
 import ViewerLabels from "@/components/labels/ViewerLabels.vue"
-import WebsiteLink from "@/components/buttons/WebsiteLink.vue"
 import Generations from "@/composables/main-state/generations"
 import Util from "@/composables/util"
 import { useContentLabels } from "@/composables/util/use-content-labels"
@@ -642,11 +642,8 @@ function removeThisPost () {
               :text="mainState.currentProfile?.description ?? '&emsp;'"
             />
 
-            <!-- Webサイトリンク -->
-            <WebsiteLink
-              v-if="mainState.currentProfile?.website != null"
-              :url="mainState.currentProfile.website"
-            />
+            <!-- プロフィールリンク -->
+            <ProfileLinkList :links="mainState.currentProfile?.links" />
 
             <!-- Atmosphere -->
             <AtmosphereContainer :key="mainState.currentProfile?.did" />
