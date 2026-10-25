@@ -168,6 +168,8 @@ interface TIAtpWrapper {
     (did: string) => Promise<Error | undefined | any>
   fetchMutingUsers
     (users: Array<TTUser>, limit?: number, cursor?: string): Promise<Error | undefined | string>
+  fetchMyProfileLinks
+    (): Promise<Error | Array<TTProfileLinkDraft>>
   fetchNotificationCount
     (): Promise<Error | number>
   fetchNotificationPreferences
@@ -300,6 +302,8 @@ interface TIAtpWrapper {
     (preferences: Array<TTPreference>): Promise<Error | undefined>
   updateProfile
     (params: TTUpdateProfileParams): Promise<Error | undefined>
+  updateProfileLinkRecords
+    (links: Array<TTProfileLinkDraft>): Promise<Error | Array<TTCidUri>>
   updateRecord
     (repo: string, collection: string, uri: string, record: { [k: string]: any }, validate?: boolean, swapCommit?: string, swapRecord?: string): Promise<Error | TTCidUri>
   updateRepostMutes

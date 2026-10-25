@@ -80,6 +80,7 @@ import fetchLists from "@/composables/atp-wrapper/fetch/fetch-lists"
 import fetchListsWithMembership from "@/composables/atp-wrapper/fetch/fetch-lists-with-membership"
 import fetchLogAudit from "@/composables/atp-wrapper/fetch/fetch-log-audit"
 import fetchMutingUsers from "@/composables/atp-wrapper/fetch/fetch-muting-users"
+import fetchMyProfileLinks from "@/composables/atp-wrapper/fetch/fetch-my-profile-links"
 import fetchNotificationCount from "@/composables/atp-wrapper/fetch/fetch-notification-count"
 import fetchNotificationPreferences from "@/composables/atp-wrapper/fetch/fetch-notification-preferences"
 import fetchNotifications from "@/composables/atp-wrapper/fetch/fetch-notifications"
@@ -145,6 +146,7 @@ import updatePinnedPost from "@/composables/atp-wrapper/update/update-pinned-pos
 import updatePostgate from "@/composables/atp-wrapper/update/update-postgate"
 import updatePreferences from "@/composables/atp-wrapper/update/update-preferences"
 import updateProfile from "@/composables/atp-wrapper/update/update-profile"
+import updateProfileLinkRecords from "@/composables/atp-wrapper/update/update-profile-link-records"
 import updateRecord from "@/composables/atp-wrapper/update/update-record"
 import updateRepostMutes from "@/composables/atp-wrapper/update/update-repost-mutes"
 import updateThreadgate from "@/composables/atp-wrapper/update/update-threadgate"
@@ -310,6 +312,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchListsWithMembership = fetchListsWithMembership
   fetchLogAudit = fetchLogAudit
   fetchMutingUsers = fetchMutingUsers
+  fetchMyProfileLinks = fetchMyProfileLinks
   fetchNotificationCount = fetchNotificationCount
   fetchNotificationPreferences = fetchNotificationPreferences
   fetchNotifications = fetchNotifications
@@ -377,6 +380,7 @@ class AtpWrapper implements TIAtpWrapper {
   updatePostgate = updatePostgate
   updatePreferences = updatePreferences
   updateProfile = updateProfile
+  updateProfileLinkRecords = updateProfileLinkRecords
   updateRecord = updateRecord
   updateRepostMutes = updateRepostMutes
   updateThreadgate = updateThreadgate

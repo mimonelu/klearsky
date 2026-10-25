@@ -8,6 +8,7 @@ import createGeneration from "@/composables/util/create-generation"
 import displayJson from "@/composables/util/display-json"
 import downloadBlob from "@/composables/util/download-blob"
 import downloadImage from "@/composables/util/download-image"
+import fetchProfileLinkIcon from "@/composables/util/fetch-profile-link-icon"
 import fetchWithTimeout from "@/composables/util/fetch-with-timeout"
 import getAspectRatio from "@/composables/util/get-aspect-ratio"
 import getGraphemeLength from "@/composables/util/get-grapheme-length"
@@ -51,6 +52,7 @@ export default {
   displayJson,
   downloadBlob,
   downloadImage,
+  fetchProfileLinkIcon,
   fetchWithTimeout,
   getAspectRatio,
   getGraphemeLength,

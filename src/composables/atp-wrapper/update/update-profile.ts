@@ -78,6 +78,21 @@ export default async function (
     profileSchema.banner = bannerSchema
   }
 
+  // プロフィールリンク
+  // NOTICE: プロフィールは既存のリンクレコードしか参照できないため、先にリンクレコードを作成／更新する
+  if (params.links != null) {
+    const linkRefs = await this.updateProfileLinkRecords(params.links)
+    if (linkRefs instanceof Error) {
+      return linkRefs
+    }
+    if (linkRefs.length > 0) {
+      profileSchema.links = linkRefs
+    }
+  }
+
+  // プロフィールから外したリンクレコードの URI
+  let removedLinkUris: Array<string> = []
+
   try {
     await this.agent.upsertProfile(
       (existing: AppBskyActorProfile.Record | undefined): AppBskyActorProfile.Record => {
@@ -94,6 +109,9 @@ export default async function (
         if (profileSchema.labels == null) {
           delete record.labels
         }
+        if (params.links != null && profileSchema.links == null) {
+          delete record.links
+        }
 
         // 画像が未指定の場合は既存の画像を引き継ぎ、取り外し指定時のみ削除する
         if (params.detachAvatar.includes(true) && profileSchema.avatar == null) {
@@ -103,11 +121,31 @@ export default async function (
           delete record.banner
         }
 
+        // 外したリンクの抽出
+        if (params.links != null) {
+          const prefix = `at://${this.session?.did}/app.bsky.actor.link/`
+          removedLinkUris = (existing?.links ?? [])
+            .map((ref) => ref.uri)
+            .filter((uri) => {
+              return uri.startsWith(prefix) &&
+                !profileSchema.links?.some((ref) => ref.uri === uri)
+            })
+        }
+
         return record
       }
     )
   } catch (error: any) {
     $log("upsertProfile", error)
     return error
+  }
+
+  // 外したリンクのレコードを削除する
+  // NOTICE: プロフィールから参照されなくなったレコードは表示されないため、削除に失敗してもエラーにしない
+  if (this.session != null && removedLinkUris.length > 0) {
+    const repo = this.session.did
+    await Promise.all(removedLinkUris.map((uri) => {
+      return this.deleteRecord(repo, "app.bsky.actor.link", uri)
+    }))
   }
 }

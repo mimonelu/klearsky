@@ -37,6 +37,26 @@ type TTProfileLink = {
   labels?: Array<TTLabel>
 }
 
+// 編集中のプロフィールリンク
+type TTProfileLinkDraft = {
+  // 保存済みのリンクレコード（新規の場合は未設定）
+  uri?: string
+  cid?: string
+  value?: import("@atproto/api").AppBskyActorLink.Record
+
+  url: string
+  title?: string
+
+  // 保存済みの favicon
+  icon?: import("@atproto/api").BlobRef
+
+  // 未アップロードの favicon
+  iconFile?: Blob
+
+  // 表示用の favicon の URL（保存済みは CDN の URL、未保存は data URL）
+  iconUrl?: string
+}
+
 type TTUpdateProfileParams = {
   displayName: string
   description: string
@@ -47,4 +67,7 @@ type TTUpdateProfileParams = {
   detachAvatar: Array<boolean>
   banner: null | Array<File>
   detachBanner: Array<boolean>
+
+  // 指定時のみプロフィールリンクを更新する
+  links?: Array<TTProfileLinkDraft>
 }
