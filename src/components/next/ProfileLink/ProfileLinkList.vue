@@ -5,10 +5,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 import { hasUserBlurLabel } from "@/composables/util/use-content-labels"
 import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
-
-// プロフィールリンクの最大数
-// SEE: https://github.com/bluesky-social/bsky/blob/main/lexicons/app/bsky/actor/profile.json
-const MAX_LINKS = 10
+import CONSTS from "@/consts/consts.json"
 
 const props = defineProps<{
   links?: Array<TTProfileLink>
@@ -88,7 +85,7 @@ function getTitle (link: { url: string, title?: string }): string {
 
     <!-- 追加ボタン -->
     <button
-      v-if="drafts.length < MAX_LINKS"
+      v-if="drafts.length < CONSTS.MAX_PROFILE_LINKS"
       type="button"
       class="profile-link-list__item profile-link-list__add-button"
       @click.prevent="emit('add')"

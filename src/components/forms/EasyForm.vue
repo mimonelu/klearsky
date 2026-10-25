@@ -217,6 +217,7 @@ function validate (): boolean {
                 :translate="item.translate"
                 class="textbox"
                 :class="item.classes"
+                @blur="onBlur(item)"
                 @input="onInput(item)"
                 @keydown.enter="onEnterKeyDownOnInput($event, item)"
               >

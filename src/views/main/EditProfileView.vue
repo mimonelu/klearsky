@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
+import ProfileLinkEditPopup from "@/components/next/ProfileLink/ProfileLinkEditPopup.vue"
 import ProfileLinkList from "@/components/next/ProfileLink/ProfileLinkList.vue"
 import Generations from "@/composables/main-state/generations"
 import Util from "@/composables/util"
@@ -164,12 +165,48 @@ async function setDefaultValues () {
   state.processing = false
 }
 
-// TODO: プロフィールリンク編集ポップアップを開く
+// プロフィールリンク編集ポップアップ
+// `index` が -1 の場合は新規追加
+const linkEditPopupState = reactive<{
+  display: boolean
+  index: number
+}>({
+  display: false,
+  index: - 1,
+})
+
 function addLink () {
+  linkEditPopupState.index = - 1
+  linkEditPopupState.display = true
 }
 
-// TODO: プロフィールリンク編集ポップアップを開く
-function editLink (_: number) {
+function editLink (index: number) {
+  linkEditPopupState.index = index
+  linkEditPopupState.display = true
+}
+
+function closeLinkEditPopup () {
+  linkEditPopupState.display = false
+}
+
+function submitLink (link: TTProfileLinkDraft) {
+  if (state.links == null) {
+    return
+  }
+  if (linkEditPopupState.index === - 1) {
+    state.links.push(link)
+  } else {
+    state.links.splice(linkEditPopupState.index, 1, link)
+  }
+  closeLinkEditPopup()
+}
+
+function deleteLink () {
+  if (state.links == null || linkEditPopupState.index === - 1) {
+    return
+  }
+  state.links.splice(linkEditPopupState.index, 1)
+  closeLinkEditPopup()
 }
 
 async function submit () {
@@ -240,6 +277,17 @@ async function submit () {
         </dl>
       </template>
     </EasyForm>
+
+    <!-- プロフィールリンク編集ポップアップ -->
+    <Transition>
+      <ProfileLinkEditPopup
+        v-if="linkEditPopupState.display"
+        :link="state.links?.[linkEditPopupState.index]"
+        @close="closeLinkEditPopup"
+        @delete="deleteLink"
+        @submit="submitLink"
+      />
+    </Transition>
   </div>
 </template>
 

@@ -103,6 +103,8 @@ export default () => ({
   "description": "紹介文",
   "pronouns": "代名詞／呼び方",
   "profileLinks": "プロフィールリンク",
+  "profileLinkUrl": "URL",
+  "profileLinkTitle": "タイトル",
   "avatar": "サムネイル",
   "detachAvatar": "サムネイルを取り外す",
   "banner": "バナー",

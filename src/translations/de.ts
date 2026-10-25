@@ -103,6 +103,8 @@ export default () => ({
   "description": "Beschreibung",
   "pronouns": "Pronomen",
   "profileLinks": "Profil-Links",
+  "profileLinkUrl": "URL",
+  "profileLinkTitle": "Titel",
   "avatar": "Avatar",
   "detachAvatar": "Avatar entfernen",
   "banner": "Banner",
