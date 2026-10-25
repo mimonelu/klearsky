@@ -36,5 +36,4 @@ type TTUpdateProfileParams = {
   detachAvatar: Array<boolean>
   banner: null | Array<File>
   detachBanner: Array<boolean>
-  pinnedPost?: TTCidUri
 }

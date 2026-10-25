@@ -78,11 +78,6 @@ export default async function (
     profileSchema.banner = bannerSchema
   }
 
-  // 固定ポスト
-  if (params.pinnedPost != null) {
-    profileSchema.pinnedPost = params.pinnedPost
-  }
-
   try {
     await this.agent.upsertProfile(
       (existing: AppBskyActorProfile.Record | undefined): AppBskyActorProfile.Record => {
@@ -98,9 +93,6 @@ export default async function (
         }
         if (profileSchema.labels == null) {
           delete record.labels
-        }
-        if (profileSchema.pinnedPost == null) {
-          delete record.pinnedPost
         }
 
         // 画像が未指定の場合は既存の画像を引き継ぎ、取り外し指定時のみ削除する

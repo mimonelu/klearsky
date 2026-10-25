@@ -220,9 +220,6 @@ async function toggleNoUnauthenticated () {
     detachAvatar: [false],
     banner: null,
     detachBanner: [false],
-
-    // 固定ポスト
-    pinnedPost: mainState.userProfile.pinnedPost,
   }
 
   // 外部公開状態の追加／削除

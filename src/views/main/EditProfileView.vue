@@ -160,12 +160,7 @@ async function submit () {
   const generation = Generations.profile.current()
 
   try {
-    await mainState.updateUserProfile({
-      ...state as TTUpdateProfileParams,
-
-      // 固定ポスト
-      pinnedPost: mainState.userProfile?.pinnedPost,
-    })
+    await mainState.updateUserProfile(state as TTUpdateProfileParams)
     const did = mainState.atp.session?.did
     if (did != null) {
       await Util.wait(500)
