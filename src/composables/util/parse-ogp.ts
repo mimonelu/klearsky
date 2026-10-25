@@ -7,7 +7,7 @@ export default async function (
   urlHasImage?: boolean
 ): Promise<Error | TTExternal> {
   const response: Error | any =
-    await Util.fetchWithTimeout(`https://cardyb.bsky.app/v1/extract?url=${uri}`)
+    await Util.fetchWithTimeout(`https://cardyb.bsky.app/v1/extract?url=${encodeURIComponent(uri)}`)
       .then((value) => {
         if (!value.ok) {
           return Error("fetchOgpError")
