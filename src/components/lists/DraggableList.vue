@@ -28,6 +28,9 @@ function onDragEnter (index: number) {
 }
 
 function onDrop (event: DragEvent) {
+  // NOTICE: ブラウザの既定の処理を止める。ドラッグデータのテキストで検索ページが開くことがあるため
+  event.preventDefault()
+
   state.focusedIndex = - 1
   const item = (event.target as Element)?.closest(".draggable-list__item")
   if (item == null) return
