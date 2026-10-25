@@ -58,6 +58,7 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 - [features/oauth.md](dev-docs/features/oauth.md) — OAuth ログイン・パスワード認証のトークン更新・セッション管理・マルチアカウント
 - [features/chat.md](dev-docs/features/chat.md) — チャットの構成、`getLog` による新着監視、カーソル管理
 - [features/post-draft.md](dev-docs/features/post-draft.md) — ポスト下書きと IndexedDB メディアストア
+- [features/profile-links.md](dev-docs/features/profile-links.md) — プロフィールリンクの保存手順、死にレコード、favicon とタイトル候補の取得。プロフィール更新処理を変更する時にも読む
 - [features/search.md](dev-docs/features/search.md) — 投稿検索の現状実装と searchPostsV2 移行の検討
 - [features/stale-response.md](dev-docs/features/stale-response.md) — 遷移後に届いた古いレスポンスの破棄（世代番号）。非同期で画面の状態を書き換える処理を追加・変更する時に読む
 
