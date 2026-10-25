@@ -102,7 +102,7 @@ export default () => ({
   "displayName": "표시 이름",
   "description": "소개",
   "pronouns": "대명사 / 호칭",
-  "websiteUrl": "웹사이트 URL",
+  "profileLinks": "프로필 링크",
   "avatar": "아바타",
   "detachAvatar": "아바타 제거",
   "banner": "배너",

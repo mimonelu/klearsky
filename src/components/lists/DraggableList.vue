@@ -64,6 +64,7 @@ function moveElement (array: Array<any>, fromIndex: number, toIndex: number) {
     >
       <slot
         :item="item"
+        :index="index"
         :focused="index === state.focusedIndex"
       />
     </div>

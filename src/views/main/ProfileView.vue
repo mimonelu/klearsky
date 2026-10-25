@@ -208,7 +208,6 @@ async function toggleNoUnauthenticated () {
     displayName: mainState.userProfile.displayName ?? "",
     description: mainState.userProfile.description ?? "",
     pronouns: mainState.userProfile.pronouns ?? "",
-    website: mainState.userProfile.website ?? "",
     labels: mainState.userProfile.labels
       ?.filter((label) => {
         return !label.ver

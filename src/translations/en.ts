@@ -102,7 +102,7 @@ export default () => ({
   "displayName": "Display Name",
   "description": "Description",
   "pronouns": "Pronouns",
-  "websiteUrl": "Website URL",
+  "profileLinks": "Profile links",
   "avatar": "Avatar",
   "detachAvatar": "Detach avatar image",
   "banner": "Banner",

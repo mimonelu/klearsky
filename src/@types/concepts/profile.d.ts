@@ -9,7 +9,6 @@ type TTProfile = TTUser & {
   links?: Array<TTProfileLink>
   pinnedPost?: TTCidUri
   postsCount: number
-  website?: string
 
   // Frontpage
   __frontpage?: Array<TICommonRecord>
@@ -61,7 +60,6 @@ type TTUpdateProfileParams = {
   displayName: string
   description: string
   pronouns: string
-  website: string
   labels: Array<string>
   avatar: null | Array<File>
   detachAvatar: Array<boolean>

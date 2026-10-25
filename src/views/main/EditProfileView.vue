@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, ref } from "vue"
+import { inject, onMounted, reactive, ref, watch } from "vue"
 import { useRouter } from "vue-router"
 import EasyForm from "@/components/forms/EasyForm.vue"
 import LabelButton from "@/components/buttons/LabelButton.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
+import ProfileLinkList from "@/components/next/ProfileLink/ProfileLinkList.vue"
 import Generations from "@/composables/main-state/generations"
 import Util from "@/composables/util"
 
@@ -15,7 +16,7 @@ const state = reactive<{
   displayName: string,
   description: string,
   pronouns: string,
-  website: string,
+  links?: Array<TTProfileLinkDraft>,
   labels: Array<string>,
   avatar: null | File
   detachAvatar: Array<boolean>,
@@ -26,7 +27,7 @@ const state = reactive<{
   displayName: "",
   description: "",
   pronouns: "",
-  website: "",
+  links: undefined,
   labels: [],
   avatar: null,
   detachAvatar: [],
@@ -75,12 +76,6 @@ const easyFormProps: TTEasyForm = {
       maxlength: 20,
       maxLengthIndicator: true,
       maxLengthIndicatorByGrapheme: true,
-    },
-    {
-      state,
-      model: "website",
-      label: $t("websiteUrl"),
-      type: "text",
     },
     {
       state,
@@ -133,6 +128,15 @@ const easyFormProps: TTEasyForm = {
   ],
 }
 
+// プロフィールリンクの変更の有無
+// 読み込み時の代入では立てず、以降の追加・編集・削除・並べ替えで立てる
+let linksModified = false
+watch(() => state.links, (_, oldValue) => {
+  if (oldValue != null) {
+    linksModified = true
+  }
+}, { deep: true })
+
 onMounted(setDefaultValues)
 
 async function setDefaultValues () {
@@ -140,7 +144,6 @@ async function setDefaultValues () {
   state.displayName = mainState.userProfile?.displayName ?? ""
   state.description = mainState.userProfile?.description ?? ""
   state.pronouns = mainState.userProfile?.pronouns ?? ""
-  state.website = mainState.userProfile?.website ?? ""
   state.labels = mainState.userProfile?.labels
     ?.filter((label) => {
       return !label.ver
@@ -148,7 +151,25 @@ async function setDefaultValues () {
     .map((label) => {
       return label.val
     }) ?? []
+
+  // プロフィールリンク
+  // NOTICE: 読み込みに失敗した場合はリンクを編集不可とし、保存時にもリンクを更新しない
+  const links = await mainState.atp.fetchMyProfileLinks()
+  if (links instanceof Error) {
+    mainState.openErrorPopup(links, "EditProfileView/fetchMyProfileLinks")
+  } else {
+    state.links = links
+  }
+
   state.processing = false
+}
+
+// TODO: プロフィールリンク編集ポップアップを開く
+function addLink () {
+}
+
+// TODO: プロフィールリンク編集ポップアップを開く
+function editLink (_: number) {
 }
 
 async function submit () {
@@ -160,7 +181,12 @@ async function submit () {
   const generation = Generations.profile.current()
 
   try {
-    await mainState.updateUserProfile(state as TTUpdateProfileParams)
+    await mainState.updateUserProfile({
+      ...state as TTUpdateProfileParams,
+
+      // 変更時のみプロフィールリンクを更新する
+      links: linksModified ? state.links : undefined,
+    })
     const did = mainState.atp.session?.did
     if (did != null) {
       await Util.wait(500)
@@ -186,7 +212,20 @@ async function submit () {
       v-bind="easyFormProps"
       ref="easyForm"
     >
-      <template #free-4>
+      <template #free-3>
+        <!-- プロフィールリンク -->
+        <dl>
+          <dt>{{ $t("profileLinks") }}</dt>
+          <dd>
+            <ProfileLinkList
+              v-if="state.links != null"
+              :drafts="state.links"
+              @add="addLink"
+              @edit="editLink"
+            />
+          </dd>
+        </dl>
+
         <!-- アカウントラベル選択ポップアップトリガー -->
         <dl>
           <dt>{{ $t("accountLabels") }}</dt>

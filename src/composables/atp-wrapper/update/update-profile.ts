@@ -29,12 +29,6 @@ export default async function (
     profileSchema.pronouns = params.pronouns
   }
 
-  // WebサイトのURL
-  // NOTICE: 空文字列の `website` がバリデーションで弾かれる現象対策
-  if (params.website?.length >= 1) {
-    profileSchema.website = params.website
-  }
-
   // アカウントラベル
   if (params.labels.length > 0) {
     profileSchema.labels = {
@@ -103,9 +97,6 @@ export default async function (
         }
 
         // 未指定のフィールドは削除する
-        if (profileSchema.website == null) {
-          delete record.website
-        }
         if (profileSchema.labels == null) {
           delete record.labels
         }
