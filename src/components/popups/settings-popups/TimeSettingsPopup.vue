@@ -106,6 +106,29 @@ const mainState = inject("state") as MainState
             </label>
           </div>
         </div>
+
+        <!-- サービスステータス取得間隔 -->
+        <div class="settings-popup__form">
+          <div class="settings-popup__form__header">
+            <span>{{ $t("serviceStatusFetchInterval") }}</span>
+          </div>
+          <div class="settings-popup__form__body">
+            <label class="selectbox">
+              <select
+                v-model="mainState.currentSetting.serviceStatusFetchInterval"
+                name="serviceStatusFetchInterval"
+                @change="$emit('changeSetting')"
+              >
+                <option
+                  v-for="interval, intervalIndex in SETTINGS.SERVICE_STATUS_FETCH_INTERVAL"
+                  :key="intervalIndex"
+                  :value="interval.value"
+                  :selected="interval.value === mainState.currentSetting.serviceStatusFetchInterval"
+                >{{ $t(interval.label) }}</option>
+              </select>
+            </label>
+          </div>
+        </div>
       </div>
     </template>
   </Popup>

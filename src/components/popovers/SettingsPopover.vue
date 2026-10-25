@@ -140,6 +140,10 @@ function process (type: string) {
       mainState.openOtherSettingsPopup()
       break
     }
+    case "serviceStatus": {
+      mainState.openServiceStatusPopup()
+      break
+    }
     case "inviteCode": {
       mainState.openInviteCodesPopup()
       break
@@ -367,6 +371,19 @@ function process (type: string) {
         <span>{{ $t("etcSettings") }}</span>
       </button>
 
+      <hr />
+
+      <!-- サービスステータスポップアップトリガー -->
+      <button
+        type="button"
+        data-type="serviceStatus"
+        :data-has-issue="mainState.myServiceStatus?.indicatorDisplay"
+        @click.prevent="process('serviceStatus')"
+      >
+        <SVGIcon name="pulse" />
+        <span>{{ $t("serviceStatus") }}</span>
+      </button>
+
       <template v-if="mainState.numberOfAvailableInviteCodes > 0">
         <hr />
 
@@ -416,6 +433,7 @@ function process (type: string) {
   button[data-type="post"] > .svg-icon { --icon-color: var(--post-color); }
   // button[data-type="time"] > .svg-icon {}
   // button[data-type="etc"] > .svg-icon {}
+  button[data-type="serviceStatus"][data-has-issue="true"] > .svg-icon { --icon-color: var(--notice-color); }
   // button[data-type="inviteCode"] > .svg-icon {}
 }
 </style>

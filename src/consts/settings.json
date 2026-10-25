@@ -48,6 +48,14 @@
     { "label": "notificationFetchInterval5", "value": 180000 },
     { "label": "notificationFetchInterval6", "value": 300000 }
   ],
+  "SERVICE_STATUS_FETCH_INTERVAL": [
+    { "label": "serviceStatusFetchInterval1", "value": 0 },
+    { "label": "serviceStatusFetchInterval2", "value": 60000 },
+    { "label": "serviceStatusFetchInterval3", "value": 180000 },
+    { "label": "serviceStatusFetchInterval4", "value": 300000 },
+    { "label": "serviceStatusFetchInterval5", "value": 600000 },
+    { "label": "serviceStatusFetchInterval6", "value": 1800000 }
+  ],
   "NOTIFICATION_FILTER": [
     { "label": "notificationFilterIncludeAll", "value": "all" },
     { "label": "notificationFilterIncludeFollows", "value": "follows" }

@@ -96,6 +96,9 @@ interface MainState {
   endChatListTimer: () => void
   startChatListTimer: () => void
 
+  // サービスステータス
+  myServiceStatus?: TIMyServiceStatus
+
   // ミュートユーザー
   currentMutingUsers: Array<TTUser>
   currentMutingUsersCursor?: string
@@ -479,6 +482,11 @@ interface MainState {
   postDraftPopupDisplay: boolean
   openPostDraftPopup: () => void
   closePostDraftPopup: () => void
+
+  // ポップアップ - サービスステータスポップアップ
+  serviceStatusPopupDisplay: boolean
+  openServiceStatusPopup: () => void
+  closeServiceStatusPopup: () => void
 
   // ポップアップ - 招待コードポップアップ
   inviteCodesPopupDisplay: boolean

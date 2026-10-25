@@ -64,6 +64,7 @@ export function registerMainViewLifecycle (options: Options) {
     state.clearNotificationInterval()
     state.clearTimelineInterval()
     state.endChatListTimer()
+    state.myServiceStatus?.clearTimer()
     removeRouteGuards()
     window.removeEventListener("beforeunload", beforeUnloadHandler)
   })

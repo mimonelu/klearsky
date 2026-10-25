@@ -9,6 +9,7 @@ import displayJson from "@/composables/util/display-json"
 import downloadBlob from "@/composables/util/download-blob"
 import downloadImage from "@/composables/util/download-image"
 import fetchProfileLinkIcon from "@/composables/util/fetch-profile-link-icon"
+import fetchServiceStatus from "@/composables/util/fetch-service-status"
 import fetchWithTimeout from "@/composables/util/fetch-with-timeout"
 import getAspectRatio from "@/composables/util/get-aspect-ratio"
 import getGraphemeLength from "@/composables/util/get-grapheme-length"
@@ -28,6 +29,7 @@ import setArray from "@/composables/util/set-array"
 import sortFeeds from "@/composables/util/sort-feeds"
 import storage from "@/composables/util/storage"
 import sanitizePreferences from "@/composables/util/sanitize-preferences"
+import sanitizeServiceStatus from "@/composables/util/sanitize-service-status"
 import shortenLinks from "@/composables/util/shorten-links"
 // import translateInDeepL from "@/composables/util/translate-in-deep-l" // DeepL: 未使用
 import translateInExternalService from "@/composables/util/translate-in-external-service"
@@ -53,6 +55,7 @@ export default {
   downloadBlob,
   downloadImage,
   fetchProfileLinkIcon,
+  fetchServiceStatus,
   fetchWithTimeout,
   getAspectRatio,
   getGraphemeLength,
@@ -72,6 +75,7 @@ export default {
   sortFeeds,
   ...storage,
   sanitizePreferences,
+  sanitizeServiceStatus,
   shortenLinks,
   // translateInDeepL, // DeepL: 未使用
   translateInExternalService,

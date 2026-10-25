@@ -71,6 +71,8 @@ import SendListReportPopup from "@/components/next/Report/SendListReportPopup.vu
 import SendPostPopup from "@/components/popups/SendPostPopup.vue"
 import SendPostReportPopup from "@/components/next/Report/SendPostReportPopup.vue"
 import SendStarterPackReportPopup from "@/components/next/Report/SendStarterPackReportPopup.vue"
+import ServiceStatusIndicator from "@/components/next/ServiceStatus/ServiceStatusIndicator.vue"
+import ServiceStatusPopup from "@/components/next/ServiceStatus/ServiceStatusPopup.vue"
 import SettingsPopover from "@/components/popovers/SettingsPopover.vue"
 import SplashScreen from "@/components/shells/SplashScreen.vue"
 import StarterPackCardPopover from "@/components/popovers/StarterPackCardPopover.vue"
@@ -162,6 +164,9 @@ const {
       </div>
 
       <ScrollButton />
+
+      <!-- サービスステータスインジケーター -->
+      <ServiceStatusIndicator />
     </div>
 
     <!-- 設定ポップオーバー -->
@@ -362,6 +367,14 @@ const {
         <PostDraftPopup
           v-if="state.postDraftPopupDisplay"
           @close="state.closePostDraftPopup"
+        />
+      </Transition>
+
+      <!-- サービスステータスポップアップ -->
+      <Transition>
+        <ServiceStatusPopup
+          v-if="state.serviceStatusPopupDisplay"
+          @close="state.closeServiceStatusPopup"
         />
       </Transition>
 

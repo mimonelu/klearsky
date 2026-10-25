@@ -92,6 +92,7 @@ import point from "@/svg/point.svg?raw"
 import post from "@/svg/post.svg?raw"
 import postDraft from "@/svg/text-box-edit.svg?raw"
 import posts from "@/svg/comment-multiple.svg?raw"
+import pulse from "@/svg/pulse.svg?raw"
 import question from "@/svg/question.svg?raw"
 import quoteRepost from "@/svg/quote-repost.svg?raw"
 import radioOff from "@/svg/radio-off.svg?raw"
@@ -218,6 +219,7 @@ const icons: { [k: string]: string } = {
   post,
   postDraft,
   posts,
+  pulse,
   question,
   quoteRepost,
   radioOff,

@@ -12,6 +12,7 @@ import MyChat from "@/composables/main-state/my-chat"
 import MyFeeds from "@/composables/main-state/my-feeds"
 import MyLabeler from "@/composables/main-state/my-labeler"
 import MyLists from "@/composables/main-state/my-lists"
+import MyServiceStatus from "@/composables/main-state/my-service-status"
 import MySession from "@/composables/main-state/my-session"
 import MyWorker from "@/composables/main-state/my-worker"
 import Util from "@/composables/util"
@@ -144,6 +145,9 @@ export const state: MainState = reactive<MainState>({
   chatListTimer: undefined,
   endChatListTimer: endChatListTimer,
   startChatListTimer: startChatListTimer,
+
+  // サービスステータス
+  myServiceStatus: undefined,
 
   // ミュートユーザー
   currentMutingUsers: [],
@@ -553,6 +557,11 @@ export const state: MainState = reactive<MainState>({
   openPostDraftPopup: openPostDraftPopup,
   closePostDraftPopup: closePostDraftPopup,
 
+  // ポップアップ - サービスステータスポップアップ
+  serviceStatusPopupDisplay: false,
+  openServiceStatusPopup: openServiceStatusPopup,
+  closeServiceStatusPopup: closeServiceStatusPopup,
+
   // ポップアップ - 招待コードポップアップ
   inviteCodesPopupDisplay: false,
   openInviteCodesPopup: openInviteCodesPopup,
@@ -923,6 +932,8 @@ state.myLists = new MyLists(state)
 
 state.mySession = new MySession(state)
 
+state.myServiceStatus = new MyServiceStatus(state)
+
 // -------------------------------- resetProfileState() 対象エリア
 resetProfileState()
 // -------------------------------- resetProfileState() 対象エリア
@@ -1001,6 +1012,9 @@ function updateSettings () {
 
   // 新着チャットタイマーの更新
   state.startChatListTimer()
+
+  // サービスステータスタイマーの更新
+  state.myServiceStatus!.updateTimer()
 }
 
 function saveSettings () {
@@ -1056,6 +1070,9 @@ function saveSettings () {
   }
   if (state.settings[did].timelineFetchInterval == null) {
     state.settings[did].timelineFetchInterval = 10000
+  }
+  if (state.settings[did].serviceStatusFetchInterval == null) {
+    state.settings[did].serviceStatusFetchInterval = 600000
   }
   if (state.settings[did].myWords == null) {
     state.settings[did].myWords = []
@@ -2650,6 +2667,16 @@ function openPostDraftPopup () {
 
 function closePostDraftPopup () {
   state.postDraftPopupDisplay = false
+}
+
+// ポップアップ - サービスステータスポップアップ
+
+function openServiceStatusPopup () {
+  state.serviceStatusPopupDisplay = true
+}
+
+function closeServiceStatusPopup () {
+  state.serviceStatusPopupDisplay = false
 }
 
 // ポップアップ - 招待コードポップアップ

@@ -18,6 +18,10 @@
   "INTERVAL_OF_UPDATE_JWT": 60000,
   "DEFAULT_NOTIFICATION_FETCH_INTERVAL": 15000,
   "DEFAULT_TIMELINE_FETCH_INTERVAL": 10000,
+  "SERVICE_STATUS_URL": "https://status.bsky.app",
+  "SERVICE_STATUS_MINOR_GROUPS": [
+    "Network Infrastructure"
+  ],
   "LABELER_UPPER_LIMIT": 20,
   "OFFICIAL_ATPROTO_PROXY_APP_BSKY": "did:web:api.bsky.app#bsky_appview",
   "OFFICIAL_ATPROTO_PROXY_CHAT_BSKY": "did:web:api.bsky.chat#bsky_chat",
