@@ -38,4 +38,50 @@ Bluesky 公式のステータスページを定期的に取得し、障害中は
 
 ## 実機確認
 
-障害時の表示は、ブラウザの開発者ツールの Local Overrides で `summary.json` / `v2/components.json` の応答を書き換えて確認する。偽のデータを返す仕組みはコードに入れていない。
+偽のデータを返す仕組みはコードに入れていない。障害時の表示は、次のスクリプトで `fetch` を差し替えて確認する（開発者ツールのコンソールに貼るか、1 行にして先頭に `javascript:` を付けてブックマークレットにする）。
+
+- `summary.json` は偽の応答を返し、`v2/components.json` は実際の応答の `scenario.component` だけ状態を書き換える
+- 差し替え後にステータスポップアップを開くと取得し直すので、すぐ反映される（開かなければ次の定期取得で反映される）
+- 監視が「取得しない」だとインジケーターは出ない
+- 元に戻すには再読み込みする
+- `scenario` の例
+  - 深刻な障害: `{ page: "HASISSUES", component: "Website, App, and API", status: "PARTIALOUTAGE" }`
+  - 深刻でない障害: `{ page: "HASISSUES", component: "Jetstream West", status: "MAJOROUTAGE" }`
+  - メンテナンス: `{ page: "UNDERMAINTENANCE", component: "Feeds", status: "UNDERMAINTENANCE" }`
+
+```js
+(() => {
+  const scenario = { page: "HASISSUES", component: "Website, App, and API", status: "PARTIALOUTAGE" };
+  const original = window.__serviceStatusOriginalFetch ??= window.fetch;
+  const incidentUrl = "https://status.bsky.app/incident/mock-" + Date.now();
+  const json = (body) => new Response(JSON.stringify(body), { headers: { "content-type": "application/json" } });
+  window.fetch = async (input, init) => {
+    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    if (!url.startsWith("https://status.bsky.app/")) {
+      return original(input, init);
+    }
+    if (url.endsWith("/summary.json")) {
+      return json({
+        page: { name: "Bluesky", url: "https://status.bsky.app", status: scenario.page },
+        activeIncidents: scenario.page === "HASISSUES"
+          ? [{ name: "Mock Incident", started: new Date().toString(), status: "INVESTIGATING", impact: scenario.status, url: incidentUrl }]
+          : [],
+        activeMaintenances: scenario.page === "UNDERMAINTENANCE"
+          ? [{ name: "Mock Maintenance", start: new Date().toString(), status: "INPROGRESS", duration: "60", url: incidentUrl }]
+          : [],
+      });
+    }
+    const response = await original(input, init);
+    const body = await response.json();
+    for (const component of body.components ?? []) {
+      if (component.name === scenario.component) {
+        component.status = scenario.status;
+      }
+    }
+    return json(body);
+  };
+  console.log("[service-status mock]", scenario);
+})();
+```
+
+ブックマークレットにする場合、スクリプトは文末にセミコロンを付けてあるので、改行を空白に置き換えるだけで 1 行にできる。
