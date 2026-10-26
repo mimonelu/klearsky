@@ -1382,6 +1382,11 @@ function updateTimelineInterval () {
 }
 
 async function updateTimeline () {
+  // 新着がある場合は、フォロー中フィードの新着取得でフラグがリセットされるまで確認しない
+  if (state.hasTimelineNewArrival) {
+    return
+  }
+
   const response = await state.atp.fetchTimelineNewArrival()
   if (response instanceof Error) {
     return
