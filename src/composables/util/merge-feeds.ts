@@ -1,3 +1,5 @@
+import { toRaw } from "vue"
+
 let id = 0
 
 export default function (
@@ -9,10 +11,22 @@ export default function (
   const addings: Array<TTFeed> = []
 
   // 重複フィード（リポスト）を除去
+  // NOTICE: `reverse()` は呼び出し元の配列を書き換える。呼び出し元はマージ後の `[0]`（取得分の最古のフィード）に
+  //         抜け漏れ用の `__cursor` を付けているため、配列をコピーしないこと
   const map = new Map()
   targetFeeds.reverse().forEach((targetFeed: TTFeed) => {
     if (!map.has(targetFeed.post.uri)) {
       map.set(targetFeed.post.uri, targetFeed)
+    }
+  })
+
+  // 既存フィードの URI → インデックス
+  // ループ中の `oldFeeds` の変更は同じ位置への置き換えのみで、追加はループ後のため、インデックスはずれない
+  const oldIndexMap = new Map<string, number>()
+  toRaw(oldFeeds).forEach((oldFeed: TTFeed, index: number) => {
+    const uri = oldFeed.post?.uri
+    if (uri != null && !oldIndexMap.has(uri)) {
+      oldIndexMap.set(uri, index)
     }
   })
 
@@ -25,9 +39,7 @@ export default function (
       targetFeed.__id = `feed-${id ++}`
     }
 
-    const oldIndex: number = oldFeeds.findIndex((oldFeed: TTFeed) => {
-      return oldFeed.post?.uri === targetFeed.post?.uri
-    })
+    const oldIndex: number = oldIndexMap.get(targetFeed.post?.uri) ?? - 1
 
     // 新規フィード
     if (oldIndex === - 1) {
