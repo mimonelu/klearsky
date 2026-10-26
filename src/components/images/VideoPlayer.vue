@@ -19,13 +19,25 @@ const props = defineProps<{
 const video = ref()
 let hls: HLS | null = null
 
+// `loadSource()` は内部で `stopLoad()` を呼ぶため、それより前に画面内に入った場合は読み込み開始を保留する
+let isSourceLoaded = false
+let isLoadRequested = false
+let isLoadStarted = false
+
 onMounted(async () => {
   if (video.value == null) {
     return
   }
 
   // SEE: https://www.npmjs.com/package/hls.js
-  hls = new HLS()
+  // 自動読み込みはマウント時から全動画のセグメントをバッファリングするため無効化し、画面内に入った時に読み込む
+  // 再生前のバッファリングは先頭のセグメント程度に抑える
+  // バッファ長の上限はビットレートと `maxBufferSize` からも算出されるため、`maxMaxBufferLength` でも制限する
+  hls = new HLS({
+    autoStartLoad: false,
+    maxBufferLength: 1,
+    maxMaxBufferLength: 1,
+  })
 
   // 画質優先の場合、再生開始時は最高画質を選択させる
   // デフォルトでは初期帯域推定値に基づくため、最初のセグメントが低画質で読み込まれてしまう
@@ -50,6 +62,10 @@ onMounted(async () => {
       if (video.value != null) {
         hls.loadSource(props.playlist)
         hls.attachMedia(video.value)
+        isSourceLoaded = true
+        if (isLoadRequested) {
+          startLoad()
+        }
       }
       emit("updateVideoType", "hls")
       return
@@ -124,6 +140,26 @@ async function isUriExisting (url: string): Promise<boolean> {
   return response.ok
 }
 
+function startLoad () {
+  isLoadRequested = true
+  if (hls == null || !isSourceLoaded || isLoadStarted) {
+    return
+  }
+  isLoadStarted = true
+  hls.startLoad()
+}
+
+// 初回の再生開始後は通常のバッファリングに戻す
+// 以降は hls.js がバッファ超過時に `maxMaxBufferLength` を縮めるため、再設定しない
+function onPlay () {
+  if (hls == null) {
+    return
+  }
+  hls.config.maxBufferLength = HLS.DefaultConfig.maxBufferLength
+  hls.config.maxMaxBufferLength = HLS.DefaultConfig.maxMaxBufferLength
+  startLoad()
+}
+
 function pause () {
   if (video.value == null) {
     return
@@ -133,16 +169,16 @@ function pause () {
 </script>
 
 <template>
-  <!-- 交差オブザーバーで画面外への移動を検出したら一時停止する -->
+  <!-- 交差オブザーバーで画面内に入ったら読み込みを開始し、画面外への移動を検出したら一時停止する -->
   <video
-    v-intersection-observer="{ outboundHandler: pause }"
+    v-intersection-observer="{ inboundHandler: startLoad, outboundHandler: pause }"
     class="video-player"
     ref="video"
     controls
-    loading="lazy"
     loop
     :poster="poster"
     :preload="preload ?? 'metadata'"
     width="100%"
+    @play.once="onPlay"
   />
 </template>
