@@ -380,7 +380,10 @@ export default class MyLabeler {
     if (this.mainState.atp.agent == null) {
       return Error("noAgentError")
     }
+    // 公式ラベラーは Agent が `appLabelers` として自動で付与するため除外する
+    const appLabelers = this.mainState.atp.agent.appLabelers
     const myLabelerDids = this.makeMyLabelerPreferenceDids()
+      .filter((did) => !appLabelers.includes(did))
     this.mainState.atp.agent.configureLabelers(myLabelerDids)
   }
 }
