@@ -101,7 +101,7 @@ function close () {
               post.__custom.reason?.$type === 'app.bsky.feed.defs#reasonRepost'
             )
           "
-          :did="(post?.__custom.reason as TTReason)?.by?.did ?? user?.did"
+          :did="(post?.__custom.reason?.by.did ?? user?.did) as string"
           @close="emit('close')"
         />
 

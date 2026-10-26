@@ -43,7 +43,7 @@ export default function (
       // 対象フィードに `post` がない場合はスキップ（おそらく該当ケースなし）
       else if (targetFeed.post == null) return
       // 対象フィードがリポストの場合はスキップ
-      else if (targetFeed.reason != null) return
+      else if (targetFeed.reason?.$type === "app.bsky.feed.defs#reasonRepost") return
       // 登録日時を考慮して既存フィードを上書き
       else {
         let oldFeed = oldFeeds[oldIndex]

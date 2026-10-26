@@ -2,7 +2,7 @@ type TTPost = {
   // Injected
   __custom: {
     forcePosition?: string
-    reason?: TTReason
+    reason?: TTReasonRepost
     translatedText?: string
     unmask?: boolean
     quotePostDisplay?: boolean
@@ -104,8 +104,10 @@ interface TIVideo {
   }
 }
 
-type TTReason = {
-  $type: string
+type TTReason = TTReasonRepost | TTReasonPin
+
+type TTReasonRepost = {
+  $type: "app.bsky.feed.defs#reasonRepost"
   by: {
     did: string
     declaration: {
@@ -118,9 +120,13 @@ type TTReason = {
     avatar: string
     viewer: TTUserViewer
   }
-  cid: string
-  uri: string
+  cid?: string
+  uri?: string
   indexedAt: string
+}
+
+type TTReasonPin = {
+  $type: "app.bsky.feed.defs#reasonPin"
 }
 
 type TTExternal = {

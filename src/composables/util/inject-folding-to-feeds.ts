@@ -52,11 +52,14 @@ export default function (
     }
 
     // リポスト
-    if (feed.reason != null && repostFoldingSettings != null) {
+    if (
+      feed.reason?.$type === "app.bsky.feed.defs#reasonRepost" &&
+      repostFoldingSettings != null
+    ) {
       // 自分自身のポストのリポスト
       if (
         repostFoldingSettings.includes(1) &&
-        feed.reason?.by.did === feed.post.author.did
+        feed.reason.by.did === feed.post.author.did
       ) {
         feed.__folding = true
       }

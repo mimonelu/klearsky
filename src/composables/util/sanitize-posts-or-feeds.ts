@@ -26,11 +26,10 @@ export default function (responses: Array<any>) {
       sanitizePost(response)
     }
 
-    // `reason`
+    // `reason` - リポストのみ（`reasonPin` 等は除く）
     if (
       response.post != null &&
-      response.reason != null &&
-      response.reason.$type?.startsWith("app.bsky.feed.defs#reason")
+      response.reason?.$type === "app.bsky.feed.defs#reasonRepost"
     ) {
       response.post.__custom.reason = response.reason
     }

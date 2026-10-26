@@ -65,7 +65,7 @@ function removeThisPost (uri: string) {
 
       <!-- 折り畳みリポストオープナー -->
       <div
-        v-if="feed.reason != null"
+        v-if="feed.reason?.$type === 'app.bsky.feed.defs#reasonRepost'"
         class="folder__item"
       >
         <SVGIcon name="repost" />
