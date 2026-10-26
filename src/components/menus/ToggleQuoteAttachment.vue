@@ -18,12 +18,15 @@ async function toggle () {
   emit("close")
 
   mainState.loaderDisplay = true
-  // NOTICE: Postgate レコードが存在しない場合はエラーを表示しない
   const responseOfFetchPostgate = await mainState.atp.fetchPostgate(props.quotedUri)
-  const postgate = responseOfFetchPostgate instanceof Error
-    ? undefined
-    : responseOfFetchPostgate.value
   mainState.loaderDisplay = false
+
+  // NOTICE: 取得に失敗したまま更新すると既存の Postgate を上書きしてしまうため中断する
+  if (responseOfFetchPostgate instanceof Error) {
+    mainState.openErrorPopup(responseOfFetchPostgate, "ToggleQuoteAttachment/toggle")
+    return
+  }
+  const postgate = responseOfFetchPostgate?.value
 
   const allow = postgate?.embeddingRules?.every((rule) => {
     return rule.$type !== "app.bsky.feed.postgate#disableRule"

@@ -12,9 +12,8 @@ export default async function (
   if (this.session == null) {
     return Error("noSessionError")
   }
-  if (detachedEmbeddingUris == null) {
-    detachedEmbeddingUris = []
-  }
+  // 呼び出し元の配列（リアクティブな状態等）を書き換えないようコピーする
+  detachedEmbeddingUris = [...(detachedEmbeddingUris ?? [])]
   const embeddingRules: any = []
   if (!allow) {
     embeddingRules.push({ $type: "app.bsky.feed.postgate#disableRule" })

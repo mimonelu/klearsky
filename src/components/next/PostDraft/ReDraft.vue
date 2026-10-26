@@ -82,6 +82,9 @@ async function makeSendPostPopupPropsFromPost (src: TTPost): Promise<undefined |
   }
 
   const draftReactionControl = await fetchReactionControl(src)
+  if (draftReactionControl instanceof Error) {
+    return
+  }
   return {
     type,
     post,
@@ -114,7 +117,7 @@ async function fetchParentOrRootPost (post: TTPost): Promise<undefined | Error |
   return response[0]
 }
 
-async function fetchReactionControl (src: TTPost): Promise<TTDraftReactionControl> {
+async function fetchReactionControl (src: TTPost): Promise<Error | TTDraftReactionControl> {
   const rc: TTDraftReactionControl = {
     postgateAllow: true,
     threadgateAction: "none",
@@ -145,10 +148,8 @@ async function fetchReactionControl (src: TTPost): Promise<TTDraftReactionContro
   const postgate = await mainState.atp.fetchPostgate(src.uri)
   mainState.loaderDisplay = false
   if (postgate instanceof Error) {
-    // Postgate レコードが存在しない場合はエラーを表示しない
-    // mainState.openErrorPopup(postgate, "ReDraft/fetchReactionControl")
-    // return postgate
-    return rc
+    mainState.openErrorPopup(postgate, "ReDraft/fetchReactionControl")
+    return postgate
   }
   if (postgate?.value != null) {
     const hasDisableRule = postgate.value.embeddingRules?.some((rule: any) => {

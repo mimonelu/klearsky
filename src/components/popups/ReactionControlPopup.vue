@@ -291,11 +291,23 @@ async function fetchPostgate () {
   state.loaderDisplay = true
   const response = await mainState.atp.fetchPostgate(props.postUri)
   state.loaderDisplay = false
+
+  // NOTICE: 取得に失敗したまま更新すると既存の Postgate を上書きしてしまうため閉じる
   if (response instanceof Error) {
-    // NOTICE: Postgate レコードが存在しない場合はエラーを表示しない
-    // mainState.openErrorPopup(response, "ReactionControlPopup/onMounted")
+    mainState.openErrorPopup(response, "ReactionControlPopup/fetchPostgate")
+    close({
+      updated: false,
+      postgateAllow: easyFormState.postgateAllow,
+      threadgateAction: easyFormState.threadgateAction,
+    })
     return
   }
+
+  // Postgate レコードが存在しない場合
+  if (response == null) {
+    return
+  }
+
   state.existingPostgate = response.value
   easyFormState.postgateAllow = state.existingPostgateAllow
 }

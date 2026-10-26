@@ -185,7 +185,7 @@ interface TIAtpWrapper {
   fetchPostedImageRefs
     (did: string): Promise<Error | string[]>
   fetchPostgate
-    (this: TIAtpWrapper, post: string): Promise<Error | { uri: string; cid: string; value: TIPostgate; }>
+    (this: TIAtpWrapper, post: string): Promise<Error | undefined | { uri: string; cid?: string; value: TIPostgate; }>
   fetchPosts
     (uris: Array<string>, noSanitize = false): Promise<Error | Array<TTPost>>
   fetchPostSearch
