@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "vite --mode development",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --build && vite build",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit",
+    "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
     "make-icon": "npx sharp-cli -i public/favicon.svg -o public/apple-touch-icon.png resize 180 180"
   },
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "~22.16.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/eslint-config-typescript": "^14.9.0",

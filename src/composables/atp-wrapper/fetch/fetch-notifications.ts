@@ -93,7 +93,7 @@ export default async function (
         avatar: notification.author.avatar,
         cid: notification.cid,
         did: notification.author.did,
-        displayName: notification.author.displayName,
+        displayName: notification.author.displayName ?? "",
         handle: notification.author.handle,
         following: notification.author.viewer?.following != null,
         indexedAt: notification.indexedAt,
@@ -105,6 +105,7 @@ export default async function (
           ? notification.author.description
           : notification.record?.text as undefined | string,
         uri: notification.uri,
+        viewer: (notification.author.viewer ?? {}) as TTUserViewer,
         isRead: notification.isRead,
       }
 

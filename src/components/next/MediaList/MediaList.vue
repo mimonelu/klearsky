@@ -5,7 +5,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 
 const props = defineProps<{
   did?: string
-  medias: Array<TTMedia>
+  medias: Array<TTMediaListItem>
   processing?: boolean
 }>()
 

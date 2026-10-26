@@ -20,8 +20,8 @@ const listLoading = computed((): boolean => {
   return mainState.listLoaderDisplay || state.processing
 })
 
-const medias = computed((): Array<TTMedia> => {
-  const results: Array<TTMedia> = []
+const medias = computed((): Array<TTMediaListItem> => {
+  const results: Array<TTMediaListItem> = []
   mainState.currentAuthorFeedsWithMedia.forEach((feed: TTFeed) => {
     if (feed.post.embed?.images == null) return
     feed.post.embed.images.forEach((image: TTImage) => {

@@ -1,5 +1,5 @@
 interface TIAtpWrapper {
-  agent: null | import("@atproto/api/dist/atp-agent").AtpAgent
+  agent: null | import("@atproto/api").AtpAgent
   oauthClient: null | import("@atproto/oauth-client-browser").BrowserOAuthClient
   proxies: { [k: string]: undefined | string }
   data: { did: string; sessions: { [did: string]: TTSession } }

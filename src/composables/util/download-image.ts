@@ -25,5 +25,5 @@ export default async (url: string): Promise<Error | undefined> => {
 
 function getFileNameFromUrl (url: string): undefined | string {
   const parts: string[] = url.split("/")
-  return parts.at(- 1)
+  return parts[parts.length - 1]
 }

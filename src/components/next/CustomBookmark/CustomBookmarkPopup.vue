@@ -205,19 +205,16 @@ async function outputJsonForSkyFeed () {
         class="slider-menu"
         ref="sliderMenu"
       >
-        <template
+        <button
           v-for="tag, tagIndex of state.customBookmarkTags"
           :key="tagIndex"
+          class="slider-menu__link"
+          :data-is-selected-on-button="tag === state.customBookmarkTag"
+          @click.stop="setCustomBookmarkTag(tag)"
         >
-          <button
-            class="slider-menu__link"
-            :data-is-selected-on-button="tag === state.customBookmarkTag"
-            @click.stop="setCustomBookmarkTag(tag)"
-          >
-            <SVGIcon name="bookmark" />
-            <span translate="no">{{ tag ?? "All" }}</span>
-          </button>
-        </template>
+          <SVGIcon name="bookmark" />
+          <span translate="no">{{ tag ?? "All" }}</span>
+        </button>
       </div>
 
       <LoadButton

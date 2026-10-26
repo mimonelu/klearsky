@@ -28,8 +28,8 @@ export default async function (
   }
 
   // ブロックユーザーをフィルタリング
-  response.data.repostedBy = (response.data.repostedBy as Array<TTUser>)
-    .filter((user: TTUser) => {
+  response.data.repostedBy = response.data.repostedBy
+    .filter((user) => {
       return !user.viewer?.blocking && !user.viewer?.blockedBy
     })
 

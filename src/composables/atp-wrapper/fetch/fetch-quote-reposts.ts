@@ -31,14 +31,12 @@ export default async function (
   // TODO:
   Util.sanitizePostsOrFeeds(response.data.posts)
 
-  // ブロックユーザーを除去
-  response.data.posts = (response.data.posts as Array<TTPost>)
+  const posts = (response.data.posts as Array<TTPost>)
+    // ブロックユーザーを除去
     .filter((post) => {
       return !post.viewer?.blocking && !post.viewer?.blockedBy
     })
-
-  // 他ユーザーの切り離されたポストを除去
-  response.data.posts = (response.data.posts as Array<TTPost>)
+    // 他ユーザーの切り離されたポストを除去
     .filter((post) => {
       return (
         post.author.did === this.session?.did ||
@@ -48,7 +46,7 @@ export default async function (
     })
 
   const newPosts: Array<TTPost> = []
-  ;(response.data.posts as Array<TTPost>).forEach((newPost) => {
+  posts.forEach((newPost) => {
     if (!currentPosts.some((currentPost) => {
       return currentPost.uri === newPost.uri
     })) {

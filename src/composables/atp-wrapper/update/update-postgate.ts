@@ -23,6 +23,7 @@ export default async function (
     }
   }
   const record: AppBskyFeedPostgate.Record = {
+    $type: "app.bsky.feed.postgate",
     createdAt: new Date().toISOString(),
     post,
     detachedEmbeddingUris,

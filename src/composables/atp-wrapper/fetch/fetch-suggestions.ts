@@ -26,8 +26,8 @@ export default async function (
   }
 
   // ブロックユーザーをフィルタリング
-  response.data.actors = (response.data.actors as Array<TTUser>)
-    .filter((user: TTUser) => {
+  response.data.actors = response.data.actors
+    .filter((user) => {
       return !user.viewer?.blocking && !user.viewer?.blockedBy
     })
 

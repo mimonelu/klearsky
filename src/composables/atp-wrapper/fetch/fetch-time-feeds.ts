@@ -10,7 +10,7 @@ export default async function (
   const rkey: undefined | string = oldPosts.length > 0
     ? direction === "new"
       ? Util.getRkey(oldPosts[0].uri)
-      : Util.getRkey((oldPosts.at(- 1) as TTPost).uri)
+      : Util.getRkey(oldPosts[oldPosts.length - 1].uri)
     : undefined
 
   const response = await this.fetchRecords(

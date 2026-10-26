@@ -113,7 +113,7 @@ function clicked (list?: TTList) {
     <LoadButton
       v-if="loaderDisplay"
       direction="new"
-      :processing="processing"
+      :processing="processing ?? false"
       @activate="fetchLists('new')"
     />
 
@@ -148,7 +148,7 @@ function clicked (list?: TTList) {
     <LoadButton
       v-if="loaderDisplay"
       direction="old"
-      :processing="processing"
+      :processing="processing ?? false"
       @activate="fetchLists('old')"
     />
   </div>

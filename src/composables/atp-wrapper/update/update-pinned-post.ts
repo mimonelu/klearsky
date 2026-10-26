@@ -14,8 +14,8 @@ export default async function (
       // プロフィールレコード未作成時
       if (existing == null) {
         return uri != null && cid != null
-          ? { pinnedPost: { uri, cid } }
-          : {}
+          ? { $type: "app.bsky.actor.profile", pinnedPost: { uri, cid } }
+          : { $type: "app.bsky.actor.profile" }
       }
 
       // 固定ポストフィールドの作成／変更

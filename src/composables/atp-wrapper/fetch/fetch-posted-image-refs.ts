@@ -31,14 +31,15 @@ export default async function (
         return
       }
       images.forEach((image: TTImage) => {
-        const ref = image.image?.ref?.$link
+        // NOTICE: fetchWithoutAgent の生の JSON のため、ref は CID ではなく { $link } になる
+        const ref = (image.image?.ref as undefined | { $link?: string })?.$link
         if (ref == null) {
           return
         }
         results.push(ref)
       })
     })
-    const lastRecord = records.at(- 1)
+    const lastRecord: undefined | TICommonRecord = records[records.length - 1]
     if (lastRecord?.uri == null) {
       return results.slice(0, POSTED_IMAGE_REFS_MAX_RESULTS)
     }

@@ -257,7 +257,7 @@ function syncCurrentListItems (type: "add" | "remove", list: TTList, listItemUri
         :headerDisplay="false"
         :loaderDisplay="false"
         :isCompact="true"
-        @clicked="clicked as (...args: unknown[]) => void"
+        @clicked="clicked as unknown"
       >
         <!-- リファレンスリスト: 所属判定不能のため追加／削除ボタンを常設 -->
         <div

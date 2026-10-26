@@ -59,7 +59,7 @@ export default async function (
     direction === "middle" ? cursor : undefined
   )
   if (!isFirstFetch && isAllNew && (cursor == null || direction === "middle")) {
-    const initialFeed = response.data.feed[0]
+    const initialFeed = response.data.feed[0] as undefined | TTFeed
     if (initialFeed != null) {
       initialFeed.__cursor = response.data.cursor
     }

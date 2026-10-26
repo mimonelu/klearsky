@@ -9,7 +9,7 @@ export default function (text: string): { text: string; facets: Array<Facet> } {
     if (!match[0] || !match[1] || !match[2] || match.index == null) continue
     customLinks.push(match)
   }
-  const facets = []
+  const facets: Array<Facet> = []
   let currentText = text
   let diff = 0
   for (const match of customLinks) {

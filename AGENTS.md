@@ -46,7 +46,7 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 - 既存コードのスタイルに合わせる: インデント 2 スペース、ダブルクォート、セミコロンなし、関数名と `(` の間にスペース（`function foo ()`）
 - Vue は `<script lang="ts" setup>`。`$t` と `state` は `inject` で取得する
 - グローバル型は `src/@types/` に置き、型名に `TT` / `TI` プレフィックスを付ける
-- `.d.ts` では top-level `import` を使わず、`import("@atproto/api").Foo` のようにインラインで参照する（top-level import はファイルをモジュール化してグローバル型が壊れる）
+- `.d.ts` では top-level `import` を使わず、`import("@atproto/api").Foo` のようにインラインで参照する（top-level import はファイルをモジュール化してグローバル型が壊れる）。パッケージの `exports` にないサブパス（`@atproto/api/dist/...` 等）はエラーにならず `any` に化けるので使わない
 - atp-wrapper の関数は第 1 引数に `this: TIAtpWrapper` を取る。エラーは throw せず `Error` を返す
 - `main-state.ts` には状態の定義と初期化以外を書かない。ロジックは `main-state/` や `util/` に切り出す
 - 文言を追加するときは全言語の翻訳ファイルにキーを追加する。訳文は短く（"This is" 等の冗長表現を避ける）

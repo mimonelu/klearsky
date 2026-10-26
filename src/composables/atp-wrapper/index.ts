@@ -192,7 +192,7 @@ class AtpWrapper implements TIAtpWrapper {
     return this._mySession?.current
   }
 
-  set session (value: TTSession | undefined) {
+  set session (_value: TTSession | undefined) {
     // MySession経由で更新すべきなので、直接設定は無視
   }
 

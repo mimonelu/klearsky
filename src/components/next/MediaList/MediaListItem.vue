@@ -6,7 +6,7 @@ import SVGIcon from "@/components/images/SVGIcon.vue"
 import { useContentLabels } from "@/composables/util/use-content-labels"
 
 const props = defineProps<{
-  media: TTMedia
+  media: TTMediaListItem
 }>()
 
 const mainState = inject("state") as MainState

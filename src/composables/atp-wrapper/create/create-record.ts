@@ -34,5 +34,5 @@ export default async function (
   if (!response.success) {
     return Error("apiError")
   }
-  return response.data
+  return response.data as TTCidUri
 }

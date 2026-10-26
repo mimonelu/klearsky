@@ -19,5 +19,5 @@ export default async function (this: TIAtpWrapper): Promise<Error | TTInviteCode
   if (!response.success) {
     return Error("apiError")
   }
-  return response.data.codes
+  return response.data.codes as TTInviteCode[]
 }

@@ -34,8 +34,8 @@ export default async function (
   }
 
   // ブロックユーザーをフィルタリング
-  response.data.follows = (response.data.follows as Array<TTUser>)
-    .filter((follow: TTUser) => {
+  response.data.follows = response.data.follows
+    .filter((follow) => {
       return !follow.viewer?.blocking && !follow.viewer?.blockedBy
     })
 
