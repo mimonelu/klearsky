@@ -1098,6 +1098,7 @@ function toggleQuotePostDisplay () {
         <div class="body__header__display-name">
           <!-- 認証者アイコン -->
           <VerifierIcon
+            v-if="post.author?.verification"
             :did="post.author?.did"
             :displayName="post.author?.displayName"
             :verification="post.author?.verification"
@@ -1105,6 +1106,7 @@ function toggleQuotePostDisplay () {
 
           <!-- 認証済みアイコン -->
           <VerifiedIcon
+            v-if="post.author?.verification"
             :did="post.author?.did"
             :displayName="post.author?.displayName"
             :verification="post.author?.verification"
