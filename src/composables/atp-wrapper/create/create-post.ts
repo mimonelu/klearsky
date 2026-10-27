@@ -45,8 +45,7 @@ export default async function (
   }
 
   // URL文字列の省略表記
-  // TODO: カスタムリンクと共存できるようにすること
-  // Util.shortenLinks(richText)
+  Util.shortenLinks(richText, customLinks.facets)
 
   record.text = richText.text
   if (record.facets != null) {

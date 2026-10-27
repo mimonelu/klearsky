@@ -138,8 +138,7 @@ async function submitCallback () {
   }
 
   // facets - URL文字列の省略表記
-  // TODO: カスタムリンクと共存できるようにすること
-  // Util.shortenLinks(richText)
+  Util.shortenLinks(richText, customLinks.facets)
 
   text = richText.text
 
