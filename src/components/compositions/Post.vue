@@ -239,14 +239,18 @@ const quotePostToggleDisplay = isQuoteRepostByMutingUser || isQuoteRepostOldestP
 
 // ポストマスクの表示状態
 const masked = computed((): boolean => {
+  // マスクしない位置では各判定を行わない
+  if (
+    props.position === "preview" ||
+    props.position === "slim"
+  ) {
+    return false
+  }
   return (
     noContentLanguage.value ||
     hasHideLabel.value ||
     isWordMute.value ||
     isRepostMute.value
-  ) && (
-    props.position !== "preview" &&
-    props.position !== "slim"
   )
 })
 
@@ -358,6 +362,10 @@ const threadgate = computed((): "none" | "lock" | "unlock" => {
 
 // ワードミュート - ワードミュートの判定
 const isWordMute = computed((): boolean => {
+  // ワードミュートが未設定なら RichText を生成しない
+  if (!mainState.currentSetting.wordMute?.length) {
+    return false
+  }
   return WordMuteScript.includes(
     contentRichText.value,
     mainState.currentSetting.wordMute,
@@ -423,13 +431,15 @@ onBeforeUnmount(() => {
   observer?.disconnect()
 })
 
-function isFocused (): boolean {
+// フォーカスポストかどうか
+// 遷移のたびに全ポストが再描画されないよう computed にしている
+const focused = computed((): boolean => {
   const rkey = Util.getRkey(props.post.uri)
   return (
     props.post.uri === props.focusPostUri ||
     rkey === mainState.currentQuery.rkey
   )
-}
+})
 
 // 古いポスト警告
 const displayOldPostNotification = props.hasOldPostNotification && indexedAt != null
@@ -443,7 +453,7 @@ async function onActivatePost (post: TTPost, event: Event) {
     return
   }
 
-  if (isFocused() || props.noLink) return
+  if (focused.value || props.noLink) return
   const postUrl = { name: "post", query: { uri: post.uri } }
   if ((event as any).metaKey || (event as any).ctrlKey) {
     const resolvedRoute = router.resolve(postUrl)
@@ -903,7 +913,7 @@ function toggleQuotePostDisplay () {
     :data-cid="post.cid"
     :data-position="position"
     :data-repost="post.__custom?.reason != null"
-    :data-focus="isFocused()"
+    :data-focus="focused"
     :data-has-mask="masked"
     :data-has-grandparent-author="grandparentAuthor != null"
     :data-is-masked="!(post.__custom?.unmask) && masked"
