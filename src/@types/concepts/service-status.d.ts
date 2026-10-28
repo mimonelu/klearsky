@@ -27,6 +27,9 @@ interface TTServiceStatusIncident {
   status?: string
   impact?: TTServiceStatusComponentStatus
   url?: string
+  lastUpdate?: {
+    message?: string
+  }
 }
 
 interface TTServiceStatusMaintenance {

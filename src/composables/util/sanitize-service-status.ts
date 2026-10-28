@@ -36,12 +36,19 @@ export default {
         status: status as TTServiceStatusPageStatus,
       },
       activeIncidents: asObjects(asObject(value)?.activeIncidents).map((incident) => {
+        // 最新の経過報告。ドキュメントの例にはなく、ない場合もある
+        const lastUpdate = asObject(incident.lastUpdate)
         return {
           name: asString(incident.name),
           started: asString(incident.started),
           status: asString(incident.status),
           impact: asString(incident.impact) as undefined | TTServiceStatusComponentStatus,
           url: asString(incident.url),
+          lastUpdate: lastUpdate != null
+            ? {
+              message: asString(lastUpdate.message),
+            }
+            : undefined,
         }
       }),
       activeMaintenances: asObjects(asObject(value)?.activeMaintenances).map((maintenance) => {

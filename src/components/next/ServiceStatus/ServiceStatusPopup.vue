@@ -49,6 +49,7 @@ const componentGroups = computed((): Array<{
 const events = computed((): Array<{
   name?: string
   status?: string
+  message?: string
   details: Array<string>
   url?: string
 }> => {
@@ -58,7 +59,8 @@ const events = computed((): Array<{
       return {
         name: incident.name,
         status: incident.impact,
-        details: [incident.status, incident.started]
+        message: incident.lastUpdate?.message?.trim() || undefined,
+        details: [incident.status, formatEventDate(incident.started)]
           .filter((detail): detail is string => detail != null),
         url: incident.url,
       }
@@ -67,13 +69,24 @@ const events = computed((): Array<{
       return {
         name: maintenance.name,
         status: "UNDERMAINTENANCE",
-        details: [maintenance.status, maintenance.start]
+        details: [maintenance.status, formatEventDate(maintenance.start)]
           .filter((detail): detail is string => detail != null),
         url: maintenance.url,
       }
     }),
   ]
 })
+
+// 日時として解釈できれば他の日時表示と同じ形式に整え、できなければそのまま返す
+// NOTICE: 日時の形式はドキュメントの例（独自形式）と実際の応答（ISO 8601）で異なる。無効な日時を `formatDate` に渡すと例外になる
+function formatEventDate (value?: string): undefined | string {
+  if (!value) {
+    return
+  }
+  return Number.isNaN(new Date(value).getTime())
+    ? value
+    : mainState.formatDate(value)
+}
 
 const fetchedAt = computed((): string => {
   const date = myServiceStatus.fetchedAt
@@ -176,6 +189,10 @@ async function update () {
             class="service-status-popup__event__name"
             translate="no"
           >{{ event.name }}</div>
+          <div
+            v-if="event.message != null"
+            class="service-status-popup__event__message"
+          >{{ event.message }}</div>
           <div
             class="service-status-popup__event__detail"
             translate="no"
@@ -357,6 +374,14 @@ async function update () {
     &__name {
       font-weight: bold;
       line-height: var(--line-height-low);
+      word-break: break-word;
+    }
+
+    &__message {
+      color: rgb(var(--fg-color), 0.75);
+      font-size: 0.875rem;
+      line-height: var(--line-height-high);
+      white-space: pre-wrap;
       word-break: break-word;
     }
 

@@ -16,7 +16,11 @@ Bluesky 公式のステータスページを定期的に取得し、障害中は
 
 - `https://status.bsky.app`（Instatus）。`bluesky.statuspage.io` は 2024-07 で更新が止まっているため使わない
 - 定期取得は `summary.json` のみ。`v2/components.json` は `page.status` が `UP` 以外の時とポップアップ表示中のみ取得する（通信量を抑えるため）
-- `summary.json` の `activeIncidents` は障害中しか含まれず、形式は Instatus のドキュメントの例でしか確認できていない。どのような JSON でも例外を起こさないよう、取得直後に `sanitize-service-status.ts` で整える
+- `summary.json` の `activeIncidents` は障害中しか含まれない。どのような JSON でも例外を起こさないよう、取得直後に `sanitize-service-status.ts` で整える
+- 実際の応答（2026-10-28 の障害時に確認）は Instatus のドキュメントの例と異なる。実装はどちらでも動くようにしている
+  - インシデントに `id` / `updatedAt` / `lastUpdate`（最新の経過報告）がある。`lastUpdate` はない場合がある前提で扱う
+  - 日時が ISO 8601（例は独自形式の文字列）。ポップアップでは日時として解釈できた場合のみ整形し、できなければそのまま表示する
+  - メンテナンスがない時は `activeMaintenances` 自体が省かれる
 - PDS 単位のコンポーネントはない。PDS の障害は「Website, App, and API」等に紐付けられる
 
 ## 表示条件
@@ -26,7 +30,7 @@ Bluesky 公式のステータスページを定期的に取得し、障害中は
 - メッセージ「障害発生中」: アイコンの条件に加え、深刻な障害で、未確認のインシデントがある
   - インシデントの `impact` では判定しない。付け方が一貫しておらず、サイト全体の障害でも `PARTIALOUTAGE`、Jetstream の障害が `MAJOROUTAGE` になっている
   - `activeIncidents` には関係するコンポーネントが含まれないため、コンポーネントの状態で判定する
-- ポップアップを開いたら、その時点のインシデントを確認済みにしてメッセージを隠す。識別子はドキュメントの例に `id` がないため `url` を使う。確認済みの記録はメモリのみ（再読み込みで再表示される）
+- ポップアップを開いたら、その時点のインシデントを確認済みにしてメッセージを隠す。識別子は `url` を使う（実際の応答には `id` もあるが、ドキュメントの例にはないため）。確認済みの記録はメモリのみ（再読み込みで再表示される）
 
 ## 注意点
 
@@ -64,10 +68,10 @@ Bluesky 公式のステータスページを定期的に取得し、障害中は
       return json({
         page: { name: "Bluesky", url: "https://status.bsky.app", status: scenario.page },
         activeIncidents: scenario.page === "HASISSUES"
-          ? [{ name: "Mock Incident", started: new Date().toString(), status: "INVESTIGATING", impact: scenario.status, url: incidentUrl }]
+          ? [{ name: "Mock Incident", started: new Date().toISOString(), status: "INVESTIGATING", impact: scenario.status, url: incidentUrl, lastUpdate: { message: "Mock update message." } }]
           : [],
         activeMaintenances: scenario.page === "UNDERMAINTENANCE"
-          ? [{ name: "Mock Maintenance", start: new Date().toString(), status: "INPROGRESS", duration: "60", url: incidentUrl }]
+          ? [{ name: "Mock Maintenance", start: new Date().toISOString(), status: "INPROGRESS", duration: "60", url: incidentUrl }]
           : [],
       });
     }
