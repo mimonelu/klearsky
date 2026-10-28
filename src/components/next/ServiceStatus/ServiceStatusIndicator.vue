@@ -25,16 +25,6 @@ const mainState = inject("state") as MainState
 </template>
 
 <style lang="scss" scoped>
-// 点滅。大半の時間は通常表示とし、周期の終わりに短く明度を変える（`step-end` でフェードさせない）
-@keyframes service-status-indicator-blink {
-  0% {
-    filter: none;
-  }
-  85%, 100% {
-    filter: brightness(1.25);
-  }
-}
-
 .service-status-indicator {
   --indicator-color: var(--orange-color);
   --indicator-size: 2rem;
@@ -82,13 +72,7 @@ const mainState = inject("state") as MainState
     }
   }
 
-  animation: service-status-indicator-blink 3s step-end infinite;
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-
   &:focus, &:hover {
-    animation: none;
     background-color: rgb(var(--indicator-color));
   }
 }
