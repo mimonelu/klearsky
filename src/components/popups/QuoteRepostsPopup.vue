@@ -182,6 +182,9 @@ function removeThisPost (uri: string) {
 <style lang="scss" scoped>
 .quote-reposts-popup:deep() {
   .popup {
+    // タブ切り替え時の読み込み中に高さが変わらないよう、最大の高さで固定する
+    flex-grow: 1;
+
     &-header > h2 > .svg-icon {
       fill: rgb(var(--share-color));
     }
