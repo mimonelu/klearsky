@@ -752,6 +752,7 @@ export const state: MainState = reactive<MainState>({
   currentQuoteReposts: [],
   currentQuoteRepostsUri: undefined,
   currentQuoteRepostsCursor: undefined,
+  currentQuoteRepostsSort: "top",
   quoteRepostsPopupDisplay: false,
   openQuoteRepostsPopup: openQuoteRepostsPopup,
   closeQuoteRepostsPopup: closeQuoteRepostsPopup,
@@ -2963,6 +2964,7 @@ async function openQuoteRepostsPopup (uri: string) {
     state.currentQuoteReposts = []
     state.currentQuoteRepostsUri = uri
     state.currentQuoteRepostsCursor = undefined
+    state.currentQuoteRepostsSort = "top"
   }
   state.quoteRepostsPopupDisplay = true
 }

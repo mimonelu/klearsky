@@ -679,6 +679,7 @@ interface MainState {
   currentQuoteReposts: Array<TTPost>
   currentQuoteRepostsUri?: string
   currentQuoteRepostsCursor?: string
+  currentQuoteRepostsSort: "latest" | "top"
   quoteRepostsPopupDisplay: boolean
   openQuoteRepostsPopup: (uri: string) => void
   closeQuoteRepostsPopup: () => void

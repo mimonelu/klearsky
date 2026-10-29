@@ -43,16 +43,21 @@ async function fetchContinuousResults () {
   }
   state.processing = true
   const uri = mainState.currentQuoteRepostsUri
+  const sort = mainState.currentQuoteRepostsSort
   const cursor = await mainState.atp.fetchQuoteReposts(
     mainState.currentQuoteReposts,
     uri,
     CONSTS.LIMIT_OF_FETCH_QUOTE_REPOSTS,
+    sort,
     mainState.currentQuoteRepostsCursor
   )
   state.processing = false
 
-  // await 中に別のポストのポップアップに切り替わった場合は反映しない
-  if (mainState.currentQuoteRepostsUri !== uri) {
+  // await 中に別のポストのポップアップやソート順に切り替わった場合は反映しない
+  if (
+    mainState.currentQuoteRepostsUri !== uri ||
+    mainState.currentQuoteRepostsSort !== sort
+  ) {
     return
   }
 
@@ -63,6 +68,20 @@ async function fetchContinuousResults () {
   if (cursor != null) {
     mainState.currentQuoteRepostsCursor = cursor
   }
+}
+
+async function changeSort (sort: "latest" | "top") {
+  Util.blurElement()
+  if (state.processing) {
+    return
+  }
+  if (mainState.currentQuoteRepostsSort === sort) {
+    return
+  }
+  mainState.currentQuoteRepostsSort = sort
+  mainState.currentQuoteReposts = []
+  mainState.currentQuoteRepostsCursor = undefined
+  await fetchContinuousResults()
 }
 
 function scrolledToBottom () {
@@ -101,6 +120,32 @@ function removeThisPost (uri: string) {
         <SVGIcon name="quoteRepost" />
         <span>{{ $t("quoteRepostsList") }}</span>
       </h2>
+    </template>
+    <template #header-after>
+      <!-- ソートタブ -->
+      <div class="tab">
+        <!-- ソートタブ - 人気順 -->
+        <button
+          type="button"
+          class="tab__button"
+          :data-focused="mainState.currentQuoteRepostsSort === 'top'"
+          @click="changeSort('top')"
+        >
+          <SVGIcon name="star" />
+          <span>{{ $t("sortTop") }}</span>
+        </button>
+
+        <!-- ソートタブ - 新着順 -->
+        <button
+          type="button"
+          class="tab__button"
+          :data-focused="mainState.currentQuoteRepostsSort === 'latest'"
+          @click="changeSort('latest')"
+        >
+          <SVGIcon name="fire" />
+          <span>{{ $t("sortLatest") }}</span>
+        </button>
+      </div>
     </template>
     <template #body>
       <div

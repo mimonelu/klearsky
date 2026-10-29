@@ -6,6 +6,7 @@ export default async function (
   currentPosts: Array<TTPost>,
   uri: string,
   limit?: number,
+  sort?: "latest" | "top",
   cursor?: string
 ): Promise<Error | undefined | string> {
   if (this.agent == null) {
@@ -14,6 +15,7 @@ export default async function (
   const query: AppBskyFeedGetQuotes.QueryParams = {
     uri,
     limit,
+    sort,
     cursor,
   }
   const response: Error | AppBskyFeedGetQuotes.Response =

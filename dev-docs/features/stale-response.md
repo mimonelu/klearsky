@@ -23,7 +23,7 @@ if (!Generations.profile.isCurrent(generation)) {
 | `list` | `updateCurrentList()`（URL のリストが `currentList` と異なる時） | `fetchCurrentList()` / `fetchCurrentListFeeds()` / `fetchCurrentListItems()` |
 | `starterPack` | `updateCurrentStarterPack()`（URL のスターターパックが `currentStarterPack` と異なる時） | スターターパック本体・`fetchCurrentStarterPackListFeeds()` |
 
-ユーザーポップアップ（リポスト／いいね／引用リポスト）は世代番号を使わず、await 後に `currentXxxUri` が開始時と一致するかを比較する。
+ユーザーポップアップ（リポスト／いいね／引用リポスト）は世代番号を使わず、await 後に `currentXxxUri` が開始時と一致するかを比較する。引用リポストはソート順（`currentQuoteRepostsSort`）も比較する。
 
 ## 注意点
 

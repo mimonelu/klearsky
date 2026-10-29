@@ -199,7 +199,7 @@ interface TIAtpWrapper {
   fetchProfiles
     (actors: string[]): Promise<Error | TTProfile[]>
   fetchQuoteReposts
-    (currentPosts: Array<TTPost>, uri: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
+    (currentPosts: Array<TTPost>, uri: string, limit?: number, sort?: "latest" | "top", cursor?: string): Promise<Error | undefined | string>
   fetchRecord
     (repo: string, collection: string, uri: string, cid?: string): Promise<Error | { uri: string; cid?: string; value: {} }>
   fetchRecords
