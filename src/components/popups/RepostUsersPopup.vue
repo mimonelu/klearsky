@@ -108,6 +108,9 @@ function scrolledToBottom () {
 <style lang="scss" scoped>
 .repost-users-popup:deep() {
   .popup {
+    // 引用リポスト一覧ポップアップに揃えて、最大の高さで固定する
+    flex-grow: 1;
+
     &-header > h2 > .svg-icon {
       fill: rgb(var(--share-color));
     }
