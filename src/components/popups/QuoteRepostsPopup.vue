@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, inject, onBeforeMount, reactive, ref, type ComputedRef } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import NoContent from "@/components/labels/NoContent.vue"
 import Popup from "@/components/popups/Popup.vue"
 import Post from "@/components/compositions/Post.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
@@ -148,6 +149,10 @@ function removeThisPost (uri: string) {
       </div>
     </template>
     <template #body>
+      <NoContent v-if="
+        !state.processing &&
+        mainState.currentQuoteReposts.length === 0
+      "/>
       <div
         class="quote-reposts-popup__posts"
         ref="postContainer"

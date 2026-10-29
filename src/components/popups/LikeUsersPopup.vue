@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { inject, onBeforeMount, reactive } from "vue"
 import LoadButton from "@/components/buttons/LoadButton.vue"
+import NoContent from "@/components/labels/NoContent.vue"
 import Popup from "@/components/popups/Popup.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import UserBox from "@/components/compositions/UserBox.vue"
@@ -76,6 +77,10 @@ function scrolledToBottom () {
       </h2>
     </template>
     <template #body>
+      <NoContent v-if="
+        !state.processing &&
+        mainState.currentLikeUsers.length === 0
+      "/>
       <div class="users">
         <UserBox
           v-for="user of mainState.currentLikeUsers"
