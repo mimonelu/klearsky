@@ -1,5 +1,8 @@
 # AGENTS.md
 
+リポジトリルートに @AGENTS.local.md が存在する場合、作業開始前に読むこと。
+開発環境や個人の作業方法に応じた指示を追加できる。
+
 Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + TypeScript + Vite の SPA）。
 対外向けの説明は `README.md` / `README_JA.md` を参照。
 
@@ -19,7 +22,6 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 
 - PR のベースブランチは `staging`。`main` への push で GitHub Pages にデプロイされる
 - リリース作業は `release/vX.Y.Z`、緊急修正は `hotfix/vX.Y.Z` ブランチ
-- コミットはユーザーに明示的に依頼されたときのみ行う
 - コミットメッセージは日本語 1 行。`Co-Authored-By` は付けない
 - イシュー対応は番号を先頭に付ける（例: `#52 動画再生開始時に最高画質を選択するよう変更`）
 
@@ -66,6 +68,7 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 
 ## ドキュメントの更新ルール
 
+- `dev-docs/` は AI が管理する
 - 設計判断や注意点など、コードから読み取れない知見は `dev-docs/` に残す
 - 機能ごとの実装メモは `features/` に置き、本ファイルの索引に追記する
 - 外部仕様の調査結果そのものは置かず、Klearsky に関わる判断や注意点だけを残す

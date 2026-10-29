@@ -28,4 +28,5 @@ coverage
 docs
 
 # Claude
+AGENTS.local.md
 .claude/settings.local.json
