@@ -66,6 +66,7 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 - [features/stale-response.md](dev-docs/features/stale-response.md) — 遷移後に届いた古いレスポンスの破棄（世代番号）。非同期で画面の状態を書き換える処理を追加・変更する時に読む
 - [features/feed-reason.md](dev-docs/features/feed-reason.md) — フィードの `reason`（リポストとピン留めのユニオン）の判定と格納先。フィードのリポスト判定を追加・変更する時に読む
 - [features/repost-mute.md](dev-docs/features/repost-mute.md) — リポストミュート・引用リポストミュートの保存先と判定、公式の範囲指定ミュートを使わない理由
+- [features/memory.md](dev-docs/features/memory.md) — メモリ使用量の計測手順と結果の読み方。メモリ削減の効果を確かめる時に読む
 
 ## ドキュメントの更新ルール
 
