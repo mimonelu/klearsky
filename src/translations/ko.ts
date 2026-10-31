@@ -212,6 +212,7 @@ export default () => ({
   "followersCount": "팔로워",
   "sortLatest": "최신순",
   "sortTop": "인기순",
+  "mute": "뮤트",
   "muteOn": "뮤트",
   "muteOff": "뮤트 해제",
   "muting": "뮤트 중",
@@ -228,7 +229,6 @@ export default () => ({
   "checkMutingUsers": "뮤트한 사용자 확인",
   "blockingUsers": "차단한 사용자",
   "checkBlockingUsers": "차단한 사용자 확인",
-  "repostMutingUsers": "리포스트 뮤트한 사용자",
   "noFollowings": "이 사용자가 팔로우하는 사람이 없습니다.",
   "noFollowers": "이 사용자를 팔로우하는 사람이 없습니다.",
   "recommendedUsers": "추천 사용자",
@@ -837,6 +837,13 @@ export default () => ({
   // ============================================================================
   "enableRepost": "리포스트 뮤트 해제",
   "disableRepost": "리포스트 뮤트",
+
+  // ============================================================================
+  // QUOTE MUTE
+  // ============================================================================
+  "enableQuoteRepost": "인용 리포스트 뮤트 해제",
+  "disableQuoteRepost": "인용 리포스트 뮤트",
+  "scopedMuteNotice": "자체 기능: 게시물이 접힙니다",
 
   // ============================================================================
   // GLOBALLINE SETTINGS

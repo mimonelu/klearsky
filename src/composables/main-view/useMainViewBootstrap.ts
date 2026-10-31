@@ -158,6 +158,20 @@ export function useMainViewBootstrap (options: Options) {
         })
     }
 
+    // 引用リポストミュートの取得
+    if (state.quoteMutes.length === 0) {
+      state.atp.fetchQuoteMutes()
+        .then((result) => {
+          if (!(result instanceof Error)) {
+            state.quoteMutes.splice(0, state.quoteMutes.length, ...result)
+            state.myWorker?.setSessionCache("quoteMutes", state.quoteMutes)
+          }
+        })
+        .catch((error) => {
+          $error("useMainViewBootstrap", "Failed to fetch quote mutes", error)
+        })
+    }
+
     // 招待コードの取得
     if (state.inviteCodes.length === 0) {
       state.updateInviteCodes()

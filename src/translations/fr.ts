@@ -212,6 +212,7 @@ export default () => ({
   "followersCount": "Abonnés",
   "sortLatest": "Plus récent",
   "sortTop": "Populaire",
+  "mute": "Cacher",
   "muteOn": "Cacher",
   "muteOff": "Montrer",
   "muting": "Caché",
@@ -228,7 +229,6 @@ export default () => ({
   "checkMutingUsers": "Voir les cachés",
   "blockingUsers": "Utilisateurs bloqués",
   "checkBlockingUsers": "Voir les bloqués",
-  "repostMutingUsers": "Reposts masqués",
   "noFollowings": "Aucun abonnement pour cet utilisateur.",
   "noFollowers": "Aucun abonné pour cet utilisateur.",
   "recommendedUsers": "Utilisateurs recommandés",
@@ -837,6 +837,13 @@ export default () => ({
   // ============================================================================
   "enableRepost": "Réactiver les republis",
   "disableRepost": "Masquer les republis",
+
+  // ============================================================================
+  // QUOTE MUTE
+  // ============================================================================
+  "enableQuoteRepost": "Réactiver les citations",
+  "disableQuoteRepost": "Masquer les citations",
+  "scopedMuteNotice": "Propre à Klearsky : publications repliées",
 
   // ============================================================================
   // GLOBALLINE SETTINGS

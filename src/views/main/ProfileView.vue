@@ -23,6 +23,7 @@ import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import Post from "@/components/compositions/Post.vue"
 import ProfileLinkList from "@/components/next/ProfileLink/ProfileLinkList.vue"
+import QuoteMuteButton from "@/components/next/QuoteMute/QuoteMuteButton.vue"
 import RepostMuteButton from "@/components/next/RepostMute/RepostMuteButton.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import VerifierIcon from "@/components/next/Verification/VerifierIcon.vue"
@@ -422,29 +423,31 @@ function removeThisPost () {
 
       <!-- バナーコンテナ内ボタンコンテナ -->
       <div class="banner-container__button-container">
-        <!-- モデレーションボタンコンテナ -->
-        <div
-          v-if="
-            !mainState.isMyProfile() &&
-            mainState.currentProfile != null
-          "
-          class="moderation-button-container group-parts"
-        >
-          <!-- リポストミュートトグル -->
-          <RepostMuteButton :did="mainState.currentProfile.did" />
+        <template v-if="
+          !mainState.isMyProfile() &&
+          mainState.currentProfile != null
+        ">
+          <!-- モデレーションボタンコンテナ -->
+          <div class="moderation-button-container group-parts">
+            <!-- 引用リポストミュートトグル -->
+            <QuoteMuteButton :did="mainState.currentProfile.did" />
 
-          <!-- ミュートトグル -->
-          <MuteButton
-            :did="mainState.currentProfile.did"
-            :viewer="mainState.currentProfile.viewer"
-          />
+            <!-- リポストミュートトグル -->
+            <RepostMuteButton :did="mainState.currentProfile.did" />
+
+            <!-- ミュートトグル -->
+            <MuteButton
+              :did="mainState.currentProfile.did"
+              :viewer="mainState.currentProfile.viewer"
+            />
+          </div>
 
           <!-- ブロックトグル -->
           <BlockButton
             :did="mainState.currentProfile.did"
             :viewer="mainState.currentProfile.viewer"
           />
-        </div>
+        </template>
 
         <!-- プロフィールポップオーバートグル -->
         <button

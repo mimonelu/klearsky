@@ -212,6 +212,7 @@ export default () => ({
   "followersCount": "Followers",
   "sortLatest": "Newest",
   "sortTop": "Popular",
+  "mute": "Mute",
   "muteOn": "Mute",
   "muteOff": "Unmute",
   "muting": "Muting",
@@ -228,7 +229,6 @@ export default () => ({
   "checkMutingUsers": "Confirm muted users",
   "blockingUsers": "Blocked Users",
   "checkBlockingUsers": "Confirm blocked users",
-  "repostMutingUsers": "Repost Muted Users",
   "noFollowings": "There are no users followed by this user.",
   "noFollowers": "There are no users following this user.",
   "recommendedUsers": "Recommended Users",
@@ -837,6 +837,13 @@ export default () => ({
   // ============================================================================
   "enableRepost": "Unmute Reposts",
   "disableRepost": "Mute Reposts",
+
+  // ============================================================================
+  // QUOTE MUTE
+  // ============================================================================
+  "enableQuoteRepost": "Unmute Quotes",
+  "disableQuoteRepost": "Mute Quotes",
+  "scopedMuteNotice": "Klearsky only: posts are collapsed",
 
   // ============================================================================
   // GLOBALLINE SETTINGS

@@ -20,6 +20,7 @@ interface TIMyWorkerSessionCache {
   myLabeler?: Array<TILabeler>
   myList?: Array<TTList>
   repostMutes?: Array<TIRepostMuteSubject>
+  quoteMutes?: Array<TIQuoteMuteSubject>
   serverInfo?: TTServerInfo
   userProfile?: TTProfile
 }

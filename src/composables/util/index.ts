@@ -17,6 +17,7 @@ import getRkey from "@/composables/util/get-rkey"
 import getUserLanguage from "@/composables/util/get-user-language"
 import injectFoldingToFeeds from "@/composables/util/inject-folding-to-feeds"
 import isNewerJwt from "@/composables/util/is-newer-jwt"
+import isQuotePost from "@/composables/util/is-quote-post"
 import makeCustomLinks from "@/composables/util/make-custom-links"
 import makeLightningLinks from "@/composables/util/make-lightning-links"
 import mergeFeeds from "@/composables/util/merge-feeds"
@@ -63,6 +64,7 @@ export default {
   getUserLanguage,
   injectFoldingToFeeds,
   isNewerJwt,
+  isQuotePost,
   makeCustomLinks,
   makeLightningLinks,
   mergeFeeds,

@@ -95,6 +95,7 @@ import posts from "@/svg/comment-multiple.svg?raw"
 import pulse from "@/svg/pulse.svg?raw"
 import question from "@/svg/question.svg?raw"
 import quoteRepost from "@/svg/quote-repost.svg?raw"
+import quoteRepostOff from "@/svg/quote-repost-off.svg?raw"
 import radioOff from "@/svg/radio-off.svg?raw"
 import radioOn from "@/svg/radio-on.svg?raw"
 import refresh from "@/svg/refresh.svg?raw"
@@ -222,6 +223,7 @@ const icons: { [k: string]: string } = {
   pulse,
   question,
   quoteRepost,
+  quoteRepostOff,
   radioOff,
   radioOn,
   refresh,

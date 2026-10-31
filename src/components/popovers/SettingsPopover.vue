@@ -108,10 +108,6 @@ function process (type: string) {
       mainState.myLabeler?.toggleTemporarilyDisabled()
       break
     }
-    case "repostMutingUsers": {
-      mainState.openRepostMutesPopup()
-      break
-    }
     case "mutingUsers": {
       mainState.openMutingUsersPopup()
       break
@@ -289,16 +285,6 @@ function process (type: string) {
 
       <hr />
 
-      <!-- リポストミュート中のユーザーポップアップトリガー -->
-      <button
-        type="button"
-        data-type="repostMutingUsers"
-        @click.prevent="process('repostMutingUsers')"
-      >
-        <SVGIcon name="repostOff" />
-        <span>{{ $t("repostMutingUsers") }}</span>
-      </button>
-
       <!-- ミュート中のユーザーポップアップトリガー -->
       <button
         type="button"
@@ -425,7 +411,6 @@ function process (type: string) {
   button[data-type="officialBookmark"] > .svg-icon { --icon-color: var(--bookmark-color); }
   button[data-type="customBookmark"] > .svg-icon { --icon-color: var(--bookmark-color); }
   button[data-type="postDraft"] > .svg-icon { --icon-color: var(--share-color); }
-  button[data-type="repostMutingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="mutingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="blockingUsers"] > .svg-icon { --icon-color: var(--notice-color); }
   button[data-type="wordMute"] > .svg-icon { --icon-color: var(--notice-color); }

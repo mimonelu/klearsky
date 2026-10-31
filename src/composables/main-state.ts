@@ -160,6 +160,9 @@ export const state: MainState = reactive<MainState>({
   // リポストミュート
   repostMutes: [],
 
+  // 引用リポストミュート
+  quoteMutes: [],
+
   // atproto-proxy
   updateAtprotoProxy: updateAtprotoProxy,
 
@@ -576,11 +579,6 @@ export const state: MainState = reactive<MainState>({
   postLanguagesPopupDisplay: false,
   openPostLanguagesPopup: openPostLanguagesPopup,
   closePostLanguagesPopup: closePostLanguagesPopup,
-
-  // ポップアップ - リポストミュートユーザーリストポップアップ
-  repostMutesPopupDisplay: false,
-  openRepostMutesPopup: openRepostMutesPopup,
-  closeRepostMutesPopup: closeRepostMutesPopup,
 
   // ポップアップ - ミュートユーザーリストポップアップ
   mutingUsersPopupDisplay: false,
@@ -2713,16 +2711,6 @@ function openPostLanguagesPopup () {
 
 function closePostLanguagesPopup () {
   state.postLanguagesPopupDisplay = false
-}
-
-// ポップアップ - リポストミュートユーザーリストポップアップ
-
-function openRepostMutesPopup () {
-  state.repostMutesPopupDisplay = true
-}
-
-function closeRepostMutesPopup () {
-  state.repostMutesPopupDisplay = false
 }
 
 // ポップアップ - ミュートユーザーリストポップアップ

@@ -198,6 +198,8 @@ interface TIAtpWrapper {
     (actor: string): Promise<Error | TTProfile>
   fetchProfiles
     (actors: string[]): Promise<Error | TTProfile[]>
+  fetchQuoteMutes
+    (): Promise<Error | Array<TIQuoteMuteSubject>>
   fetchQuoteReposts
     (currentPosts: Array<TTPost>, uri: string, limit?: number, sort?: "latest" | "top", cursor?: string): Promise<Error | undefined | string>
   fetchRecord
@@ -304,6 +306,8 @@ interface TIAtpWrapper {
     (params: TTUpdateProfileParams): Promise<Error | undefined>
   updateProfileLinkRecords
     (links: Array<TTProfileLinkDraft>): Promise<Error | Array<TTCidUri>>
+  updateQuoteMutes
+    (subjects: Array<TIQuoteMuteSubject>): Promise<Error | TTCidUri>
   updateRecord
     (repo: string, collection: string, uri: string, record: { [k: string]: any }, validate?: boolean, swapCommit?: string, swapRecord?: string): Promise<Error | TTCidUri>
   updateRepostMutes

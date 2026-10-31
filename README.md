@@ -114,6 +114,7 @@ Klearsky implements several custom AT Protocol records and fields:
 - `space.aoisora.bookmark` - Custom bookmark system for saving posts
 - `net.mimonelu.klearsky.extraFeed` - Storage for trending page and global feed preferences
 - `net.mimonelu.klearsky.repostMutes` - Repost mute
+- `net.mimonelu.klearsky.quoteMutes` - Quote repost mute
 
 ### Custom Fields
 - `app.bsky.feed.post.record["net.mimonelu.klearsky.via"]` - Client identification (Klearsky)

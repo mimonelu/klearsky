@@ -110,6 +110,9 @@ interface MainState {
   // リポストミュート
   repostMutes: Array<TIRepostMuteSubject>
 
+  // 引用リポストミュート
+  quoteMutes: Array<TIQuoteMuteSubject>
+
   // atproto-proxy
   updateAtprotoProxy: (proxy?: string) => void
 
@@ -502,11 +505,6 @@ interface MainState {
   postLanguagesPopupDisplay: boolean
   openPostLanguagesPopup: Function
   closePostLanguagesPopup: () => void
-
-  // ポップアップ - リポストミュートユーザーリストポップアップ
-  repostMutesPopupDisplay: boolean
-  openRepostMutesPopup: Function
-  closeRepostMutesPopup: () => void
 
   // ポップアップ - ミュートユーザーリストポップアップ
   mutingUsersPopupDisplay: boolean

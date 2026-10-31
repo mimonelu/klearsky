@@ -20,6 +20,10 @@ export default {
   // ※ ❗️変更不可❗️
   OWN_DOMAIN_REPOST_MUTES: "net.mimonelu.klearsky.repostMutes",
 
+  // 引用リポストミュート
+  // ※ ❗️変更不可❗️
+  OWN_DOMAIN_QUOTE_MUTES: "net.mimonelu.klearsky.quoteMutes",
+
   // クライアント種別
   // ※ 変更可能
   OWN_DOMAIN_VIA: "net.mimonelu.klearsky.via",

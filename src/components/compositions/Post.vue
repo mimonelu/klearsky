@@ -250,7 +250,8 @@ const masked = computed((): boolean => {
     noContentLanguage.value ||
     hasHideLabel.value ||
     isWordMute.value ||
-    isRepostMute.value
+    isRepostMute.value ||
+    isQuoteMute.value
   )
 })
 
@@ -383,6 +384,18 @@ const isRepostMute = computed((): boolean => {
     return false
   }
   return mainState.repostMutes.some((subject) => subject.did === repostByDid)
+})
+
+// 引用リポストミュート - 引用リポストミュートの判定
+const isQuoteMute = computed((): boolean => {
+  const authorDid = props.post.author?.did
+  if (authorDid == null) {
+    return false
+  }
+  if (!mainState.quoteMutes.some((subject) => subject.did === authorDid)) {
+    return false
+  }
+  return Util.isQuotePost(props.post)
 })
 
 // ワードミュート - 本文とワードミュート用に RichText を生成
@@ -1060,6 +1073,12 @@ function toggleQuotePostDisplay () {
         name="repostOff"
       />
 
+      <!-- ポストマスク - 引用リポストミュート -->
+      <SVGIcon
+        v-show="isQuoteMute"
+        name="quoteRepostOff"
+      />
+
       <DisplayName
         class="post__mask__display-name"
         :displayName="post.author?.displayName"
@@ -1725,6 +1744,7 @@ function toggleQuotePostDisplay () {
     }
 
     & > .svg-icon--contentFiltering,
+    & > .svg-icon--quoteRepostOff,
     & > .svg-icon--repostOff,
     & > .svg-icon--wordMute {
       fill: rgb(var(--notice-color), var(--alpha));

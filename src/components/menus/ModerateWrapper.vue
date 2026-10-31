@@ -8,9 +8,11 @@ import MenuTickerSendPostReport from "@/components/next/Report/SendPostReport.vu
 import MenuTickerSendStarterPackReport from "@/components/next/Report/SendStarterPackReport.vue"
 import MenuTickerToggleBlock from "@/components/next/UserBlock/ToggleBlock.vue"
 import MenuTickerToggleMute from "@/components/next/UserMute/ToggleMute.vue"
+import MenuTickerToggleQuoteMute from "@/components/next/QuoteMute/ToggleQuoteMute.vue"
 import MenuTickerToggleRepostMute from "@/components/next/RepostMute/ToggleRepostMute.vue"
 import Popover from "@/components/popovers/Popover.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 const emit = defineEmits<{(event: string): void}>()
 
@@ -87,6 +89,24 @@ function close () {
     >
       <menu class="list-menu">
         <slot name="before" />
+        <!-- 引用リポストミュートのトグル -->
+        <MenuTickerToggleQuoteMute
+          v-if="
+            !isUser &&
+            generator == null &&
+            list == null &&
+            starterPack == null &&
+            myConvo == null &&
+            message == null &&
+            (
+              post == null ||
+              Util.isQuotePost(post)
+            )
+          "
+          :did="(post?.author.did ?? user?.did) as string"
+          @close="emit('close')"
+        />
+
         <!-- リポストミュートのトグル -->
         <MenuTickerToggleRepostMute
           v-if="

@@ -114,6 +114,7 @@ KlearskyはいくつかのカスタムAT Protocolレコードとフィールド�
 - `space.aoisora.bookmark` - 投稿保存用のカスタムブックマークシステム
 - `net.mimonelu.klearsky.extraFeed` - トレンドページとグローバルフィード設定の保存
 - `net.mimonelu.klearsky.repostMutes` - リポストミュート
+- `net.mimonelu.klearsky.quoteMutes` - 引用リポストミュート
 
 ### カスタムフィールド
 - `app.bsky.feed.post.record["net.mimonelu.klearsky.via"]` - クライアント識別（Klearsky）

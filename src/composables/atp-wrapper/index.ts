@@ -95,6 +95,7 @@ import fetchPostThread from "@/composables/atp-wrapper/fetch/fetch-post-thread"
 import fetchPreferences from "@/composables/atp-wrapper/fetch/fetch-preferences"
 import fetchProfile from "@/composables/atp-wrapper/fetch/fetch-profile"
 import fetchProfiles from "@/composables/atp-wrapper/fetch/fetch-profiles"
+import fetchQuoteMutes from "@/composables/atp-wrapper/fetch/fetch-quote-mutes"
 import fetchQuoteReposts from "@/composables/atp-wrapper/fetch/fetch-quote-reposts"
 import fetchRecord from "@/composables/atp-wrapper/fetch/fetch-record"
 import fetchRecords from "@/composables/atp-wrapper/fetch/fetch-records"
@@ -147,6 +148,7 @@ import updatePostgate from "@/composables/atp-wrapper/update/update-postgate"
 import updatePreferences from "@/composables/atp-wrapper/update/update-preferences"
 import updateProfile from "@/composables/atp-wrapper/update/update-profile"
 import updateProfileLinkRecords from "@/composables/atp-wrapper/update/update-profile-link-records"
+import updateQuoteMutes from "@/composables/atp-wrapper/update/update-quote-mutes"
 import updateRecord from "@/composables/atp-wrapper/update/update-record"
 import updateRepostMutes from "@/composables/atp-wrapper/update/update-repost-mutes"
 import updateThreadgate from "@/composables/atp-wrapper/update/update-threadgate"
@@ -327,6 +329,7 @@ class AtpWrapper implements TIAtpWrapper {
   fetchPreferences = fetchPreferences
   fetchProfile = fetchProfile
   fetchProfiles = fetchProfiles
+  fetchQuoteMutes = fetchQuoteMutes
   fetchQuoteReposts = fetchQuoteReposts
   fetchRecord = fetchRecord
   fetchRecords = fetchRecords
@@ -381,6 +384,7 @@ class AtpWrapper implements TIAtpWrapper {
   updatePreferences = updatePreferences
   updateProfile = updateProfile
   updateProfileLinkRecords = updateProfileLinkRecords
+  updateQuoteMutes = updateQuoteMutes
   updateRecord = updateRecord
   updateRepostMutes = updateRepostMutes
   updateThreadgate = updateThreadgate
