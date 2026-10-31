@@ -1,5 +1,6 @@
-<script lang="ts" setup>
+<script lang="ts">
 // SEE: https://pictogrammers.com/library/mdi/
+// アイコン表はインスタンスごとに生成されないよう、`setup` の外に置く
 import activitySubscription from "@/svg/activity-subscription.svg?raw"
 import alert from "@/svg/alert.svg?raw"
 import alphaA from "@/svg/alpha-a.svg?raw"
@@ -255,7 +256,9 @@ const icons: { [k: string]: string } = {
   wallpaper,
   wordMute,
 }
+</script>
 
+<script lang="ts" setup>
 defineProps<{
   name: string
   reverseH?: boolean
