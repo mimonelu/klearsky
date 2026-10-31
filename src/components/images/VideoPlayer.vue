@@ -33,10 +33,12 @@ onMounted(async () => {
   // 自動読み込みはマウント時から全動画のセグメントをバッファリングするため無効化し、画面内に入った時に読み込む
   // 再生前のバッファリングは先頭のセグメント程度に抑える
   // バッファ長の上限はビットレートと `maxBufferSize` からも算出されるため、`maxMaxBufferLength` でも制限する
+  // CEA-608 字幕のパーサーはセグメントの読み込み時に数万個のオブジェクトを確保する。Bluesky の字幕は WebVTT のため無効化する
   hls = new HLS({
     autoStartLoad: false,
     maxBufferLength: 1,
     maxMaxBufferLength: 1,
+    enableCEA708Captions: false,
   })
 
   // 画質優先の場合、再生開始時は最高画質を選択させる

@@ -30,5 +30,5 @@
 | コンストラクター | 正体 |
 |---|---|
 | `Link` / `Dep` | Vue のリアクティブの依存追跡。描画中に参照したリアクティブなプロパティごとに作られる |
-| `PenState` | hls.js の CEA-608 字幕パーサー。セグメントを読み込んだ動画 1 本につき 18,180 個 |
+| `PenState` | hls.js の CEA-608 字幕パーサー。セグメントを読み込んだ動画 1 本につき 18,180 個。`enableCEA708Captions: false` で生成しないようにしているため、出たら設定が効いていない |
 | `blink::GridSizingTrackCollection` | `display: grid` の要素ごとのレイアウトデータ |
