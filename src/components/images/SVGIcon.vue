@@ -275,12 +275,11 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
+// `overflow` や `position` を指定するとアイコンごとに描画レイヤーが作られメモリを消費するため、指定しない
 .svg-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  position: relative;
   min-width: 1em;
   max-width: 1em;
   height: 1em;
