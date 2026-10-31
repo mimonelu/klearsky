@@ -1,6 +1,6 @@
 {
   "name": "klearsky",
-  "version": "0.10.12",
+  "version": "0.10.13",
   "private": true,
   "scripts": {
     "dev": "vite --mode development",
