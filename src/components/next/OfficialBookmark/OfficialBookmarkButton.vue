@@ -13,7 +13,6 @@ const mainState = inject("state") as MainState
   <button
     class="icon-button official-bookmark-button"
     :data-bookmarked="!!post.viewer?.bookmarked"
-    :data-has-bookmark="!!post.bookmarkCount"
   >
     <div class="icon-container">
       <SVGIcon name="bookmark" />
@@ -27,9 +26,6 @@ const mainState = inject("state") as MainState
 
 <style lang="scss" scoped>
 .official-bookmark-button {
-  &[data-has-bookmark="false"] {
-    grid-template-columns: auto;
-  }
   &[data-bookmarked="true"] {
     & > .icon-container {
       & > .svg-icon {

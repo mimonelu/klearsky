@@ -27,10 +27,6 @@ const mainState = inject("state") as MainState
 
 <style lang="scss" scoped>
 .quote-repost-button {
-  &[disabled] {
-    grid-template-columns: auto auto 1fr;
-  }
-
   & > .svg-icon--lock {
     fill: rgb(var(--fg-color), 0.25);
   }

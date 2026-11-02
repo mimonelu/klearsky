@@ -51,9 +51,12 @@
     }
   }
 }
+// グリッドはボタンごとにレイアウトデータを確保しメモリを消費するため、フレックスにする
+// 狭い時に数字を省略表示させるため、幅を親に収める（負の `margin` の分だけ広げる）
+// 親がグリッドの場合、親側で `min-width: 0` を指定して列が数字の幅に押し広げられないようにすること
 .icon-button {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
   align-items: center;
-  grid-gap: 0 0.375em;
+  column-gap: 0.375em;
+  max-width: calc(100% + 1.5em);
 }

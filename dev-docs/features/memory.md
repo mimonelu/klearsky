@@ -31,6 +31,6 @@
 |---|---|
 | `Link` / `Dep` | Vue のリアクティブの依存追跡。描画中に参照したリアクティブなプロパティごとに作られる |
 | `PenState` | hls.js の CEA-608 字幕パーサー。セグメントを読み込んだ動画 1 本につき 18,180 個。`enableCEA708Captions: false` で生成しないようにしているため、出たら設定が効いていない |
-| `blink::GridSizingTrackCollection` | `display: grid` の要素ごとのレイアウトデータ |
+| `blink::GridSizingTrackCollection` | `display: grid` の要素ごとのレイアウトデータ。行と列で 1 個ずつ作られ、`blink::LayoutGrid` と合わせてグリッド 1 個あたり約 4 KB |
 | `blink::PaintLayerScrollableArea` | `overflow: hidden` / `auto` 等のスクロールコンテナごとに作られる。`overflow: clip` では作られない |
 | `blink::PaintLayer` / `blink::ClipPaintPropertyNode` | 描画レイヤーと切り取り。`overflow` が `visible` 以外（`clip` を含む）の要素や `position` 指定の要素等に作られる |

@@ -1577,7 +1577,6 @@ function toggleQuotePostDisplay () {
           <button
             class="icon-button reply_count"
             :disabled="threadgate === 'lock'"
-            :data-has-threadgate="threadgate !== 'none'"
             @click.stop="onActivateReplyButton"
           >
             <!-- Threadgate -->
@@ -2306,6 +2305,11 @@ function toggleQuotePostDisplay () {
     margin-top: 0.25em;
   }
 
+  // 列が `.icon-button` の数字の幅に押し広げられないようにする
+  & > div {
+    min-width: 0;
+  }
+
   .lightning-link {
     display: flex;
   }
@@ -2328,13 +2332,6 @@ function toggleQuotePostDisplay () {
 // リプライボタン
 // ほぼ Threadgate 対応
 .reply_count {
-  &[data-has-threadgate="false"] {
-    grid-template-columns: auto 1fr;
-  }
-  &[data-has-threadgate="true"] {
-    grid-template-columns: auto auto 1fr;
-  }
-
   & > .ignore {
     display: none;
   }
