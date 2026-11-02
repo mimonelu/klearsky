@@ -34,6 +34,7 @@ function openImagePopup () {
       :blur="blur"
       :isLabeler="isLabeler"
       :actorStatus="actorStatus"
+      fullsize
     />
   </button>
 </template>

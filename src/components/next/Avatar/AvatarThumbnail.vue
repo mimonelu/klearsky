@@ -7,9 +7,22 @@ const props = defineProps<{
   blur?: boolean
   isLabeler?: boolean
   actorStatus?: TIActorStatus
+  fullsize?: boolean
 }>()
 
 const mainState = inject("state") as MainState
+
+// 公式 CDN のアバターは縮小版を使う。原寸のままだと、小さく表示するだけでもデコード後の画像メモリを大きく消費する
+// 大きく表示する場合は `fullsize` を指定する
+const src = computed((): undefined | string => {
+  if (mainState.currentSetting.postAnonymization) {
+    return
+  }
+  if (props.fullsize || props.image == null) {
+    return props.image
+  }
+  return props.image.replace(/^https:\/\/cdn\.bsky\.app\/img\/avatar\//, "https://cdn.bsky.app/img/avatar_thumbnail/")
+})
 
 // アクターステータス - LIVE
 const hasLive = computed((): boolean => {
@@ -25,7 +38,7 @@ const hasLive = computed((): boolean => {
     :data-has-live="hasLive"
   >
     <div class="avatar-thumbnail__inner">
-      <LazyImage :src="mainState.currentSetting.postAnonymization ? undefined : image" />
+      <LazyImage :src="src" />
     </div>
 
     <!-- アクターステータス - LIVE -->
