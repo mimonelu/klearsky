@@ -34,13 +34,5 @@ const mainState = inject("state") as MainState
   & > .svg-icon--lock {
     fill: rgb(var(--fg-color), 0.25);
   }
-
-  & > .icon-container {
-    position: relative;
-
-    & > .svg-icon {
-      position: relative;
-    }
-  }
 }
 </style>

@@ -41,13 +41,5 @@ const mainState = inject("state") as MainState
       color: rgb(var(--bookmark-color));
     }
   }
-
-  & > .icon-container {
-    position: relative;
-
-    & > .svg-icon {
-      position: relative;
-    }
-  }
 }
 </style>
