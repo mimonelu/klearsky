@@ -77,13 +77,6 @@
   "LIMIT_OF_THREADGATE_ITEMS": 5,
   "OLD_POST_NOTIFICATION_DAYS": 2,
   "EDIT_POST_TIME_LIMIT_MINUTES": 10,
-  "ATMOSPHERE_SERVICE_FAVICONS": {
-    "frontpage": "https://frontpage.fyi/frontpage-logo.svg?b5da8167450d2f63",
-    "linkat": "https://linkat.blue/favicon.ico",
-    "skybemoreblue": "https://www.skybemoreblue.com/apple-icon.png",
-    "smokesignal": "https://smokesignal.events/static/favicon.ico",
-    "whtwnd": "https://whtwnd.com/whtwnd.svg"
-  },
   "DEFAULT_CHAT_REACTIONS": [
     [ "👍", "😆", "❤️", "👀", "😢" ],
     [ "✅", "😊", "🚀", "🤔", "😭" ]

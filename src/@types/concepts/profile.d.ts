@@ -9,21 +9,6 @@ type TTProfile = TTUser & {
   links?: Array<TTProfileLink>
   pinnedPost?: TTCidUri
   postsCount: number
-
-  // Frontpage
-  __frontpage?: Array<TICommonRecord>
-
-  // Linkat
-  __linkat?: Array<TICommonRecord>
-
-  // SkyBeMoreBlue
-  __skyBeMoreBlue?: Array<any>
-
-  // SmokeSignal
-  __smokeSignal?: Array<TICommonRecord>
-
-  // WhiteWind
-  __whiteWind?: Array<TICommonRecord>
 }
 
 // `app.bsky.actor.defs#profileLinkView`

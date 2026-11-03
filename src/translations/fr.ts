@@ -915,11 +915,6 @@ export default () => ({
   "pnYoutube": "Youtube",
   "pnVimeo": "Vimeo",
   "pnNicovideo": "Nicovideo",
-  "pnFrontpage": "Frontpage",
-  "pnLinkat": "Linkat",
-  "pnSkyBeMoreBlue": "SkyBeMoreBlue",
-  "pnSmokeSignal": "Smoke Signal",
-  "pnWhiteWind": "WhiteWind",
 
   // ============================================================================
   // EXTERNAL APPS

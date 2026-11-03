@@ -1,15 +1,14 @@
 <script lang="ts" setup>
 import { computed, inject, onMounted, reactive } from "vue"
-import AtmosphereHelper from "@/components/next/Atmosphere/script"
-import Frontpage from "@/components/next/Atmosphere/Frontpage.vue"
-import Linkat from "@/components/next/Atmosphere/Linkat.vue"
-import SkyBeMoreBlue from "@/components/next/Atmosphere/SkyBeMoreBlue.vue"
-import SmokeSignal from "@/components/next/Atmosphere/SmokeSignal.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import WhiteWind from "@/components/next/Atmosphere/WhiteWind.vue"
-import { ATMOSPHERE_SERVICE_FAVICONS } from "@/consts/consts.json"
+import Util from "@/composables/util"
+import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
+
+const $t = inject("$t") as Function
 
 const mainState = inject("state") as MainState
+
+const { onClickExternalLink } = useSafeExternalUrl()
 
 const state = reactive<{
   display: boolean
@@ -17,28 +16,54 @@ const state = reactive<{
   display: true,
 })
 
-const hasItem = computed((): boolean => {
-  return AtmosphereHelper.some(mainState.currentProfile)
-})
+// 除外する NSID の上位 2 区切り（Bluesky 本体と AT Protocol のコア）
+const EXCLUDED_AUTHORITIES = ["app.bsky", "chat.bsky", "com.atproto"]
 
-const displayOfSmokeSignal = computed((): boolean => {
-  return AtmosphereHelper.includes("smokesignal", mainState.currentProfile)
-})
+// ドメインの 1 区切り
+const DOMAIN_SEGMENT_REGEX = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/
 
-const displayOfLinkat = computed((): boolean => {
-  return AtmosphereHelper.includes("linkat", mainState.currentProfile)
-})
+// TLD（数字のみは不可）
+const TLD_REGEX = /^[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?$/
 
-const displayOfFrontpage = computed((): boolean => {
-  return AtmosphereHelper.includes("frontpage", mainState.currentProfile)
-})
+type TTAtmosphereDomain = {
+  // NSID の上位 2 区切りを逆順にしたドメイン名
+  domain: string
 
-const displayOfSkyBeMoreBlue = computed((): boolean => {
-  return AtmosphereHelper.includes("skybemoreblue", mainState.currentProfile)
-})
+  // そのドメインのコレクション数
+  collectionsCount: number
+}
 
-const displayOfWhiteWind = computed((): boolean => {
-  return AtmosphereHelper.includes("whitewind", mainState.currentProfile)
+// リポジトリのコレクション（NSID）をドメインごとにまとめた一覧
+// NOTICE: NSID はアカウントが自由に作れるため、形式に合わないものは除外する
+const domains = computed((): Array<TTAtmosphereDomain> => {
+  const collections = mainState.currentProfile?.__repo?.collections
+  if (!Array.isArray(collections)) {
+    return []
+  }
+  const counts = new Map<string, number>()
+  for (const collection of collections) {
+    if (typeof collection !== "string") {
+      continue
+    }
+    const segments = collection.toLowerCase().split(".")
+
+    // NSID は 3 区切り以上
+    if (segments.length < 3) {
+      continue
+    }
+    const [tld, name] = segments
+    if (!TLD_REGEX.test(tld) || !DOMAIN_SEGMENT_REGEX.test(name)) {
+      continue
+    }
+    if (EXCLUDED_AUTHORITIES.includes(`${tld}.${name}`)) {
+      continue
+    }
+    const domain = `${name}.${tld}`
+    counts.set(domain, (counts.get(domain) ?? 0) + 1)
+  }
+  return [...counts]
+    .map(([domain, collectionsCount]) => ({ domain, collectionsCount }))
+    .sort((a, b) => a.domain.localeCompare(b.domain))
 })
 
 onMounted(() => {
@@ -56,138 +81,103 @@ function toggle () {
 
 <template>
   <div
-    v-if="hasItem"
+    v-if="domains.length > 0"
     class="atmosphere-container"
-    :data-has-item="hasItem"
   >
     <button
       type="button"
       class="button--plain atmosphere-container__button"
-      :disabled="!hasItem"
       @click.prevent="toggle"
     >
       <SVGIcon name="at" />
       <span translate="no">{{ $t("atmosphere") }}</span>
-
-      <!-- SmokeSignal Favicon -->
-      <img
-        v-if="displayOfSmokeSignal"
-        :src="ATMOSPHERE_SERVICE_FAVICONS.smokesignal"
-        :alt="$t('pnSmokeSignal')"
-      >
-
-      <!-- Linkat Favicon -->
-      <img
-        v-if="displayOfLinkat"
-        :src="ATMOSPHERE_SERVICE_FAVICONS.linkat"
-        :alt="$t('pnLinkat')"
-      >
-
-      <!-- Frontpage Favicon -->
-      <img
-        v-if="displayOfFrontpage"
-        :src="ATMOSPHERE_SERVICE_FAVICONS.frontpage"
-        :alt="$t('pnFrontpage')"
-      >
-
-      <!-- SkyBeMoreBlue Favicon -->
-      <img
-        v-if="displayOfSkyBeMoreBlue"
-        :src="ATMOSPHERE_SERVICE_FAVICONS.skybemoreblue"
-        :alt="$t('pnSkyBeMoreBlue')"
-      >
-
-      <!-- WhiteWind Favicon -->
-      <img
-        v-if="displayOfWhiteWind"
-        :src="ATMOSPHERE_SERVICE_FAVICONS.whtwnd"
-        :alt="$t('pnWhiteWind')"
-      >
-
-      <SVGIcon
-        v-if="hasItem"
-        :name="state.display ? 'cursorUp' : 'cursorDown'"
-      />
+      <span class="atmosphere-container__count">{{ domains.length }}</span>
+      <SVGIcon :name="state.display ? 'cursorUp' : 'cursorDown'" />
     </button>
     <div
       v-if="state.display"
       class="atmosphere-container__content"
     >
-      <!-- SmokeSignal コンテンツ -->
-      <SmokeSignal
-        v-if="displayOfSmokeSignal"
-        :profile="mainState.currentProfile ?? undefined"
-      />
-
-      <!-- Linkat コンテンツ -->
-      <Linkat
-        v-if="displayOfLinkat"
-        :profile="mainState.currentProfile ?? undefined"
-      />
-
-      <!-- Frontpage コンテンツ -->
-      <Frontpage
-        v-if="displayOfFrontpage"
-        :profile="mainState.currentProfile ?? undefined"
-      />
-
-      <!-- SkyBeMoreBlue コンテンツ -->
-      <SkyBeMoreBlue
-        v-if="displayOfSkyBeMoreBlue"
-        :profile="mainState.currentProfile ?? undefined"
-      />
-
-      <!-- WhiteWind コンテンツ -->
-      <WhiteWind
-        v-if="displayOfWhiteWind"
-        :profile="mainState.currentProfile ?? undefined"
-      />
+      <a
+        v-for="item of domains"
+        :key="item.domain"
+        class="atmosphere-container__item"
+        :href="Util.safeExternalUrl(`https://${item.domain}`)"
+        rel="noreferrer"
+        target="_blank"
+        :title="`https://${item.domain}`"
+        translate="no"
+        @click="onClickExternalLink($event, `https://${item.domain}`)"
+      >
+        <SVGIcon name="link" />
+        <span class="atmosphere-container__domain">{{ item.domain }}</span>
+        <span class="atmosphere-container__collections-count">{{ item.collectionsCount }}</span>
+      </a>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .atmosphere-container {
+  background-color: rgb(var(--fg-color), 0.0625);
   border-radius: var(--border-radius-middle);
   display: flex;
   flex-direction: column;
   padding: 0 0.5rem;
-  &[data-has-item="true"] {
-    background-image: linear-gradient(
-      135deg,
-      rgb(var(--blue-color)),
-      rgb(var(--blue-color), 0.75)
-    );
-  }
-  &[data-has-item="false"] {
-    background-color: rgb(var(--fg-color), 0.0625);
-  }
 
   &__button {
     margin: 0 -0.5rem;
-    [data-has-item="true"] & {
-      --fg-color: var(--white-color);
-    }
+  }
 
-    // Favicon
-    & > img {
-      width: 1rem;
-      min-width: 1rem;
-      max-width: 1rem;
-    }
+  &__count {
+    color: rgb(var(--fg-color), 0.5);
   }
 
   &__content {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     grid-gap: 0.5rem;
     padding-bottom: 0.5rem;
+  }
 
-    // TODO: Atmosphere コンテンツのコレクションはあるが、コンテンツ自体はない場合（削除した場合など）の対応をすること
-    &:empty {
-      margin-top: -0.5rem;
-      padding-bottom: 0;
+  // NOTICE: プロフィールリンク（`ProfileLinkList.vue`）と同じ形にする
+  &__item {
+    --alpha: 0.875;
+    background-color: rgb(var(--bg-color));
+    border-radius: 1.5em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    grid-gap: 0.375em;
+    overflow: hidden;
+    padding: 0.375em 0.75em;
+    max-width: 100%;
+    &:focus,
+    &:hover {
+      --alpha: 1.0;
+      background-color: rgb(var(--accent-color), 0.25);
     }
+
+    & > .svg-icon {
+      fill: rgb(var(--fg-color), var(--alpha));
+      min-width: 1em;
+    }
+
+    & > span {
+      font-size: 0.875em;
+      line-height: var(--line-height-low);
+      white-space: nowrap;
+    }
+  }
+
+  &__domain {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__collections-count {
+    color: rgb(var(--fg-color), 0.5);
   }
 }
 </style>
