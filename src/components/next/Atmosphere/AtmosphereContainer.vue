@@ -203,7 +203,7 @@ function toggle () {
           translate="no"
           @click="onClickExternalLink($event, `https://${item.domain}`)"
         >
-          <SVGIcon name="link" />
+          <SVGIcon name="point" />
           <span class="atmosphere-container__domain">{{ item.domain }}</span>
           <span class="atmosphere-container__collections-count">{{ item.collectionsCount }}</span>
         </a>
@@ -235,7 +235,7 @@ function toggle () {
     padding-bottom: 0.5rem;
   }
 
-  // NOTICE: プロフィールリンク（`ProfileLinkList.vue`）と同じ形にする
+  // NOTICE: プロフィールリンク（`ProfileLinkList.vue`）に準じた形にする
   &__item {
     background-color: rgb(var(--bg-color));
     border-radius: 1.5em;
@@ -244,7 +244,7 @@ function toggle () {
     align-items: center;
     grid-gap: 0.375em;
     overflow: hidden;
-    padding: 0.375em 0.75em;
+    padding: 0.375em 0.75em 0.375em 0.375em;
     max-width: 100%;
     &:focus,
     &:hover {
@@ -252,12 +252,16 @@ function toggle () {
     }
 
     & > .svg-icon {
-      fill: rgb(var(--fg-color), 0.5);
+      font-size: 1.5em;
+      fill: rgb(var(--fg-color), 0.25);
       min-width: 1em;
     }
 
+    // NOTICE: アバター自体のホバー表現（角が四角くなる）を出さないため、ポインターイベントを無効にする
     & > .avatar-thumbnail {
+      font-size: 1.5em;
       min-width: 1em;
+      pointer-events: none;
     }
 
     & > span {
