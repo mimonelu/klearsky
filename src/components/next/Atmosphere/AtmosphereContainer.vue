@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, reactive } from "vue"
+import { computed, inject, onMounted, reactive, watch } from "vue"
+import AvatarThumbnail from "@/components/next/Avatar/AvatarThumbnail.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
+import { hasUserBlurLabel } from "@/composables/util/use-content-labels"
 import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 
 const $t = inject("$t") as Function
@@ -15,6 +17,12 @@ const state = reactive<{
 }>({
   display: true,
 })
+
+// `getProfiles` の 1 回あたりの最大件数
+const PROFILES_PER_REQUEST = 25
+
+// `getProfiles` の最大回数
+const MAX_PROFILES_REQUESTS = 5
 
 // 除外する NSID の上位 2 区切り（Bluesky 本体と AT Protocol のコア）
 const EXCLUDED_AUTHORITIES = ["app.bsky", "chat.bsky", "com.atproto"]
@@ -66,8 +74,74 @@ const domains = computed((): Array<TTAtmosphereDomain> => {
     .sort((a, b) => a.domain.localeCompare(b.domain))
 })
 
+// ドメインをハンドルとするアカウント
+const accounts = reactive(new Map<string, TTUser>())
+
+// アカウントの取得を要求済みのドメイン
+const requestedDomains = new Set<string>()
+
+let numberOfProfilesRequests = 0
+
+// 開いている時だけ、未取得のドメインのアカウントを取得する。表示はブロックしない
+// NOTICE: 別のプロフィールに移ると `key` によりコンポーネントごと作り直されるため、古いレスポンスは破棄されたインスタンスに入るだけになる
+function fetchAccounts () {
+  if (!state.display) {
+    return
+  }
+  const targets = domains.value
+    .map((item) => item.domain)
+    .filter((domain) => !requestedDomains.has(domain))
+  for (
+    let index = 0;
+    index < targets.length && numberOfProfilesRequests < MAX_PROFILES_REQUESTS;
+    index += PROFILES_PER_REQUEST
+  ) {
+    const actors = targets.slice(index, index + PROFILES_PER_REQUEST)
+    actors.forEach((domain) => requestedDomains.add(domain))
+    numberOfProfilesRequests ++
+    fetchAccountsOf(actors)
+  }
+}
+
+async function fetchAccountsOf (actors: Array<string>) {
+  const profiles = await mainState.atp.fetchProfiles(actors)
+  if (profiles instanceof Error) {
+    return
+  }
+  for (const profile of profiles) {
+    // ハンドルの検証に失敗したアカウントなど、ドメインと一致しないものは使わない
+    const domain = profile.handle.toLowerCase()
+    if (!actors.includes(domain)) {
+      continue
+    }
+    accounts.set(domain, profile)
+  }
+}
+
+// リンク先とアイコンに使うアカウント。アバターのないアカウントは使わない
+// NOTICE: アバターの有無でリンク先（プロフィールかドメインか）を見分けられるようにするため
+// NOTICE: ラベル設定で非表示またはぼかし対象のアカウントと、ブロック関係にあるアカウントは使わない
+const accountsForLink = computed((): Map<string, TTUser> => {
+  const results = new Map<string, TTUser>()
+  for (const [domain, account] of accounts) {
+    if (
+      account.avatar == null ||
+      account.viewer?.blocking ||
+      account.viewer?.blockedBy ||
+      hasUserBlurLabel(mainState, account.labels)
+    ) {
+      continue
+    }
+    results.set(domain, account)
+  }
+  return results
+})
+
+watch([() => state.display, domains], fetchAccounts)
+
 onMounted(() => {
   state.display = mainState.currentSetting?.atmosphereDisplay ?? true
+  fetchAccounts()
 })
 
 function toggle () {
@@ -98,21 +172,42 @@ function toggle () {
       v-if="state.display"
       class="atmosphere-container__content"
     >
-      <a
+      <template
         v-for="item of domains"
         :key="item.domain"
-        class="atmosphere-container__item"
-        :href="Util.safeExternalUrl(`https://${item.domain}`)"
-        rel="noreferrer"
-        target="_blank"
-        :title="`https://${item.domain}`"
-        translate="no"
-        @click="onClickExternalLink($event, `https://${item.domain}`)"
       >
-        <SVGIcon name="link" />
-        <span class="atmosphere-container__domain">{{ item.domain }}</span>
-        <span class="atmosphere-container__collections-count">{{ item.collectionsCount }}</span>
-      </a>
+        <!-- アカウントがあればプロフィールへのリンク -->
+        <RouterLink
+          v-if="accountsForLink.has(item.domain)"
+          class="atmosphere-container__item"
+          :to="{ name: 'profile-feeds', query: { account: accountsForLink.get(item.domain)?.did } }"
+          :title="accountsForLink.get(item.domain)?.displayName || item.domain"
+          translate="no"
+        >
+          <AvatarThumbnail
+            :image="accountsForLink.get(item.domain)?.avatar"
+            :isLabeler="accountsForLink.get(item.domain)?.associated?.labeler"
+          />
+          <span class="atmosphere-container__domain">{{ item.domain }}</span>
+          <span class="atmosphere-container__collections-count">{{ item.collectionsCount }}</span>
+        </RouterLink>
+
+        <!-- アカウントがなければドメインへのリンク -->
+        <a
+          v-else
+          class="atmosphere-container__item atmosphere-container__item--domain"
+          :href="Util.safeExternalUrl(`https://${item.domain}`)"
+          rel="noreferrer"
+          target="_blank"
+          :title="`https://${item.domain}`"
+          translate="no"
+          @click="onClickExternalLink($event, `https://${item.domain}`)"
+        >
+          <SVGIcon name="link" />
+          <span class="atmosphere-container__domain">{{ item.domain }}</span>
+          <span class="atmosphere-container__collections-count">{{ item.collectionsCount }}</span>
+        </a>
+      </template>
     </div>
   </div>
 </template>
@@ -142,7 +237,6 @@ function toggle () {
 
   // NOTICE: プロフィールリンク（`ProfileLinkList.vue`）と同じ形にする
   &__item {
-    --alpha: 0.875;
     background-color: rgb(var(--bg-color));
     border-radius: 1.5em;
     cursor: pointer;
@@ -154,12 +248,15 @@ function toggle () {
     max-width: 100%;
     &:focus,
     &:hover {
-      --alpha: 1.0;
       background-color: rgb(var(--accent-color), 0.25);
     }
 
     & > .svg-icon {
-      fill: rgb(var(--fg-color), var(--alpha));
+      fill: rgb(var(--fg-color), 0.5);
+      min-width: 1em;
+    }
+
+    & > .avatar-thumbnail {
       min-width: 1em;
     }
 
@@ -174,6 +271,11 @@ function toggle () {
     font-weight: bold;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  // ドメインへのリンク（アカウントがない場合）
+  &__item--domain &__domain {
+    color: rgb(var(--fg-color), 0.5);
   }
 
   &__collections-count {
