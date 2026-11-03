@@ -54,12 +54,6 @@
     "favicon": "https://bsky-debug.app/static/icon.png"
   },
   {
-    "name": "uniresolverApp",
-    "post": "https://dev.uniresolver.io/#{did}",
-    "profile": "https://dev.uniresolver.io/#{did}",
-    "favicon": "https://dev.uniresolver.io/favicon.ico"
-  },
-  {
     "name": "didApp",
     "post": "https://web.plc.directory/did/{did}",
     "profile": "https://web.plc.directory/did/{did}"

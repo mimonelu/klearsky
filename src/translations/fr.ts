@@ -934,7 +934,6 @@ export default () => ({
   "wrapperApp": "Wrapper Bluesky",
   "tokimekiApp": "TOKIMEKI Bluesky",
   "witchskyApp": "Witchsky",
-  "uniresolverApp": "Universal Resolver",
   "didApp": "Répertoire did:plc",
   "oplogsApp": "PLC operation logs",
 
