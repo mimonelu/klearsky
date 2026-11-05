@@ -40,3 +40,13 @@
 | `blink::GridSizingTrackCollection` | `display: grid` の要素ごとのレイアウトデータ。行と列で 1 個ずつ作られ、`blink::LayoutGrid` と合わせてグリッド 1 個あたり約 4 KB |
 | `blink::PaintLayerScrollableArea` | `overflow: hidden` / `auto` 等のスクロールコンテナごとに作られる。`overflow: clip` では作られない |
 | `blink::PaintLayer` / `blink::ClipPaintPropertyNode` | 描画レイヤーと切り取り。`overflow` が `visible` 以外（`clip` を含む）の要素や `position` 指定の要素等に作られる |
+
+## `content-visibility` を見送った理由（#55）
+
+`.feed` に `content-visibility: auto` を指定して計測し、採用を見送った。
+
+- 過去のフィードを 5 回読み込んだ直後のヒープは、約 97 MB → 約 96 MB で誤差の範囲だった。レイアウト関連の `blink::*` は 1 割強しか減らず、一度描画したポストのレイアウトは画面外に出ても大部分が残る
+- ポストスレッドから戻った直後だけ、ヒープが約 96 MB → 約 67 MB、画像キャッシュが 51 MB → 23 MB に減った。ポストが作り直され、画面外のポストが描画されないためで、読み進めれば再び積み上がる
+- 戻った時のスクロール位置がずれる
+
+画面外のポストを描画しない方向の効果を測る時は、戻った直後の値だけで判断せず、順にスクロールして読み進めた直後の値も比べる。
