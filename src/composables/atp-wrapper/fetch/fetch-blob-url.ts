@@ -22,6 +22,7 @@ export default async function (
   }
 
   // URLオブジェクトに変換
+  // NOTICE: 不要になったら呼び出し側で `URL.revokeObjectURL()` すること
   return URL.createObjectURL(new Blob([data], {
     type: image.mimeType,
   }))

@@ -34,6 +34,10 @@ const state = reactive<{
   y: 0.5,
 })
 
+const blobUrls: string[] = []
+
+let unmounted = false
+
 onBeforeMount(() => {
   hotkeys("esc", close)
   hotkeys("left", () => { showImage(- 1) })
@@ -49,6 +53,14 @@ onBeforeMount(() => {
       state.blobs[index] = props.images[index]?.largeUri
       return
     }
+
+    // 取得中に破棄された場合は表示先がないため解放のみ行う
+    if (unmounted) {
+      URL.revokeObjectURL(url)
+      return
+    }
+
+    blobUrls.push(url)
     state.blobs[index] = url
   })
 })
@@ -57,6 +69,8 @@ onBeforeUnmount(() => {
   hotkeys.unbind("esc")
   hotkeys.unbind("left")
   hotkeys.unbind("right")
+  unmounted = true
+  blobUrls.forEach((url) => URL.revokeObjectURL(url))
 })
 
 function startDrag (event: MouseEvent | TouchEvent) {

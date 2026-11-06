@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive } from "vue"
+import { inject, onBeforeUnmount, onMounted, reactive } from "vue"
 import type { BlobRef } from "@atproto/api"
 import LazyImage from "@/components/images/LazyImage.vue"
 import Loader from "@/components/shells/Loader.vue"
@@ -31,6 +31,10 @@ const BLOB_MIME_TYPES = [
   "image/gif",
   "image/svg+xml",
 ]
+
+let blobUrl: undefined | string
+
+let unmounted = false
 
 onMounted(async () => {
   if (props.image == null) {
@@ -72,6 +76,13 @@ onMounted(async () => {
   setBlobToSrc(props.image.image as unknown as BlobRef)
 })
 
+onBeforeUnmount(() => {
+  unmounted = true
+  if (blobUrl != null) {
+    URL.revokeObjectURL(blobUrl)
+  }
+})
+
 async function setBlobToSrc (image: BlobRef) {
   const url = await mainState.atp.fetchBlobUrl(props.did as string, image)
   if (url instanceof Error) {
@@ -84,6 +95,14 @@ async function setBlobToSrc (image: BlobRef) {
     state.loaded = true
     return
   }
+
+  // 取得中に破棄された場合は表示先がないため解放のみ行う
+  if (unmounted) {
+    URL.revokeObjectURL(url)
+    return
+  }
+
+  blobUrl = url
   state.src = url
   state.errored = false
   state.loaded = true
