@@ -15,12 +15,12 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 | `npm run build` | 型チェック＋本番ビルド（出力先は `docs/`） |
 | `npm run lint` | ESLint（`--fix` 付きでファイルを書き換える点に注意） |
 
-- Node.js v22.16.0
+- Node.js v22.23.4（`.nvmrc` で管理）
 - 自動テストはない。検証は型チェックと実機確認で行う
 
 ## ブランチ・コミット
 
-- PR のベースブランチは `staging`。`main` への push で GitHub Pages にデプロイされる
+- PR のベースブランチは `staging`。`main` への push で Cloudflare Pages（本番）と GitHub Pages に、`staging` への push で Cloudflare Pages（ステージング）にデプロイされる
 - リリース作業は `release/vX.Y.Z`、緊急修正は `hotfix/vX.Y.Z` ブランチ
 - コミットメッセージは日本語 1 行。`Co-Authored-By` は付けない
 - イシュー対応は番号を先頭に付ける（例: `#52 動画再生開始時に最高画質を選択するよう変更`）

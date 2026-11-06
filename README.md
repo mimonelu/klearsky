@@ -24,7 +24,7 @@ A powerful, feature-packed web client for the AT Protocol (Bluesky) with extensi
 
 ### Prerequisites
 
-- Node.js v22.16.0 or higher
+- Node.js v22.23.4 or higher
 - npm or yarn package manager
 
 ### Installation
