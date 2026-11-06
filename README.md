@@ -58,7 +58,8 @@ npm run dev
 | `npm run build-only` | Build for production without type checking |
 | `npm run type-check` | Run TypeScript type checking |
 | `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint with auto-fix |
+| `npm run lint` | Run ESLint |
+| `npm run lint:fix` | Run ESLint with auto-fix |
 
 ### Tech Stack
 

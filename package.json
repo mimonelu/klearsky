@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-    "lint": "eslint . --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "make-icon": "npx sharp-cli -i public/favicon.svg -o public/apple-touch-icon.png resize 180 180"
   },
   "browserslist": [

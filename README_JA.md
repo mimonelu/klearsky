@@ -58,7 +58,8 @@ npm run dev
 | `npm run build-only` | 型チェックなしでプロダクション用にビルド |
 | `npm run type-check` | TypeScript型チェックを実行 |
 | `npm run preview` | プロダクションビルドをローカルでプレビュー |
-| `npm run lint` | ESLintを自動修正付きで実行 |
+| `npm run lint` | ESLintを実行 |
+| `npm run lint:fix` | ESLintを自動修正付きで実行 |
 
 ### 技術スタック
 

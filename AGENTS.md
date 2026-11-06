@@ -11,9 +11,10 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 | コマンド | 用途 |
 |---|---|
 | `npm run dev` | 開発サーバー（http://localhost:5173/） |
-| `npm run type-check` | 型チェック（`vue-tsc --noEmit`）。**変更後は必ず実行** |
+| `npm run type-check` | 型チェック（`vue-tsc --build`）。**変更後は必ず実行** |
 | `npm run build` | 型チェック＋本番ビルド（出力先は `docs/`） |
-| `npm run lint` | ESLint（`--fix` 付きでファイルを書き換える点に注意） |
+| `npm run lint` | ESLint（チェックのみ） |
+| `npm run lint:fix` | ESLint（`--fix` はファイルを書き換えるため、ユーザーの許可なく使わない） |
 
 - Node.js v22.23.4（`.nvmrc` で管理）
 - 自動テストはない。検証は型チェックと実機確認で行う
