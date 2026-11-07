@@ -1,4 +1,3 @@
-import Util from "@/composables/util"
 import OWN_DOMAIN from "@/consts/own-domain"
 
 export default async function (
@@ -34,9 +33,6 @@ export default async function (
   if (newCustomBookmarkPosts instanceof Error) {
     return newCustomBookmarkPosts
   }
-
-  // TODO:
-  Util.sanitizePostsOrFeeds(newCustomBookmarkPosts)
 
   // カスタムブックマークパックの作成
   const newCustomBookmarkPacks: Array<TICustomBookmarkPack> =

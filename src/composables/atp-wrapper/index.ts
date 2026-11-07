@@ -87,7 +87,6 @@ import fetchNotifications from "@/composables/atp-wrapper/fetch/fetch-notificati
 import fetchOfficialBookmarks from "@/composables/atp-wrapper/fetch/fetch-official-bookmarks"
 import fetchOfficialFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-official-feed-generators"
 import fetchPopularFeedGenerators from "@/composables/atp-wrapper/fetch/fetch-popular-feed-generators"
-import fetchPostedImageRefs from "@/composables/atp-wrapper/fetch/fetch-posted-image-refs"
 import fetchPostgate from "@/composables/atp-wrapper/fetch/fetch-postgate"
 import fetchPosts from "@/composables/atp-wrapper/fetch/fetch-posts"
 import fetchPostSearch from "@/composables/atp-wrapper/fetch/fetch-post-search"
@@ -321,7 +320,6 @@ class AtpWrapper implements TIAtpWrapper {
   fetchOfficialBookmarks = fetchOfficialBookmarks
   fetchOfficialFeedGenerators = fetchOfficialFeedGenerators
   fetchPopularFeedGenerators = fetchPopularFeedGenerators
-  fetchPostedImageRefs = fetchPostedImageRefs
   fetchPostgate = fetchPostgate
   fetchPosts = fetchPosts
   fetchPostSearch = fetchPostSearch
