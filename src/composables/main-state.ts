@@ -1780,7 +1780,8 @@ async function fetchCurrentAuthorFeed (direction: TTDirection, filter?: string, 
     CONSTS.LIMIT_OF_FETCH_AUTHOR_FEEDS,
     direction === "old" ? cursor : middleCursor,
     filter ?? "posts_no_replies",
-    direction
+    direction,
+    state.repostMutes
   )
   if (!Generations.profile.isCurrent(generation)) {
     return
@@ -2064,7 +2065,8 @@ async function fetchTimeline (direction: TTDirection, middleCursor?: string) {
     state.currentSetting.otherFolding,
     CONSTS.LIMIT_OF_FETCH_TIMELINE,
     direction === "old" ? state.timelineCursor : middleCursor,
-    direction
+    direction,
+    state.repostMutes
   )
 
   // 新着フォロー中フィードフラグをリセット
@@ -2182,6 +2184,7 @@ async function fetchCustomFeeds (direction: TTDirection, middleCursor?: string) 
     direction === "old" ? state.currentCustomFeedsCursor : middleCursor,
     direction,
     (feedUri: any): boolean => feedUri === state.currentQuery.feed,
+    state.repostMutes
   )
   if (cursor instanceof Error) {
     state.openErrorPopup(cursor, "mainState/fetchCustomFeeds")
@@ -2279,6 +2282,7 @@ async function fetchCurrentListFeeds (direction: TTDirection, middleCursor?: str
     direction === "old" ? state.currentListFeedsCursor : middleCursor,
     direction,
     (): boolean => Generations.list.isCurrent(generation),
+    state.repostMutes
   )
   if (!Generations.list.isCurrent(generation)) {
     return false
@@ -2313,6 +2317,7 @@ async function fetchCurrentStarterPackListFeeds (
     direction === "old" ? state.currentStarterPackListFeedsCursor : middleCursor,
     direction,
     (): boolean => Generations.starterPack.isCurrent(generation),
+    state.repostMutes
   )
   if (!Generations.starterPack.isCurrent(generation)) {
     return false

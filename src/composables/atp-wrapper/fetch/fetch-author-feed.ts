@@ -8,7 +8,8 @@ export default async function (
   limit?: number,
   cursor?: string,
   filter?: string,
-  direction?: TTDirection
+  direction?: TTDirection,
+  repostMutes?: Array<TIRepostMuteSubject>
 ): Promise<Error | undefined | string> {
   if (this.agent == null) {
     return Error("noAgentError")
@@ -43,7 +44,8 @@ export default async function (
     response.data.feed as Array<TTFeed>,
     cursor,
     direction,
-    response.data.cursor
+    response.data.cursor,
+    repostMutes
   )
   // Util.sortFeeds(oldFeeds)
 

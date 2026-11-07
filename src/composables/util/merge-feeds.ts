@@ -8,7 +8,8 @@ export default function (
   targetFeeds: Array<TTFeed>,
   cursor?: string,
   direction?: TTDirection,
-  nextCursor?: string
+  nextCursor?: string,
+  repostMutes?: Array<TIRepostMuteSubject>
 ) {
   const isFirstFetch = oldFeeds.length === 0
   const doesUnshift = cursor == null
@@ -16,10 +17,17 @@ export default function (
   const addings: Array<TTFeed> = []
 
   // 重複フィード（リポスト）を除去
-  const map = new Map()
+  // 最古のフィードを残す。ただし、リポストミュートの対象で隠れないよう、対象外のフィードを優先する
+  const map = new Map<string, TTFeed>()
   targetFeeds.slice().reverse().forEach((targetFeed: TTFeed) => {
-    if (!map.has(targetFeed.post.uri)) {
-      map.set(targetFeed.post.uri, targetFeed)
+    const uri = targetFeed.post.uri
+    const currentFeed = map.get(uri)
+    if (currentFeed == null) {
+      map.set(uri, targetFeed)
+    } else if (isRepostMuted(currentFeed, repostMutes) && !isRepostMuted(targetFeed, repostMutes)) {
+      // 残すフィードの位置に入れ直す
+      map.delete(uri)
+      map.set(uri, targetFeed)
     }
   })
 
@@ -51,7 +59,7 @@ export default function (
 
     // 既存フィード
     else {
-      updateFeed(oldFeeds[oldIndex], targetFeed)
+      updateFeed(oldFeeds[oldIndex], targetFeed, repostMutes)
     }
   })
 
@@ -141,13 +149,23 @@ function hasSameReason (a: TTFeed, b: TTFeed): boolean {
 
 // 既存フィードの API のデータだけを更新する
 // フィードのオブジェクトを残すので、インジェクションプロパティと `reason` は既存の値のまま
-// `reason` は取得の経路で変わるため、更新しない
-function updateFeed (oldFeed: TTFeed, newFeed: TTFeed) {
+// `reason` は取得の経路で変わるため、更新しない。ただし、リポストミュートの対象で隠れている時は対象外の値に差し替える
+function updateFeed (oldFeed: TTFeed, newFeed: TTFeed, repostMutes?: Array<TIRepostMuteSubject>) {
   // 新しいデータにリアクティブプロキシを入れないよう、生のデータから引き継ぐ
   const rawOldFeed = toRaw(oldFeed)
+  const replacesReason = isRepostMuted(rawOldFeed, repostMutes) && !isRepostMuted(newFeed, repostMutes)
+  const newCustomReason = newFeed.post.__custom?.reason
   inheritPostCustom(rawOldFeed.post, newFeed.post)
   inheritPostCustom(rawOldFeed.reply?.root, newFeed.reply?.root)
   inheritPostCustom(rawOldFeed.reply?.parent, newFeed.reply?.parent)
+
+  if (replacesReason) {
+    newFeed.post.__custom.reason = newCustomReason
+    oldFeed.reason = newFeed.reason
+
+    // 折り畳みは `reason` で判定しているので合わせる
+    oldFeed.__folding = newFeed.__folding
+  }
 
   oldFeed.post = newFeed.post
   oldFeed.reply = newFeed.reply
@@ -164,4 +182,10 @@ function inheritPostCustom (oldPost?: TTPost, newPost?: TTPost) {
     opThreadPostCount: newPost.__custom?.opThreadPostCount,
   }
   inheritQuoteCustom(oldPost.embed, newPost.embed)
+}
+
+function isRepostMuted (feed: TTFeed, repostMutes?: Array<TIRepostMuteSubject>): boolean {
+  if (feed.reason?.$type !== "app.bsky.feed.defs#reasonRepost") return false
+  const did = feed.reason.by.did
+  return repostMutes?.some((subject: TIRepostMuteSubject) => subject.did === did) ?? false
 }
