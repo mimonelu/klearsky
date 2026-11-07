@@ -58,18 +58,13 @@ export default async function (
   // TODO:
   Util.sanitizePostsOrFeeds(response.data.feed)
   const isFirstFetch = oldFeeds.length === 0
-  const isAllNew = Util.mergeFeeds(
+  Util.mergeFeeds(
     oldFeeds,
     response.data.feed as Array<TTFeed>,
-    cursor == null,
-    direction === "middle" ? cursor : undefined
+    cursor,
+    direction,
+    response.data.cursor
   )
-  if (!isFirstFetch && isAllNew && (cursor == null || direction === "middle")) {
-    const initialFeed = response.data.feed[0] as undefined | TTFeed
-    if (initialFeed != null) {
-      initialFeed.__cursor = response.data.cursor
-    }
-  }
   // Util.sortFeeds(oldFeeds) // ソートはしない
 
   if (direction !== "old" && !isFirstFetch) {

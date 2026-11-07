@@ -6,16 +6,18 @@ let id = 0
 export default function (
   oldFeeds: Array<TTFeed>,
   targetFeeds: Array<TTFeed>,
-  doesUnshift?: boolean,
-  middleCursor?: string
-): boolean {
+  cursor?: string,
+  direction?: TTDirection,
+  nextCursor?: string
+) {
+  const isFirstFetch = oldFeeds.length === 0
+  const doesUnshift = cursor == null
+  const middleCursor = direction === "middle" ? cursor : undefined
   const addings: Array<TTFeed> = []
 
   // 重複フィード（リポスト）を除去
-  // NOTICE: `reverse()` は呼び出し元の配列を書き換える。呼び出し元はマージ後の `[0]`（取得分の最古のフィード）に
-  //         抜け漏れ用の `__cursor` を付けているため、配列をコピーしないこと
   const map = new Map()
-  targetFeeds.reverse().forEach((targetFeed: TTFeed) => {
+  targetFeeds.slice().reverse().forEach((targetFeed: TTFeed) => {
     if (!map.has(targetFeed.post.uri)) {
       map.set(targetFeed.post.uri, targetFeed)
     }
@@ -107,6 +109,9 @@ export default function (
     }
   })
 
+  // 抜け漏れ取得ボタンの付け先（実際に追加したフィードの最古）
+  let anchorFeed: undefined | TTFeed = addings[addings.length - 1]
+
   // 新着フィード
   if (doesUnshift) {
     // 新規取得ライン
@@ -123,10 +128,17 @@ export default function (
   // 抜け漏れフィード
   else if (middleCursor != null) {
     const index = oldFeeds.findIndex((oldFeed: TTFeed) => oldFeed.__cursor === middleCursor)
-    if (index !== - 1) {
-      delete oldFeeds[index].__cursor
-      oldFeeds.splice(index + 1, 0, ...addings)
-    }
+
+    // 挿入位置がなければ取得分を捨てる
+    if (index === - 1) return
+
+    const middleFeed = oldFeeds[index]
+    delete middleFeed.__cursor
+    oldFeeds.splice(index + 1, 0, ...addings)
+
+    // 1 件も追加されなければ、続きを取得できるよう元のフィードにボタンを残す
+    // 同じカーソルが返った時は取得が進まないので残さない
+    if (addings.length === 0 && nextCursor !== middleCursor) anchorFeed = middleFeed
   }
 
   // 過去フィード
@@ -134,5 +146,14 @@ export default function (
     oldFeeds.push(...addings)
   }
 
-  return isAllNew
+  // 抜け漏れ取得ボタン
+  if (
+    !isFirstFetch &&
+    isAllNew &&
+    nextCursor != null &&
+    (doesUnshift || middleCursor != null) &&
+    anchorFeed != null
+  ) {
+    anchorFeed.__cursor = nextCursor
+  }
 }
