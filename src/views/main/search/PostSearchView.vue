@@ -285,7 +285,7 @@ function onScrolledToBottom () {
             :position="post.__custom.forcePosition != null ? post.__custom.forcePosition as any : 'post'"
             :post="post"
             :hasReplyIcon="post.record.reply != null"
-            :hasQuoteRepostIcon="post.record.embed?.record != null"
+            :hasQuoteRepostIcon="Util.resolveEmbed(post.record.embed).quoteRef != null"
             @updateThisPostThread="updateThisPostThread as unknown"
             @removeThisPost="removeThisPost as unknown"
             @onActivateHashTag="updateSearchPostTerm as unknown"

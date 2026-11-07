@@ -57,6 +57,9 @@ const state = reactive<{
   }),
 })
 
+// 引用先
+const embedQuote = computed(() => Util.resolveEmbed(props.post?.embed).quote)
+
 async function deletePost () {
   Util.blurElement()
   if (state.deletePostUri == null) return
@@ -222,17 +225,17 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
       <MenuTickerToggleQuoteAttachment
         v-if="
           (
-            post.embed?.record?.$type === 'app.bsky.embed.record#viewRecord' &&
-            post.embed?.record?.author?.did === mainState.atp.session?.did
+            embedQuote?.$type === 'app.bsky.embed.record#viewRecord' &&
+            embedQuote.author.did === mainState.atp.session?.did
           ) ||
           (
-            post.embed?.record?.$type === 'app.bsky.embed.record#viewDetached' &&
-            post.embed?.record?.uri?.startsWith(`at://${mainState.atp.session?.did}/`)
+            embedQuote?.$type === 'app.bsky.embed.record#viewDetached' &&
+            embedQuote.uri.startsWith(`at://${mainState.atp.session?.did}/`)
           )
         "
-        :quotedUri="post.embed?.record?.uri"
+        :quotedUri="embedQuote.uri"
         :quoterUri="post.uri"
-        :detached="post.embed?.record?.detached ?? false"
+        :detached="embedQuote.$type === 'app.bsky.embed.record#viewDetached'"
         @close="emit('close')"
       />
 

@@ -1,4 +1,5 @@
 import { toRaw } from "vue"
+import inheritQuoteCustom from "@/composables/util/inherit-quote-custom"
 
 let id = 0
 
@@ -81,8 +82,7 @@ export default function (
 
         // __custom の退避
         const oldCustomPropsOfPost = oldFeed.post.__custom
-        const oldCustomPropsOfQuote1 = oldFeed.post.embed?.record?.__custom
-        const oldCustomPropsOfQuote2 = oldFeed.post.embed?.record?.embed?.record?.__custom
+        const oldEmbed = oldFeed.post.embed
         const oldCustomPropsOfRoot = oldFeed.reply?.root?.__custom
         const oldCustomPropsOfParent = oldFeed.reply?.parent?.__custom
 
@@ -98,12 +98,7 @@ export default function (
 
         // __custom の復帰
         oldFeed.post.__custom = oldCustomPropsOfPost
-        if (oldFeed.post.embed?.record != null && oldCustomPropsOfQuote1 != null) {
-          oldFeed.post.embed.record.__custom = oldCustomPropsOfQuote1
-        }
-        if (oldFeed.post.embed?.record?.embed?.record != null && oldCustomPropsOfQuote2 != null) {
-          oldFeed.post.embed.record.embed.record.__custom = oldCustomPropsOfQuote2
-        }
+        inheritQuoteCustom(oldEmbed, oldFeed.post.embed)
         if (oldFeed.reply != null) {
           if (oldCustomPropsOfRoot != null) oldFeed.reply.root.__custom = oldCustomPropsOfRoot
           if (oldCustomPropsOfParent != null) oldFeed.reply.parent.__custom = oldCustomPropsOfParent

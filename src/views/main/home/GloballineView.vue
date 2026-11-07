@@ -90,9 +90,9 @@ async function onPost (did: string, post: any) {
     const wantsPost = mainState.currentSetting.globallinePostTypes.includes("post")
     const wantsReply = mainState.currentSetting.globallinePostTypes.includes("reply")
     const wantsQuoteRepost = mainState.currentSetting.globallinePostTypes.includes("quoteRepost")
-    const isPost = post.record.reply == null && post.record.embed?.record == null
+    const isQuoteRepost = Util.resolveEmbed(post.record.embed).quoteRef != null
+    const isPost = post.record.reply == null && !isQuoteRepost
     const isReply = post.record.reply != null
-    const isQuoteRepost = post.record.embed?.record != null
     if ((isPost && !wantsPost) ||
         (isReply && !wantsReply) ||
         (isQuoteRepost && !wantsQuoteRepost)) {
@@ -345,7 +345,7 @@ function onMutated () {
         :key="post.uri"
         class="post-wrapper"
         :data-is-reply="post.record.reply != null"
-        :data-is-quote-repost="post.record.embed?.record != null"
+        :data-is-quote-repost="Util.resolveEmbed(post.record.embed).quoteRef != null"
         :data-is-loaded="post.author.did != null"
         :data-is-muted="post.author.viewer?.muted"
         :data-is-blocking="post.author.viewer?.blocking != null"
@@ -357,7 +357,7 @@ function onMutated () {
           :position="mainState.currentSetting.globallineLayout ?? 'post'"
           :post="post"
           :hasReplyIcon="post.record.reply != null"
-          :hasQuoteRepostIcon="post.record.embed?.record != null"
+          :hasQuoteRepostIcon="Util.resolveEmbed(post.record.embed).quoteRef != null"
           :forceHideMedia="true"
           @updateThisPostThread="updateThisPostThread as any"
           @removeThisPost="removeThisPost as any"

@@ -10,7 +10,7 @@ type TTImage = {
   aspectRatio?: TTAspectRatio
 }
 
-type TTGalleryItem = TTImage
+type TTGalleryItem = Omit<TTImage, "thumb" | "video">
 
 type TTAspectRatio = {
   width: number

@@ -12,9 +12,11 @@ import fetchProfileLinkIcon from "@/composables/util/fetch-profile-link-icon"
 import fetchServiceStatus from "@/composables/util/fetch-service-status"
 import fetchWithTimeout from "@/composables/util/fetch-with-timeout"
 import getAspectRatio from "@/composables/util/get-aspect-ratio"
+import getBlobCid from "@/composables/util/get-blob-cid"
 import getGraphemeLength from "@/composables/util/get-grapheme-length"
 import getRkey from "@/composables/util/get-rkey"
 import getUserLanguage from "@/composables/util/get-user-language"
+import inheritQuoteCustom from "@/composables/util/inherit-quote-custom"
 import injectFoldingToFeeds from "@/composables/util/inject-folding-to-feeds"
 import isNewerJwt from "@/composables/util/is-newer-jwt"
 import isQuotePost from "@/composables/util/is-quote-post"
@@ -23,6 +25,7 @@ import makeLightningLinks from "@/composables/util/make-lightning-links"
 import mergeFeeds from "@/composables/util/merge-feeds"
 import officialUrl from "@/composables/util/official-url"
 import parseOgp from "@/composables/util/parse-ogp"
+import resolveEmbed from "@/composables/util/resolve-embed"
 import safeJson from "@/composables/util/safe-json"
 import safeExternalUrl from "@/composables/util/safe-external-url"
 import safeUrl from "@/composables/util/safe-url"
@@ -32,6 +35,7 @@ import storage from "@/composables/util/storage"
 import sanitizePreferences from "@/composables/util/sanitize-preferences"
 import sanitizeServiceStatus from "@/composables/util/sanitize-service-status"
 import shortenLinks from "@/composables/util/shorten-links"
+import toPostLike from "@/composables/util/to-post-like"
 // import translateInDeepL from "@/composables/util/translate-in-deep-l" // DeepL: 未使用
 import translateInExternalService from "@/composables/util/translate-in-external-service"
 import translateInMyMemory from "@/composables/util/translate-in-my-memory"
@@ -59,9 +63,11 @@ export default {
   fetchServiceStatus,
   fetchWithTimeout,
   getAspectRatio,
+  getBlobCid,
   getGraphemeLength,
   getRkey,
   getUserLanguage,
+  inheritQuoteCustom,
   injectFoldingToFeeds,
   isNewerJwt,
   isQuotePost,
@@ -70,6 +76,7 @@ export default {
   mergeFeeds,
   officialUrl,
   parseOgp,
+  resolveEmbed,
   ...safeJson,
   safeExternalUrl,
   safeUrl,
@@ -79,6 +86,7 @@ export default {
   sanitizePreferences,
   sanitizeServiceStatus,
   shortenLinks,
+  toPostLike,
   // translateInDeepL, // DeepL: 未使用
   translateInExternalService,
   translateInMyMemory,

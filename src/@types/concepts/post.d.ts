@@ -2,6 +2,7 @@ type TTPost = {
   // Injected
   __custom: {
     forcePosition?: string
+    listDeleted?: boolean
     reason?: TTReasonRepost
     translatedText?: string
     unmask?: boolean
@@ -13,7 +14,7 @@ type TTPost = {
   author: TTUser
   bookmarkCount?: number
   cid: string
-  embed?: TIEmbed
+  embed?: TTEmbedView
   indexedAt: string
   labels?: Array<TTLabel>
   likeCount: number
@@ -47,7 +48,7 @@ type TTRecord = {
 interface TIPostValue {
   $type: string
   createdAt: string
-  embed?: TIEmbed
+  embed?: TTEmbedRaw
   entities?: Array<TTEntity>
   facets?: any
   langs?: Array<string>
@@ -71,37 +72,11 @@ interface TIPostValue {
   [k: string]: unknown
 }
 
-interface TIEmbed {
-  $type: string
-  external?: TTExternal
-  images?: Array<TTImage>
-  media?: TTMedia
-  video?: TIBlob
-  record?: TTPost & {
-    $type: string
-    detached?: boolean
-  }
-  [k: string]: unknown
-}
-
 interface TIBlob {
   $type: "blob"
   mimeType: string
   ref: Blob
   size: number
-}
-
-interface TIVideo {
-  $type: "app.bsky.embed.video#view"
-  cid: string
-  playlist: string
-  thumbnail: string
-  aspectRatio?: TTAspectRatio
-  alt?: string // Injected
-  video?: {
-    $type: "blob"
-    ref: Blob
-  }
 }
 
 type TTReason = TTReasonRepost | TTReasonPin

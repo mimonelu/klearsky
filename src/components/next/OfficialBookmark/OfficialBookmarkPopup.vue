@@ -157,7 +157,7 @@ function removeThisPost (uri: string) {
               :post="bookmark"
               :container="state.postContainer"
               :hasReplyIcon="bookmark.record?.reply != null"
-              :hasQuoteRepostIcon="bookmark.record?.embed?.record != null"
+              :hasQuoteRepostIcon="Util.resolveEmbed(bookmark.record?.embed).quoteRef != null"
               @click.exact="close"
               @updateThisPostThread="updateThisPostThread as unknown"
               @removeThisPost="removeThisPost as unknown"

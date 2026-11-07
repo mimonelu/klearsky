@@ -248,7 +248,7 @@ async function outputJsonForSkyFeed () {
               :post="pack.post"
               :container="state.postContainer"
               :hasReplyIcon="pack.post.record.reply != null"
-              :hasQuoteRepostIcon="pack.post.record.embed?.record != null"
+              :hasQuoteRepostIcon="Util.resolveEmbed(pack.post.record.embed).quoteRef != null"
               @click.exact="close"
               @updateThisPostThread="updateThisPostThread as unknown"
               @removeThisPost="removeThisPost as unknown"

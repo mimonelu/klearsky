@@ -40,10 +40,11 @@ export default async function (
     })
     // 他ユーザーの切り離されたポストを除去
     .filter((post) => {
+      const quote = Util.resolveEmbed(post.embed).quote
       return (
         post.author.did === this.session?.did ||
-        !post.embed?.record?.detached ||
-        post.embed?.record?.uri?.startsWith(`at://${this.session?.did}/`)
+        quote?.$type !== "app.bsky.embed.record#viewDetached" ||
+        quote.uri.startsWith(`at://${this.session?.did}/`)
       )
     })
 

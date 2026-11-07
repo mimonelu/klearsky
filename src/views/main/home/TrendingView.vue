@@ -3,6 +3,7 @@ import { inject, onMounted, reactive } from "vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import Loader from "@/components/shells/Loader.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 import { hasUserBlurLabel } from "@/composables/util/use-content-labels"
 
 const mainState = inject("state") as MainState
@@ -59,6 +60,16 @@ const MAX_HOT_TRENDING_IMAGES = 5
 // ホット画像スケルトンの最大数
 const MAX_HOT_TRENDING_IMAGE_SKELETONS = 3
 
+// ポストの 1 枚目の画像のサムネイル
+function getImageThumb (post: TTPost): undefined | string {
+  const media = Util.resolveEmbed(post.embed).media
+  switch (media?.$type) {
+    case "app.bsky.embed.images#view": return media.images[0]?.thumb
+    case "app.bsky.embed.gallery#view": return media.items[0]?.thumbnail
+    default: return undefined
+  }
+}
+
 async function updateHotPosts () {
   // ホットポスト
   const hotPosts: Array<Array<TTPost>> = []
@@ -98,14 +109,14 @@ async function updateHotPosts () {
 
     // 画像を持つポストのみを抽出
     .filter((post) => {
-      return post.embed?.images?.[0]?.thumb != null
+      return getImageThumb(post) != null
     })
 
     // ホットポストからホット画像データに変換
     .map((post) => {
       return {
         topic: post.__topic as string,
-        image: post.embed?.images?.[0]?.thumb as string,
+        image: getImageThumb(post) as string,
         text: post.record.text as string,
       }
     })

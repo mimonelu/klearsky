@@ -1,3 +1,5 @@
+import inheritQuoteCustom from "@/composables/util/inherit-quote-custom"
+
 export default function updatePostProps (src: TTPost, dst: TTPost) {
   if (src == null || dst == null) return
 
@@ -41,6 +43,7 @@ export default function updatePostProps (src: TTPost, dst: TTPost) {
   if (dst.embed == null) {
     delete src.embed
   } else  {
+    inheritQuoteCustom(src.embed, dst.embed)
     src.embed = dst.embed
   }
   if (dst.record != null) {

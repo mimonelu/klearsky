@@ -1,4 +1,5 @@
 import type { BlobRef } from "@atproto/api"
+import getBlobCid from "@/composables/util/get-blob-cid"
 
 export default async function (
   this: TIAtpWrapper,
@@ -9,11 +10,7 @@ export default async function (
     return Error("noAgentError")
   }
 
-  const cid = (image as any).cid != null
-    ? (image as any).cid
-    : (image.ref as any).$link != null
-      ? (image.ref as any).$link
-      : image.ref.toString()
+  const cid = getBlobCid(image) as string
 
   // ダウンロード
   const data = await this.fetchBlob(cid, did)

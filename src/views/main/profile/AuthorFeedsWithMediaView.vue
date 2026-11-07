@@ -23,15 +23,26 @@ const listLoading = computed((): boolean => {
 const medias = computed((): Array<TTMediaListItem> => {
   const results: Array<TTMediaListItem> = []
   mainState.currentAuthorFeedsWithMedia.forEach((feed: TTFeed) => {
-    if (feed.post.embed?.images == null) return
-    feed.post.embed.images.forEach((image: TTImage) => {
-      results.push({
-        post: feed.post,
-        smallUri: image.thumb as string,
-        largeUri: image.fullsize as string,
-        alt: image.alt,
+    const media = Util.resolveEmbed(feed.post.embed).media
+    if (media?.$type === "app.bsky.embed.images#view") {
+      media.images.forEach((image) => {
+        results.push({
+          post: feed.post,
+          smallUri: image.thumb,
+          largeUri: image.fullsize,
+          alt: image.alt,
+        })
       })
-    })
+    } else if (media?.$type === "app.bsky.embed.gallery#view") {
+      media.items.forEach((item) => {
+        results.push({
+          post: feed.post,
+          smallUri: item.thumbnail,
+          largeUri: item.fullsize,
+          alt: item.alt,
+        })
+      })
+    }
   })
   return results
 })

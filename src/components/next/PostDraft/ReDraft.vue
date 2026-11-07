@@ -29,46 +29,42 @@ async function makeSendPostPopupPropsFromPost (src: TTPost): Promise<undefined |
   if (parentOrRootPost instanceof Error) {
     return
   }
+  const { media: viewMedia, quote } = Util.resolveEmbed(src.embed)
+  const quotePost = quote?.$type === "app.bsky.embed.record#viewRecord"
+    ? Util.toPostLike(quote)
+    : undefined
   const type = parentOrRootPost != null
     ? "reply"
-    : src.embed?.record?.$type === "app.bsky.embed.record#viewRecord"
+    : quotePost != null
       ? "quoteRepost"
       : "post"
   const post = type === "reply"
     ? parentOrRootPost
-    : type === "quoteRepost"
-      ? src.embed?.record
-      : undefined
+    : quotePost
   const text = src.record?.text ?? ""
   const url =
-    src.embed?.external?.uri ??
-    src.embed?.media?.external?.uri ??
-    (
-      (
-        src.embed?.record?.$type === "app.bsky.feed.defs#generatorView" ||
-        src.embed?.record?.$type === "app.bsky.graph.defs#listView" ||
-        src.embed?.record?.record?.$type === "app.bsky.graph.starterpack"
+    viewMedia?.$type === "app.bsky.embed.external#view"
+      ? viewMedia.external.uri
+      : (
+        quote?.$type === "app.bsky.feed.defs#generatorView" ||
+        quote?.$type === "app.bsky.graph.defs#listView" ||
+        quote?.$type === "app.bsky.graph.defs#starterPackViewBasic"
       )
-        ? src.embed?.record?.uri
+        ? quote.uri
         : undefined
-    )
   const langs = src.record?.langs
   const labels = src.labels
     ?.filter((label) => label.src === src.author.did)
     ?.map((label) => label.val)
+  const rawMedia = Util.resolveEmbed(src.record.embed).media
   const medias = (
-    src.record.embed?.images ??
-    src.record.embed?.media?.images ??
-    (
-      src.record.embed?.$type === "app.bsky.embed.video"
-        ? [src.record.embed]
-        : undefined
-    ) ??
-    (
-      src.record.embed?.media?.$type === "app.bsky.embed.video"
-        ? [src.record.embed.media]
-        : undefined
-    )
+    rawMedia?.$type === "app.bsky.embed.images"
+      ? rawMedia.images
+      : rawMedia?.$type === "app.bsky.embed.gallery"
+        ? rawMedia.items
+        : rawMedia?.$type === "app.bsky.embed.video"
+          ? [rawMedia]
+          : undefined
   ) as undefined | Array<TTImage>
 
   // TODO: ポスト再利用機能の添付ファイル対応
