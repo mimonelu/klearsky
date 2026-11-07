@@ -66,7 +66,7 @@ async function onPost (did: string, post: any) {
   postContainerHeight = container.clientHeight
 
   // 言語判定
-  const postLanguages = post.record?.langs ?? post.value?.langs
+  const postLanguages = post.record?.langs
   if (postLanguages == null) {
     // 言語判定 - ポスト言語が設定されていない場合はスキップ
     if (mainState.currentSetting.globallineSkipPostHasNoLanguage) {

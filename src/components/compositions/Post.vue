@@ -253,9 +253,7 @@ const masked = computed((): boolean => {
 })
 
 // 対象ポスト言語
-const postLanguages: undefined | ReadonlyArray<string> =
-  props.post.record?.langs ??
-  props.post.value?.langs
+const postLanguages: undefined | ReadonlyArray<string> = props.post.record?.langs
 
 // 翻訳リンクの設置可否 - 共通用
 const hasOtherLanguages = computed((): boolean => {
@@ -403,7 +401,7 @@ const isQuoteMute = computed((): boolean => {
 const contentRichText = computed(() => {
   // テキストまたはfacetsが変更された場合のみ再生成
   const currentText = text.value ?? ""
-  const facets = props.post.record?.facets ?? props.post.value?.facets
+  const facets = props.post.record?.facets
   const richText = new RichText({
     text: currentText,
     facets,

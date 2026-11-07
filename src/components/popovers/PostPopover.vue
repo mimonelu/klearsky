@@ -193,7 +193,7 @@ function callback (type: "deletePost" | "updatePost" | "createCustomBookmark" | 
       <!-- テキストを翻訳する -->
       <MenuTickerTranslateText
         :text="post.record?.text"
-        :langs="post.record?.langs ?? post.value?.langs"
+        :langs="post.record?.langs"
         @close="emit('close')"
       />
 
