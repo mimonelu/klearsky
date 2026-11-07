@@ -52,39 +52,19 @@ function sanitizePost (post: any, opThreadPostIndex?: number, opThreadPostCount?
     post.__custom.opThreadPostCount = opThreadPostCount
   }
 
-  // アニメーション画像向けに BlobRef をコピー
-  copyImages(post.record?.embed, post.embed)
-
   sanitizeQuote(post.embed)
 }
 
-// 引用先のポストを階層ごとにサニタイズする
+// 引用先のポストに階層ごとに `__custom` を追加する
 function sanitizeQuote (embed?: TTEmbedView) {
   const quote = resolveEmbed(embed).quote
   if (quote?.$type !== "app.bsky.embed.record#viewRecord") {
     return
   }
 
-  // `__custom` の追加
   if (quote.__custom == null) {
     quote.__custom = {}
   }
 
-  // アニメーション画像向けに BlobRef をコピー
-  copyImages(quote.value?.embed, quote.embeds?.[0])
-
   sanitizeQuote(quote.embeds?.[0])
-}
-
-function copyImages (rawEmbed?: any, viewEmbed?: any) {
-  const src = rawEmbed?.images ?? rawEmbed?.media?.images
-  const dst = viewEmbed?.images ?? viewEmbed?.media?.images
-  if (src == null || dst == null) {
-    return
-  }
-  for (let i = 0; i < src.length; i ++) {
-    if (dst[i] != null) {
-      dst[i].image = src[i].image
-    }
-  }
 }

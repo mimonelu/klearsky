@@ -142,12 +142,27 @@ const linkCard = (
 const hasLinkCard = linkCard != null
 
 // メディア - 画像
-const embedImages: TTImage[] = (
-  embedMedia?.$type === "app.bsky.embed.images#view" ||
-  embedMedia?.$type === "app.bsky.embed.images"
-)
-  ? embedMedia.images as unknown as TTImage[] ?? []
-  : []
+const embedImages = getEmbedImages()
+
+// View の画像は BlobRef を持たないため、アニメーション画像向けに Raw の BlobRef を合わせる
+function getEmbedImages (): TTImage[] {
+  if (embedMedia?.$type === "app.bsky.embed.images") {
+    return embedMedia.images as unknown as TTImage[] ?? []
+  }
+  if (embedMedia?.$type !== "app.bsky.embed.images#view") {
+    return []
+  }
+  const rawMedia = Util.resolveEmbed(props.post.record?.embed).media
+  const rawImages = rawMedia?.$type === "app.bsky.embed.images"
+    ? rawMedia.images
+    : undefined
+  return embedMedia.images.map((image, index) => {
+    return {
+      ...image,
+      image: rawImages?.[index]?.image as unknown as TIBlob,
+    }
+  })
+}
 
 // メディア - 動画
 const embedVideo =

@@ -29,4 +29,4 @@ TimeFeeds と Jetstream のポストは `post.record.embed`（Raw）だけを持
 - **`Post.vue` の更新**: 引用先は切り離しや再接続で変わるので `computed` にしている。メディアは更新で変わらないので、リアクティブの依存を増やさないよう定数にしている（#104）
 - **Raw の欠落**: Raw は他のクライアントが自由に書けるので、`$type` が正しくても中身が欠けている場合を想定する
 - **BlobRef**: `ref` は `agent` 経由なら CID、`fetchWithoutAgent` と Jetstream なら `{ $link }` になる。`toString()` を直接呼ばず `Util.getBlobCid` を使う
-- **画像の BlobRef**: `sanitize-posts-or-feeds.ts` は View の画像に Raw の BlobRef をコピーしている。アニメーション画像の表示（`Thumbnail.vue`、`Post.vue` の `openImagePopup`）が依存している
+- **画像の BlobRef**: View の画像は BlobRef を持たない。アニメーション画像の表示（`Thumbnail.vue`、`Post.vue` の `openImagePopup`）に必要なので、`Post.vue` が同じ位置の Raw の画像から合わせている。ギャラリーは対象外
