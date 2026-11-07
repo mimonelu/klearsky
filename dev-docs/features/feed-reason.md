@@ -23,3 +23,4 @@
 - `inject-folding-to-feeds.ts` は `sanitize-posts-or-feeds.ts` より前に呼ばれるため、`__custom.reason` ではなく `TTFeed.reason` を自前で判定する必要がある
 - `reasonRepost` の `uri` / `cid` は省略可能（リポスト経由のいいね・リポストで参照する）
 - ピン留めポストは通常のポストとして表示している。「固定」等の表示は未対応
+- `mergeFeeds` も `reasonPin` を `reason` なしと同じに扱う（[feed-merge.md](feed-merge.md)）
