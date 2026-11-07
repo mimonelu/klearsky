@@ -25,16 +25,17 @@ export default function (
 
   // 既存フィードの URI → インデックス
   // ループ中の `oldFeeds` の変更は同じ位置への置き換えのみで、追加はループ後のため、インデックスはずれない
+  const rawOldFeeds = toRaw(oldFeeds)
   const oldIndexMap = new Map<string, number>()
-  toRaw(oldFeeds).forEach((oldFeed: TTFeed, index: number) => {
+  rawOldFeeds.forEach((oldFeed: TTFeed, index: number) => {
     const uri = oldFeed.post?.uri
     if (uri != null && !oldIndexMap.has(uri)) {
       oldIndexMap.set(uri, index)
     }
   })
 
-  // 抜け漏れフラグ
-  let isAllNew = true
+  // NOTICE: 既存フィードが置き換わる前に判定すること
+  const isConnected = checkConnection(rawOldFeeds, oldIndexMap, targetFeeds)
 
   Array.from(map.values()).reverse().forEach((targetFeed: TTFeed) => {
     // `__id` のインジェクション
@@ -51,8 +52,6 @@ export default function (
 
     // 既存フィード
     else {
-      isAllNew = false
-
       // 既存フィードに `post` がない場合はスキップ（おそらく該当ケースなし）
       if (oldFeeds[oldIndex].post == null) oldFeeds[oldIndex] = targetFeed
       // 対象フィードに `post` がない場合はスキップ（おそらく該当ケースなし）
@@ -149,11 +148,46 @@ export default function (
   // 抜け漏れ取得ボタン
   if (
     !isFirstFetch &&
-    isAllNew &&
+    !isConnected &&
     nextCursor != null &&
     (doesUnshift || middleCursor != null) &&
     anchorFeed != null
   ) {
     anchorFeed.__cursor = nextCursor
   }
+}
+
+// 取得分が既存フィードとつながっているかを、取得分の最古から順に見て判定する
+// 時系列のフィードなら、つながっている時は最古のフィードが既存フィードに含まれる
+// ピン留めや再登場は時系列と関係ない位置に返るので、「1 件でも一致すればつながっている」とはみなさない
+// NOTICE: 重複を除く前の取得分を渡すこと。除いた後だと、既存フィードと一致するフィードが捨てられていることがある
+function checkConnection (
+  rawOldFeeds: Array<TTFeed>,
+  oldIndexMap: Map<string, number>,
+  targetFeeds: Array<TTFeed>
+): boolean {
+  // 既存フィードの最古が取得分にあれば、取得分は既存フィードの末尾まで届いている
+  // 既存フィードの件数が取得の上限に近い時は、取得分の最古が末尾を越えることがあるため、先に確認する
+  const oldestOldFeed = rawOldFeeds[rawOldFeeds.length - 1]
+  const reachesOldest = targetFeeds.some((targetFeed: TTFeed) => {
+    return targetFeed.post.uri === oldestOldFeed?.post?.uri && hasSameReason(oldestOldFeed, targetFeed)
+  })
+  if (reachesOldest) return true
+
+  for (let i = targetFeeds.length - 1; i >= 0; i --) {
+    const oldIndex = oldIndexMap.get(targetFeeds[i].post.uri)
+    if (oldIndex == null) return false
+    if (hasSameReason(rawOldFeeds[oldIndex], targetFeeds[i])) return true
+
+    // 同じポストで `reason` だけ違う場合は判定できないので、次に新しいフィードへ進む
+  }
+  return false
+}
+
+// リポストでなければ（`reasonPin` を含む）、ただのポストとして同じとみなす
+function hasSameReason (a: TTFeed, b: TTFeed): boolean {
+  const aReason = a.reason?.$type === "app.bsky.feed.defs#reasonRepost" ? a.reason : undefined
+  const bReason = b.reason?.$type === "app.bsky.feed.defs#reasonRepost" ? b.reason : undefined
+  if (aReason == null || bReason == null) return aReason == null && bReason == null
+  return aReason.by.did === bReason.by.did && aReason.indexedAt === bReason.indexedAt
 }
