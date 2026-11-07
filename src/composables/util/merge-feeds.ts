@@ -24,7 +24,7 @@ export default function (
   })
 
   // 既存フィードの URI → インデックス
-  // ループ中の `oldFeeds` の変更は同じ位置への置き換えのみで、追加はループ後のため、インデックスはずれない
+  // `oldFeeds` への追加はループ後のため、インデックスはずれない
   const rawOldFeeds = toRaw(oldFeeds)
   const oldIndexMap = new Map<string, number>()
   rawOldFeeds.forEach((oldFeed: TTFeed, index: number) => {
@@ -34,77 +34,24 @@ export default function (
     }
   })
 
-  // NOTICE: 既存フィードが置き換わる前に判定すること
   const isConnected = checkConnection(rawOldFeeds, oldIndexMap, targetFeeds)
 
   Array.from(map.values()).reverse().forEach((targetFeed: TTFeed) => {
-    // `__id` のインジェクション
-    if (targetFeed.__id == null) {
-      targetFeed.__id = `feed-${id ++}`
-    }
-
-    const oldIndex: number = oldIndexMap.get(targetFeed.post?.uri) ?? - 1
+    const oldIndex = oldIndexMap.get(targetFeed.post.uri)
 
     // 新規フィード
-    if (oldIndex === - 1) {
+    if (oldIndex == null) {
+      // `__id` のインジェクション
+      if (targetFeed.__id == null) {
+        targetFeed.__id = `feed-${id ++}`
+      }
+
       addings.push(targetFeed)
     }
 
     // 既存フィード
     else {
-      // 既存フィードに `post` がない場合はスキップ（おそらく該当ケースなし）
-      if (oldFeeds[oldIndex].post == null) oldFeeds[oldIndex] = targetFeed
-      // 対象フィードに `post` がない場合はスキップ（おそらく該当ケースなし）
-      else if (targetFeed.post == null) return
-      // 対象フィードがリポストの場合はスキップ
-      else if (targetFeed.reason?.$type === "app.bsky.feed.defs#reasonRepost") return
-      // 登録日時を考慮して既存フィードを上書き
-      else {
-        let oldFeed = oldFeeds[oldIndex]
-
-        // 既存フィードの登録日時
-        const oldDate = new Date(
-          oldFeed.post.__custom.reason?.indexedAt ??
-            oldFeed.post.indexedAt
-        )
-
-        // 対象フィードの登録日時
-        const targetDate = new Date(
-          targetFeed.post.__custom.reason?.indexedAt ?? targetFeed.post.indexedAt
-        )
-
-        if (oldDate > targetDate) return
-        // 現インジェクションプロパティの退避
-        const oldCursor = oldFeed.__cursor
-        const oldId = oldFeed.__id
-        const oldFolding = oldFeed.__folding
-        const oldReplyDisplay = oldFeed.__replyDisplay
-        const oldFetchLine = oldFeed.__fetchingLine
-
-        // __custom の退避
-        const oldCustomPropsOfPost = oldFeed.post.__custom
-        const oldEmbed = oldFeed.post.embed
-        const oldCustomPropsOfRoot = oldFeed.reply?.root?.__custom
-        const oldCustomPropsOfParent = oldFeed.reply?.parent?.__custom
-
-        oldFeeds[oldIndex] = targetFeed
-        oldFeed = oldFeeds[oldIndex]
-
-        // 現インジェクションプロパティの復帰
-        oldFeed.__cursor = oldCursor
-        oldFeed.__id = oldId
-        oldFeed.__folding = oldFolding
-        oldFeed.__replyDisplay = oldReplyDisplay
-        oldFeed.__fetchingLine = oldFetchLine
-
-        // __custom の復帰
-        oldFeed.post.__custom = oldCustomPropsOfPost
-        inheritQuoteCustom(oldEmbed, oldFeed.post.embed)
-        if (oldFeed.reply != null) {
-          if (oldCustomPropsOfRoot != null) oldFeed.reply.root.__custom = oldCustomPropsOfRoot
-          if (oldCustomPropsOfParent != null) oldFeed.reply.parent.__custom = oldCustomPropsOfParent
-        }
-      }
+      updateFeed(oldFeeds[oldIndex], targetFeed)
     }
   })
 
@@ -190,4 +137,31 @@ function hasSameReason (a: TTFeed, b: TTFeed): boolean {
   const bReason = b.reason?.$type === "app.bsky.feed.defs#reasonRepost" ? b.reason : undefined
   if (aReason == null || bReason == null) return aReason == null && bReason == null
   return aReason.by.did === bReason.by.did && aReason.indexedAt === bReason.indexedAt
+}
+
+// 既存フィードの API のデータだけを更新する
+// フィードのオブジェクトを残すので、インジェクションプロパティと `reason` は既存の値のまま
+// `reason` は取得の経路で変わるため、更新しない
+function updateFeed (oldFeed: TTFeed, newFeed: TTFeed) {
+  // 新しいデータにリアクティブプロキシを入れないよう、生のデータから引き継ぐ
+  const rawOldFeed = toRaw(oldFeed)
+  inheritPostCustom(rawOldFeed.post, newFeed.post)
+  inheritPostCustom(rawOldFeed.reply?.root, newFeed.reply?.root)
+  inheritPostCustom(rawOldFeed.reply?.parent, newFeed.reply?.parent)
+
+  oldFeed.post = newFeed.post
+  oldFeed.reply = newFeed.reply
+  oldFeed.feedContext = newFeed.feedContext
+  oldFeed.reqId = newFeed.reqId
+}
+
+// `__custom` の表示の状態を引き継ぐ。スレッドの位置だけは API 由来なので新しい値を使う
+function inheritPostCustom (oldPost?: TTPost, newPost?: TTPost) {
+  if (oldPost == null || newPost == null) return
+  newPost.__custom = {
+    ...oldPost.__custom,
+    opThreadPostIndex: newPost.__custom?.opThreadPostIndex,
+    opThreadPostCount: newPost.__custom?.opThreadPostCount,
+  }
+  inheritQuoteCustom(oldPost.embed, newPost.embed)
 }
