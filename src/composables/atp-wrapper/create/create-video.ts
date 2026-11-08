@@ -2,6 +2,21 @@ import type { AppBskyVideoDefs, AppBskyVideoGetJobStatus, BlobRef } from "@atpro
 import Util from "@/composables/util"
 import { $t } from "@/plugins/i18n"
 
+// 動画アップロード用トークンの有効期間（公式ドキュメントの推奨値）
+// NOTICE: 動画サービスは処理の後にこのトークンで PDS へ動画を保存するため、
+//         アップロードと処理が終わるまで切れない長さにする
+const TOKEN_LIFETIME = 30 * 60 * 1000
+
+// トークンが切れた後、処理の失敗が返るまで待つ猶予
+const DEADLINE_MARGIN = 60 * 1000
+
+// 処理状況を確認する間隔
+const POLLING_INTERVAL = 3000
+
+// 処理状況の取得に失敗した時の再試行の間隔と上限（公式アプリと同じ）
+const RETRY_INTERVAL = 5000
+const MAX_FAILURE_COUNT = 50
+
 export default async function (
   this: TIAtpWrapper,
   file: File
@@ -17,10 +32,11 @@ export default async function (
   const pdsUrl = this.agent.serviceUrl?.hostname
     ?? (this.session.__pdsUrl ? Util.safeUrl(this.session.__pdsUrl)?.hostname : null)
     ?? "bsky.social"
+  const exp = Math.floor((Date.now() + TOKEN_LIFETIME) / 1000)
   const token = await this.fetchServiceAuth(
     `did:web:${pdsUrl}`,
     "com.atproto.repo.uploadBlob",
-    (Date.now() / 1000) + (60 * 5), // 5分
+    exp,
   )
   if (token instanceof Error) {
     return token
@@ -70,50 +86,67 @@ export default async function (
   }
 
   // サーバサイド処理の待機
+  // NOTICE: トークンが切れると動画サービスは PDS に保存できず、以降に完了しないため、
+  //         トークンの有効期限に、失敗が返るまでの猶予を加えた時刻まで待つ
   const urlOfGetJobStatus = new URL("https://video.bsky.app/xrpc/app.bsky.video.getJobStatus")
-  urlOfGetJobStatus.searchParams.append("did", this.session?.did ?? "")
   urlOfGetJobStatus.searchParams.append("jobId", jobId)
+  const deadline = exp * 1000 + DEADLINE_MARGIN
   let lastState: undefined | string
-  for (let i = 0; i < 100; i ++) {
-    await Util.wait(3000)
-    const response: Error | Response =
-      await Util.fetchWithTimeout(urlOfGetJobStatus, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((value) => value)
-        .catch((error) => error)
-    if (response instanceof Error) {
-      $warn("getJobStatus", response)
-      return makeError(response.message, "getJobStatus")
-    }
+  let failureCount = 0
+  while (Date.now() < deadline) {
+    await Util.wait(failureCount === 0 ? POLLING_INTERVAL : RETRY_INTERVAL)
+    const jobStatus = await fetchJobStatus(urlOfGetJobStatus)
 
-    // NOTICE: 失敗時も本文に理由が入るため、ステータスに関係なく本文を読む
-    const json: Error | AppBskyVideoGetJobStatus.OutputSchema = await response.json()
-      .then((value) => value)
-      .catch((error) => error)
-    $log("getJobStatus", json)
-    if (!response.ok || json instanceof Error || json?.jobStatus == null) {
-      $warn("getJobStatus", response)
-      return makeError(getReason(json), "getJobStatus", response.status)
-    }
-    lastState = json.jobStatus.state
-    if (json.jobStatus.state === "JOB_STATE_COMPLETED") {
-      if (json.jobStatus.blob != null) {
-        return json.jobStatus.blob
+    // NOTICE: 一時的な障害に備え、取得の失敗は再試行する
+    if (jobStatus instanceof Error) {
+      failureCount ++
+      if (failureCount < MAX_FAILURE_COUNT) {
+        continue
       }
-      return makeError(getReason(json), "getJobStatus", json.jobStatus.state, "without blob")
+      return jobStatus
     }
-    if (json.jobStatus.state === "JOB_STATE_FAILED") {
+    failureCount = 0
+    lastState = jobStatus.state
+    if (jobStatus.state === "JOB_STATE_COMPLETED") {
+      if (jobStatus.blob != null) {
+        return jobStatus.blob
+      }
+      return makeError(getReason(jobStatus), "getJobStatus", jobStatus.state, "without blob")
+    }
+    if (jobStatus.state === "JOB_STATE_FAILED") {
       return makeError(
-        getReason(json),
+        getReason(jobStatus),
         "getJobStatus",
-        json.jobStatus.failureCode ?? json.jobStatus.state
+        jobStatus.failureCode ?? jobStatus.state
       )
     }
   }
 
   return makeError(undefined, "getJobStatus", "timeout", lastState)
+}
+
+// 処理状況を取得する
+// NOTICE: 公式アプリ・公式ドキュメントと同じく、トークンなしで呼ぶ
+async function fetchJobStatus (url: URL): Promise<Error | AppBskyVideoDefs.JobStatus> {
+  const response: Error | Response =
+    await Util.fetchWithTimeout(url, { method: "GET" })
+      .then((value) => value)
+      .catch((error) => error)
+  if (response instanceof Error) {
+    $warn("getJobStatus", response)
+    return makeError(response.message, "getJobStatus")
+  }
+
+  // NOTICE: 失敗時も本文に理由が入るため、ステータスに関係なく本文を読む
+  const json: Error | AppBskyVideoGetJobStatus.OutputSchema = await response.json()
+    .then((value) => value)
+    .catch((error) => error)
+  $log("getJobStatus", json)
+  if (!response.ok || json instanceof Error || json?.jobStatus == null) {
+    $warn("getJobStatus", response)
+    return makeError(getReason(json), "getJobStatus", response.status)
+  }
+  return json.jobStatus
 }
 
 // 動画サービスの本文から失敗の理由を取り出す
