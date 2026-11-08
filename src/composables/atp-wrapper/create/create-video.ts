@@ -1,5 +1,6 @@
-import type { AppBskyVideoUploadVideo, BlobRef } from "@atproto/api"
+import type { AppBskyVideoGetJobStatus, BlobRef } from "@atproto/api"
 import Util from "@/composables/util"
+import { $t } from "@/plugins/i18n"
 
 export default async function (
   this: TIAtpWrapper,
@@ -43,21 +44,17 @@ export default async function (
       .catch((error) => error)
   if (responseOfUploadVideo instanceof Error) {
     $warn("createVideo", responseOfUploadVideo)
-    return responseOfUploadVideo
+    return makeError(responseOfUploadVideo.message, "uploadVideo")
   }
-  if (!(responseOfUploadVideo?.ok)) {
-    $warn("createVideo", responseOfUploadVideo)
-    return Error("apiError")
-  }
+
+  // NOTICE: 失敗時も本文に理由が入るため、ステータスに関係なく本文を読む
   const jsonOfUploadVideo = await responseOfUploadVideo.json()
     .then((value) => value)
     .catch((error) => error)
   $log("createVideo", jsonOfUploadVideo)
-  if (jsonOfUploadVideo instanceof Error) {
-    return jsonOfUploadVideo
-  }
-  if (jsonOfUploadVideo?.jobId == null) {
-    return Error("apiError")
+  if (!responseOfUploadVideo.ok || jsonOfUploadVideo?.jobId == null) {
+    $warn("createVideo", responseOfUploadVideo)
+    return makeError(getReason(jsonOfUploadVideo), "uploadVideo", responseOfUploadVideo.status)
   }
   const jobId = jsonOfUploadVideo.jobId
 
@@ -65,6 +62,7 @@ export default async function (
   const urlOfGetJobStatus = new URL("https://video.bsky.app/xrpc/app.bsky.video.getJobStatus")
   urlOfGetJobStatus.searchParams.append("did", this.session?.did ?? "")
   urlOfGetJobStatus.searchParams.append("jobId", jobId)
+  let lastState: undefined | string
   for (let i = 0; i < 100; i ++) {
     await Util.wait(3000)
     const response: Error | Response =
@@ -76,22 +74,19 @@ export default async function (
         .catch((error) => error)
     if (response instanceof Error) {
       $warn("getJobStatus", response)
-      return response
+      return makeError(response.message, "getJobStatus")
     }
-    if (!(response?.ok)) {
-      $warn("getJobStatus", response)
-      return Error("apiError")
-    }
-    const json: Error | AppBskyVideoUploadVideo.OutputSchema = await response.json()
+
+    // NOTICE: 失敗時も本文に理由が入るため、ステータスに関係なく本文を読む
+    const json: Error | AppBskyVideoGetJobStatus.OutputSchema = await response.json()
       .then((value) => value)
       .catch((error) => error)
     $log("getJobStatus", json)
-    if (json instanceof Error) {
-      return json
+    if (!response.ok || json instanceof Error || json?.jobStatus == null) {
+      $warn("getJobStatus", response)
+      return makeError(getReason(json), "getJobStatus", response.status)
     }
-    if (json?.jobStatus == null) {
-      return Error("apiError")
-    }
+    lastState = json.jobStatus.state
     if (
       json.jobStatus.state === "JOB_STATE_COMPLETED" &&
       json.jobStatus.blob != null
@@ -99,9 +94,41 @@ export default async function (
       return json.jobStatus.blob
     }
     if (json.jobStatus.state === "JOB_STATE_FAILED") {
-      return Error(json.jobStatus.error ?? "apiError")
+      return makeError(
+        getReason(json),
+        "getJobStatus",
+        json.jobStatus.failureCode ?? json.jobStatus.state
+      )
     }
   }
 
-  return Error("apiError")
+  return makeError(undefined, "getJobStatus", "timeout", lastState)
+}
+
+// 動画サービスの本文から失敗の理由を取り出す
+// NOTICE: 本文の形式が統一されていないため、最上位と `jobStatus` の下の両方を読む
+function getReason (body: any): undefined | string {
+  if (body instanceof Error) {
+    return body.message
+  }
+  for (const source of [body, body?.jobStatus]) {
+    const reason = [source?.error, source?.message]
+      .filter((value) => typeof value === "string" && value !== "")
+      .join(": ")
+    if (reason !== "") {
+      return reason
+    }
+  }
+  return undefined
+}
+
+// 理由に、原因を切り分けるための処理名と詳細を添えて Error にする
+function makeError (
+  reason: undefined | string,
+  ...details: Array<undefined | number | string>
+): Error {
+  const detail = details
+    .filter((value) => value != null && value !== "")
+    .join(" ")
+  return Error(`${reason || $t("apiError")} (${detail})`)
 }
