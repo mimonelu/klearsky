@@ -1,4 +1,4 @@
-import type { AppBskyVideoGetJobStatus, BlobRef } from "@atproto/api"
+import type { AppBskyVideoDefs, AppBskyVideoGetJobStatus, BlobRef } from "@atproto/api"
 import Util from "@/composables/util"
 import { $t } from "@/plugins/i18n"
 
@@ -52,11 +52,22 @@ export default async function (
     .then((value) => value)
     .catch((error) => error)
   $log("createVideo", jsonOfUploadVideo)
-  if (!responseOfUploadVideo.ok || jsonOfUploadVideo?.jobId == null) {
+
+  // NOTICE: 本文は `JobStatus` が最上位に入る形と `jobStatus` の下に入る形がある
+  const jobStatusOfUploadVideo: undefined | AppBskyVideoDefs.JobStatus =
+    jsonOfUploadVideo instanceof Error
+      ? undefined
+      : jsonOfUploadVideo?.jobStatus ?? jsonOfUploadVideo
+  if (jobStatusOfUploadVideo?.blob != null) {
+    return jobStatusOfUploadVideo.blob
+  }
+
+  // NOTICE: 処理済みの動画は 409 で返るが、`jobId` を含むため、ステータスに関係なく待機に進む
+  const jobId = jobStatusOfUploadVideo?.jobId
+  if (!jobId) {
     $warn("createVideo", responseOfUploadVideo)
     return makeError(getReason(jsonOfUploadVideo), "uploadVideo", responseOfUploadVideo.status)
   }
-  const jobId = jsonOfUploadVideo.jobId
 
   // サーバサイド処理の待機
   const urlOfGetJobStatus = new URL("https://video.bsky.app/xrpc/app.bsky.video.getJobStatus")
@@ -87,11 +98,11 @@ export default async function (
       return makeError(getReason(json), "getJobStatus", response.status)
     }
     lastState = json.jobStatus.state
-    if (
-      json.jobStatus.state === "JOB_STATE_COMPLETED" &&
-      json.jobStatus.blob != null
-    ) {
-      return json.jobStatus.blob
+    if (json.jobStatus.state === "JOB_STATE_COMPLETED") {
+      if (json.jobStatus.blob != null) {
+        return json.jobStatus.blob
+      }
+      return makeError(getReason(json), "getJobStatus", json.jobStatus.state, "without blob")
     }
     if (json.jobStatus.state === "JOB_STATE_FAILED") {
       return makeError(
