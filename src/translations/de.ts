@@ -804,7 +804,7 @@ export default () => ({
   "activitySubscriptionList": "Abonnementsliste",
   "allowSubscription-followers": "Nur Follower",
   "allowSubscription-mutuals": "Nur gegenseitige Follower",
-  "allowSubscription-none": "Kein Abonnement",
+  "allowSubscription-none": "Niemand",
   "activitySubscriptionPermission": "Abonnement-Berechtigung",
   "allowSubscriptionsFollowers": "Nur Follower",
   "allowSubscriptionsMutuals": "Nur Mutuals",

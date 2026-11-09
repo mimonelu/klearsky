@@ -804,7 +804,7 @@ export default () => ({
   "activitySubscriptionList": "Liste d'abonnements",
   "allowSubscription-followers": "Abonnés uniquement",
   "allowSubscription-mutuals": "Abonnés mutuels uniquement",
-  "allowSubscription-none": "Aucun abonnement",
+  "allowSubscription-none": "Personne",
   "activitySubscriptionPermission": "Permission d'abonnement",
   "allowSubscriptionsFollowers": "Abonnés uniquement",
   "allowSubscriptionsMutuals": "Mutuels uniquement",
@@ -973,7 +973,7 @@ export default () => ({
   // ============================================================================
   // USER STATUS
   // ============================================================================
-  "authenticated": "Private",
+  "authenticated": "Privé",
   "unauthenticated": "Public",
   "unauthenticatedSetting": "Visibilité hors connexion",
   "beginner": "Nouvel utilisateur",
