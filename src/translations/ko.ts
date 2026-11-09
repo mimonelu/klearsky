@@ -306,6 +306,9 @@ export default () => ({
   "searchDomain": "이 도메인 포함 게시물 검색",
   "searchSince": "검색 시작일",
   "searchUntil": "검색 종료일",
+  "searchPresetWeek": "1주 전",
+  "searchPresetMonth": "1개월 전",
+  "searchPresetYear": "1년 전",
 
   // ============================================================================
   // TRENDING

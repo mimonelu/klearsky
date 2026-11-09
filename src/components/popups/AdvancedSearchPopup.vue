@@ -17,6 +17,18 @@ const mainState = inject("state") as MainState
 
 const router = useRouter()
 
+// 期間のプリセット。どれも「N 前の今日」を基準に同じ幅の範囲を設定する
+const DATE_PRESETS: Array<{
+  label: string
+  years: number
+  months: number
+  days: number
+}> = [
+  { label: "searchPresetWeek", years: 0, months: 0, days: 7 },
+  { label: "searchPresetMonth", years: 0, months: 1, days: 0 },
+  { label: "searchPresetYear", years: 1, months: 0, days: 0 },
+]
+
 const easyFormState = reactive<TIPostSearch & {
   noLang: Array<boolean>
   authorIsMe: Array<string>
@@ -229,6 +241,29 @@ async function submitCallback () {
   close()
 }
 
+// 検索開始日に「基準日 - 2 日」、検索終了日に「基準日 + 1 日」を設定する
+// 検索終了日は検索結果に含まれないため、実際の範囲は「基準日 - 2 日」から「基準日」までの 3 日間
+function setDatePreset (preset: typeof DATE_PRESETS[number]) {
+  const today = new Date()
+
+  // 月末を超える日はその月の末日に丸める（例: 3/31 の 1ヶ月前は 2/28）
+  const base = new Date(today.getFullYear() - preset.years, today.getMonth() - preset.months, 1)
+  const lastDate = new Date(base.getFullYear(), base.getMonth() + 1, 0).getDate()
+  base.setDate(Math.min(today.getDate(), lastDate) - preset.days)
+
+  easyFormState.since = formatLocalDate(base, -2)
+  easyFormState.until = formatLocalDate(base, 1)
+}
+
+// `toISOString()` は UTC のため使わず、ローカルの日付から `YYYY-MM-DD` を組み立てる
+function formatLocalDate (base: Date, offsetDays: number): string {
+  const date = new Date(base.getFullYear(), base.getMonth(), base.getDate() + offsetDays)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+  return `${year}-${month}-${day}`
+}
+
 function modifyHandle (handle?: string): undefined | string {
   if (handle == null) {
     return
@@ -253,7 +288,22 @@ function modifyHandle (handle?: string): undefined | string {
       <EasyForm
         v-bind="easyFormProps"
         ref="easyForm"
-      />
+      >
+        <template #beforeButton>
+          <!-- 期間のプリセット -->
+          <div class="group-parts date-preset-container">
+            <button
+              v-for="preset of DATE_PRESETS"
+              :key="preset.label"
+              type="button"
+              class="button--bordered"
+              @click.prevent="setDatePreset(preset)"
+            >
+              <span>{{ $t(preset.label) }}</span>
+            </button>
+          </div>
+        </template>
+      </EasyForm>
     </template>
     <template #footer>
       <div class="button-container">
@@ -279,6 +329,11 @@ function modifyHandle (handle?: string): undefined | string {
       margin-top: -0.5rem;
     }
   }
+}
+
+.date-preset-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .button-container {

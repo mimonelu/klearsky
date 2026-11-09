@@ -306,6 +306,9 @@ export default () => ({
   "searchDomain": "Search posts containing this domain",
   "searchSince": "Search start date",
   "searchUntil": "Search end date",
+  "searchPresetWeek": "1w ago",
+  "searchPresetMonth": "1mo ago",
+  "searchPresetYear": "1y ago",
 
   // ============================================================================
   // TRENDING

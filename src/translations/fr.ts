@@ -306,6 +306,9 @@ export default () => ({
   "searchDomain": "Rechercher publications contenant ce domaine",
   "searchSince": "Date de début",
   "searchUntil": "Date de fin",
+  "searchPresetWeek": "Il y a 1 semaine",
+  "searchPresetMonth": "Il y a 1 mois",
+  "searchPresetYear": "Il y a 1 an",
 
   // ============================================================================
   // TRENDING

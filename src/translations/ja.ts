@@ -306,6 +306,9 @@ export default () => ({
   "searchDomain": "このドメインを含むポストを検索",
   "searchSince": "検索開始日",
   "searchUntil": "検索終了日",
+  "searchPresetWeek": "1週間前",
+  "searchPresetMonth": "1ヶ月前",
+  "searchPresetYear": "1年前",
 
   // ============================================================================
   // TRENDING
