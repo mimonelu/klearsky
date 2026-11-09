@@ -29,39 +29,15 @@ const DATE_PRESETS: Array<{
   { label: "searchPresetYear", years: 1, months: 0, days: 0 },
 ]
 
-const easyFormState = reactive<TIPostSearch & {
+type TTAdvancedSearchFormState = TIPostSearch & {
   noLang: Array<boolean>
   authorIsMe: Array<string>
   mentionsIsMe: Array<string>
-}>((() => {
-  const authorIsMe =
-    mainState.currentSearchPostFormState.author && (
-      mainState.currentSearchPostFormState.author === "me" ||
-      mainState.currentSearchPostFormState.author === mainState.userProfile?.handle
-    )
-  const mentionsIsMe =
-    mainState.currentSearchPostFormState.mentions && (
-      mainState.currentSearchPostFormState.mentions === "me" ||
-      mainState.currentSearchPostFormState.mentions === mainState.userProfile?.handle
-    )
-  return {
-    text: mainState.currentSearchTerm || "",
-    sort: mainState.currentSearchPostFormState.sort || "latest",
-    noLang: mainState.currentSearchPostFormState.lang ? [] : [true],
-    lang: mainState.currentSearchPostFormState.lang || (Util.getUserLanguage() ?? ""),
-    authorIsMe: authorIsMe ? [mainState.userProfile?.handle || ""] : [],
-    author: authorIsMe ? "" : mainState.currentSearchPostFormState.author || "",
+}
 
-    // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
-    // to: "",
-
-    mentionsIsMe: mentionsIsMe ? [mainState.userProfile?.handle || ""] : [],
-    mentions: mentionsIsMe ? "" : mainState.currentSearchPostFormState.mentions || "",
-    domain: mainState.currentSearchPostFormState.domain || "",
-    since: mainState.currentSearchPostFormState.since || "",
-    until: mainState.currentSearchPostFormState.until || "",
-  }
-})())
+const easyFormState = reactive<TTAdvancedSearchFormState>(
+  makeEasyFormState(mainState.currentSearchPostFormState, mainState.currentSearchTerm)
+)
 
 const easyFormProps: TTEasyForm = {
   submitCallback,
@@ -191,6 +167,45 @@ function close () {
   emit("close")
 }
 
+// 検索条件からフォームの値を組み立てる。検索条件が空であれば初期値になる
+function makeEasyFormState (formState: TIPostSearch, searchTerm?: string): TTAdvancedSearchFormState {
+  const authorIsMe =
+    formState.author && (
+      formState.author === "me" ||
+      formState.author === mainState.userProfile?.handle
+    )
+  const mentionsIsMe =
+    formState.mentions && (
+      formState.mentions === "me" ||
+      formState.mentions === mainState.userProfile?.handle
+    )
+  return {
+    text: searchTerm || "",
+    sort: formState.sort || "latest",
+    noLang: formState.lang ? [] : [true],
+    lang: formState.lang || (Util.getUserLanguage() ?? ""),
+    authorIsMe: authorIsMe ? [mainState.userProfile?.handle || ""] : [],
+    author: authorIsMe ? "" : formState.author || "",
+
+    // TODO: `mentions` と同等の挙動となるためコメントアウト。修正され次第復帰すること
+    // to: "",
+
+    mentionsIsMe: mentionsIsMe ? [mainState.userProfile?.handle || ""] : [],
+    mentions: mentionsIsMe ? "" : formState.mentions || "",
+    domain: formState.domain || "",
+    since: formState.since || "",
+    until: formState.until || "",
+  }
+}
+
+// フォームの値だけを初期値に戻す。検索条件の状態と表示中の検索結果には触れない
+function reset () {
+  Object.assign(easyFormState, makeEasyFormState({}))
+  updateLangData()
+  updateAuthorData()
+  updateMentionsData()
+}
+
 function updateLangData () {
   const langData = easyFormProps.data.find((prop) => {
     return prop.model === "lang"
@@ -279,6 +294,15 @@ function modifyHandle (handle?: string): undefined | string {
     @close="close"
   >
     <template #header>
+      <!-- リセットボタン -->
+      <button
+        type="button"
+        class="reset-button"
+        @click.stop="reset"
+      >
+        <SVGIcon name="remove" />
+      </button>
+
       <h2>
         <SVGIcon name="search" />
         <span>{{ $t("advancedSearch") }}</span>
@@ -321,6 +345,10 @@ function modifyHandle (handle?: string): undefined | string {
 
 <style lang="scss" scoped>
 .advanced-search-popup {
+  .reset-button > .svg-icon {
+    --fg-color: var(--notice-color);
+  }
+
   // lang, author, mentions フォームの上部マージンを詰める
   .easy-form:deep() {
     dl[data-name="lang"],
