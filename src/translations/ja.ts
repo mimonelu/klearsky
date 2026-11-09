@@ -98,7 +98,7 @@ export default () => ({
   // ============================================================================
   // PROFILE EDITING
   // ============================================================================
-  "editProfile": "編集",
+  "editProfile": "プロフィールの編集",
   "displayName": "名前",
   "description": "紹介文",
   "pronouns": "代名詞／呼び方",
@@ -899,6 +899,8 @@ export default () => ({
   "live": "LIVE",
   "actorStatusLiveUntil": "LIVE配信中",
   "actorStatusLiveEdit": "配信ステータスの設定",
+  "actorStatusLiveOn": "配信中",
+  "actorStatusLiveOff": "未設定",
   "actorStatusLiveExpiredAt": "表示終了日時",
   "actorStatusLiveUri": "配信URL",
   "actorStatusLiveDurationMinutes": "表示期間（分）",
@@ -973,6 +975,7 @@ export default () => ({
   // ============================================================================
   "authenticated": "非公開",
   "unauthenticated": "公開中",
+  "unauthenticatedSetting": "外部公開",
   "beginner": "新規ユーザー",
   "beginnerInPost": "初期ポスト",
   "postViaBridgy": "Post via Bridgy",

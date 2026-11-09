@@ -98,7 +98,7 @@ export default () => ({
   // ============================================================================
   // PROFILE EDITING
   // ============================================================================
-  "editProfile": "편집",
+  "editProfile": "프로필 편집",
   "displayName": "표시 이름",
   "description": "소개",
   "pronouns": "대명사 / 호칭",
@@ -899,6 +899,8 @@ export default () => ({
   "live": "LIVE",
   "actorStatusLiveUntil": "LIVE 스트리밍 중",
   "actorStatusLiveEdit": "스트리밍 상태 설정",
+  "actorStatusLiveOn": "스트리밍 중",
+  "actorStatusLiveOff": "미설정",
   "actorStatusLiveExpiredAt": "표시 종료 날짜",
   "actorStatusLiveUri": "스트리밍 URL",
   "actorStatusLiveDurationMinutes": "표시 기간 (분)",
@@ -973,6 +975,7 @@ export default () => ({
   // ============================================================================
   "authenticated": "비공개",
   "unauthenticated": "공개 중",
+  "unauthenticatedSetting": "비로그인 공개",
   "beginner": "신규 사용자",
   "beginnerInPost": "초기 게시물",
   "postViaBridgy": "Bridgy를 통한 게시물",

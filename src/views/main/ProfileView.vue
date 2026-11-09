@@ -18,6 +18,7 @@ import LabelTags from "@/components/buttons/LabelTags.vue"
 import LazyImage from "@/components/images/LazyImage.vue"
 import KnownFollowers from "@/components/lists/KnownFollowers.vue"
 import MuteButton from "@/components/next/UserMute/MuteButton.vue"
+import MyProfileMenuButton from "@/components/next/MyProfileMenu/MyProfileMenuButton.vue"
 import PageHeader from "@/components/shells/PageHeader.vue"
 import PageHeaderButtons from "@/components/shells/PageHeaderButtons.vue"
 import Popover from "@/components/popovers/Popover.vue"
@@ -577,7 +578,7 @@ function removeThisPost () {
                 <!-- 利用中ユーザー用ボタンコンテナ -->
                 <div
                   v-if="mainState.isMyProfile()"
-                  class="group-parts"
+                  class="my-profile-button-container"
                 >
                   <!-- プロフィール編集ボタン -->
                   <RouterLink
@@ -588,35 +589,15 @@ function removeThisPost () {
                     <span>{{ $t("editProfile") }}</span>
                   </RouterLink>
 
-                  <!-- 外部公開状態トグル -->
-                  <button
-                    type="button"
-                    class="button no-unauthenticated-toggle"
-                    :data-no-unauthenticated="hasNoUnauthenticated"
-                    @click.stop="toggleNoUnauthenticated"
-                  >
-                    <SVGIcon :name="hasNoUnauthenticated ? 'earthOff' : 'earth'" />
-                    <span>{{ $t(hasNoUnauthenticated ? "authenticated" : "unauthenticated") }}</span>
-                  </button>
-
-                  <!-- アクターステータス編集ボタン -->
-                  <button
-                    type="button"
-                    class="button actor-status-edit-button"
-                    :data-has-live="hasLive"
-                    @click.stop="openActorStatusEditPopup"
-                  >
-                    <SVGIcon name="video" />
-                  </button>
-
-                  <!-- 購読許可設定ポップアップトリガー -->
-                  <button
-                    type="button"
-                    class="button activity-subscription-permission-popup-trigger"
-                    @click.stop="openActivitySubscriptionPermissionPopup"
-                  >
-                    <SVGIcon name="bell" />
-                  </button>
+                  <!-- 利用中ユーザー用メニューボタン -->
+                  <MyProfileMenuButton
+                    :hasNoUnauthenticated="hasNoUnauthenticated"
+                    :hasLive="hasLive"
+                    :allowSubscriptions="mainState.currentProfile.associated?.activitySubscription?.allowSubscriptions ?? 'followers'"
+                    @toggleNoUnauthenticated="toggleNoUnauthenticated"
+                    @openActorStatusEditPopup="openActorStatusEditPopup"
+                    @openActivitySubscriptionPermissionPopup="openActivitySubscriptionPermissionPopup"
+                  />
                 </div>
               </div>
             </div>
@@ -1281,14 +1262,18 @@ function removeThisPost () {
   }
 }
 
+// 利用中ユーザー用ボタンコンテナ
+.my-profile-button-container {
+  display: flex;
+  grid-gap: 0.5rem;
+}
+
 // Known Followers
 .known-followers {
   font-size: 2rem;
 }
 
 .edit-button,
-.no-unauthenticated-toggle,
-.actor-status-edit-button,
 .follow-button,
 .mute-button,
 .block-button,
@@ -1306,25 +1291,6 @@ function removeThisPost () {
 .edit-button {
   & > .svg-icon {
     font-size: 0.875rem;
-  }
-}
-
-// 外部公開状態トグル
-.no-unauthenticated-toggle {
-  display: flex;
-  align-items: center;
-  margin-right: auto;
-  &[data-no-unauthenticated="false"] {
-    --bg-color: var(--white-color);
-    --fg-color: var(--accent-color);
-  }
-}
-
-// アクターステータス編集ボタン
-.actor-status-edit-button {
-  &[data-has-live="true"] {
-    --bg-color: var(--white-color);
-    --fg-color: var(--red-color);
   }
 }
 

@@ -98,7 +98,7 @@ export default () => ({
   // ============================================================================
   // PROFILE EDITING
   // ============================================================================
-  "editProfile": "Modifier",
+  "editProfile": "Modifier le profil",
   "displayName": "Nom d'affichage",
   "description": "Description",
   "pronouns": "Pronoms",
@@ -899,6 +899,8 @@ export default () => ({
   "live": "LIVE",
   "actorStatusLiveUntil": "En ligne jusqu'au",
   "actorStatusLiveEdit": "Paramètres du statut en direct",
+  "actorStatusLiveOn": "En direct",
+  "actorStatusLiveOff": "Non défini",
   "actorStatusLiveExpiredAt": "L'affichage expire à",
   "actorStatusLiveUri": "URL de diffusion en direct",
   "actorStatusLiveDurationMinutes": "Durée d’affichage (minutes)",
@@ -973,6 +975,7 @@ export default () => ({
   // ============================================================================
   "authenticated": "Private",
   "unauthenticated": "Public",
+  "unauthenticatedSetting": "Visibilité hors connexion",
   "beginner": "Nouvel utilisateur",
   "beginnerInPost": "Première publication",
   "postViaBridgy": "Publication via Bridgy",

@@ -227,11 +227,15 @@ async function openBridgyOriginalUrl () {
   // 新規アカウントラベル
   &__beginner-label {
     --color: var(--accent-color);
+    cursor: auto;
   }
 
   // 外部公開状態ラベル
   &__unauthenticated-label {
+    --alpha: 1.0;
     --color: var(--accent-color);
+    cursor: auto;
+    font-weight: bold;
   }
 
   // 有害なラベル
@@ -247,11 +251,13 @@ async function openBridgyOriginalUrl () {
   // 自動化アカウント
   &__automated-account {
     --color: var(--label-color);
+    cursor: auto;
   }
 
   // カスタムラベル
   &__custom-label {
     --color: var(--fg-color);
+    cursor: auto;
 
     & > .svg-icon {
       fill: rgb(var(--orange-color), var(--alpha, 1.0));
