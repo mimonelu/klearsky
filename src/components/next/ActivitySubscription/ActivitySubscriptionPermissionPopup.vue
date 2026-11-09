@@ -35,8 +35,8 @@ const easyFormProps: TTEasyForm = {
 
 async function close () {
   emit("close")
-  const currentActivitySubscription = mainState.currentProfile?.associated?.activitySubscription
-  if (currentActivitySubscription?.allowSubscriptions !== easyFormStates.allowSubscriptions) {
+  const currentProfile = mainState.currentProfile
+  if (currentProfile?.associated?.activitySubscription?.allowSubscriptions !== easyFormStates.allowSubscriptions) {
     mainState.loaderDisplay = true
 
     // TODO: AtpAgent に更新用のメソッドがないため、直接レコードを更新している
@@ -54,10 +54,16 @@ async function close () {
     mainState.loaderDisplay = false
     if (result instanceof Error) {
       mainState.openErrorPopup(result, "ActivitySubscriptionPermissionPopup/close")
+      return
     }
-  }
-  if (currentActivitySubscription?.allowSubscriptions != null) {
-    currentActivitySubscription.allowSubscriptions = easyFormStates.allowSubscriptions
+
+    // 更新に成功したら、`associated.activitySubscription` が無くても画面に反映する
+    if (currentProfile != null) {
+      currentProfile.associated ??= {}
+      currentProfile.associated.activitySubscription = {
+        allowSubscriptions: easyFormStates.allowSubscriptions,
+      }
+    }
   }
 }
 </script>
