@@ -110,7 +110,7 @@ function select (callback: () => void) {
           </div>
         </button>
 
-        <!-- おすすめへの表示トグル（状態がわからない間は誤った値を書き込まないよう無効にする） -->
+        <!-- おすすめフィードへの表示トグル（状態がわからない間は誤った値を書き込まないよう無効にする） -->
         <button
           type="button"
           :disabled="hideFromAlgorithmicRecommendations == null"

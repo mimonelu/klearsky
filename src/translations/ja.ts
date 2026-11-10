@@ -976,7 +976,7 @@ export default () => ({
   "authenticated": "非公開",
   "unauthenticated": "公開中",
   "unauthenticatedSetting": "外部公開",
-  "algorithmicRecommendationSetting": "おすすめへの表示",
+  "algorithmicRecommendationSetting": "おすすめフィードへの表示",
   "algorithmicRecommendationAllowed": "許可",
   "algorithmicRecommendationRefused": "拒否",
   "beginner": "新規ユーザー",
