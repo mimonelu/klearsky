@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, nextTick, reactive, ref } from "vue"
+import { computed, inject, nextTick, reactive, ref, watch } from "vue"
 import { RouterView, useRouter } from "vue-router"
 import { differenceInDays } from "date-fns"
 import ActivitySubscriptionItemTrigger from "@/components/next/ActivitySubscription/ActivitySubscriptionItemTrigger.vue"
@@ -246,6 +246,66 @@ async function toggleNoUnauthenticated () {
     await mainState.fetchCurrentProfile(did, generation)
   }
   mainState.centerLoaderDisplay = false
+}
+
+// おすすめアルゴリズムへの表示の拒否（未取得、または取得に失敗した場合は `undefined`）
+// プロフィールのレスポンスに含まれないため、自分のプロフィールを表示した時にレコードを取得する
+const hideFromAlgorithmicRecommendations = ref<undefined | boolean>(undefined)
+
+// 自分のプロフィールを表示している場合のみ、利用中のアカウントの DID を返す
+function getMyProfileDid (): undefined | string {
+  return mainState.isMyProfile() ? mainState.atp.session?.did : undefined
+}
+
+watch(getMyProfileDid, async (did?: string) => {
+  hideFromAlgorithmicRecommendations.value = undefined
+  if (did == null) {
+    return
+  }
+  const result = await mainState.atp.fetchContentVisibilityDeclaration()
+
+  // 待機中に別のプロフィールやアカウントへ切り替わっていたら反映しない
+  if (getMyProfileDid() !== did) {
+    return
+  }
+
+  if (result instanceof Error) {
+    return
+  }
+  hideFromAlgorithmicRecommendations.value = result
+}, { immediate: true })
+
+async function toggleHideFromAlgorithmicRecommendations () {
+  const did = getMyProfileDid()
+  if (did == null || hideFromAlgorithmicRecommendations.value == null) {
+    return
+  }
+  const value = !hideFromAlgorithmicRecommendations.value
+  mainState.centerLoaderDisplay = true
+
+  // NOTICE: AtpAgent に更新用のメソッドがないため、直接レコードを更新している
+  const result = await mainState.atp.updateRecord(
+    did,
+    "app.bsky.actor.contentVisibilityDeclaration",
+    `at://${did}/app.bsky.actor.contentVisibilityDeclaration/self`,
+    {
+      "$type": "app.bsky.actor.contentVisibilityDeclaration",
+      hideFromAlgorithmicRecommendations: value,
+    }
+  )
+
+  mainState.centerLoaderDisplay = false
+  if (result instanceof Error) {
+    mainState.openErrorPopup(result, "ProfileView/toggleHideFromAlgorithmicRecommendations")
+    return
+  }
+
+  // 待機中に別のプロフィールやアカウントへ切り替わっていたら反映しない
+  if (getMyProfileDid() !== did) {
+    return
+  }
+
+  hideFromAlgorithmicRecommendations.value = value
 }
 
 function openActorStatusEditPopup () {
@@ -592,9 +652,11 @@ function removeThisPost () {
                   <!-- 利用中ユーザー用メニューボタン -->
                   <MyProfileMenuButton
                     :hasNoUnauthenticated="hasNoUnauthenticated"
+                    :hideFromAlgorithmicRecommendations="hideFromAlgorithmicRecommendations"
                     :hasLive="hasLive"
                     :allowSubscriptions="mainState.currentProfile.associated?.activitySubscription?.allowSubscriptions ?? 'followers'"
                     @toggleNoUnauthenticated="toggleNoUnauthenticated"
+                    @toggleHideFromAlgorithmicRecommendations="toggleHideFromAlgorithmicRecommendations"
                     @openActorStatusEditPopup="openActorStatusEditPopup"
                     @openActivitySubscriptionPermissionPopup="openActivitySubscriptionPermissionPopup"
                   />

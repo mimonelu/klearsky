@@ -124,6 +124,8 @@ interface TIAtpWrapper {
     (cursor?: string): Promise<Error | TIFetchChatLogsResponse>
   fetchChatMessages
     (convoId: string, limit?: number, cursor?: string): Promise<Error | { cursor?: string; messages: Array<TIChatMessage> }>
+  fetchContentVisibilityDeclaration
+    (this: TIAtpWrapper): Promise<Error | boolean>
   fetchCustomBookmarkPacks
     (this: TIAtpWrapper, currentCustomBookmarkPacks: Array<TICustomBookmarkPack>, did: string, limit?: number, cursor?: string): Promise<Error | undefined | string>
   fetchCustomFeeds

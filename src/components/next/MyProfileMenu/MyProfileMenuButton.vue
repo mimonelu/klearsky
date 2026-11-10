@@ -6,12 +6,16 @@ import Util from "@/composables/util"
 
 const emit = defineEmits<{
   (event: "toggleNoUnauthenticated"): void
+  (event: "toggleHideFromAlgorithmicRecommendations"): void
   (event: "openActorStatusEditPopup"): void
   (event: "openActivitySubscriptionPermissionPopup"): void
 }>()
 
 const props = defineProps<{
   hasNoUnauthenticated: boolean
+
+  // 未取得、または取得に失敗した場合は `undefined`
+  hideFromAlgorithmicRecommendations: undefined | boolean
   hasLive: boolean
   allowSubscriptions: "followers" | "mutuals" | "none"
 }>()
@@ -102,6 +106,25 @@ function select (callback: () => void) {
               :data-color="hasNoUnauthenticated ? undefined : 'accent'"
             >
               <span>{{ $t(hasNoUnauthenticated ? "authenticated" : "unauthenticated") }}</span>
+            </div>
+          </div>
+        </button>
+
+        <!-- おすすめへの表示トグル（状態がわからない間は誤った値を書き込まないよう無効にする） -->
+        <button
+          type="button"
+          :disabled="hideFromAlgorithmicRecommendations == null"
+          @click.stop="select(() => emit('toggleHideFromAlgorithmicRecommendations'))"
+        >
+          <SVGIcon :name="hideFromAlgorithmicRecommendations ? 'eyeOff' : 'eye'" />
+          <div class="my-profile-menu-popover__text">
+            <span>{{ $t("algorithmicRecommendationSetting") }}</span>
+            <div
+              v-if="hideFromAlgorithmicRecommendations != null"
+              class="tag--link my-profile-menu-popover__state"
+              :data-color="hideFromAlgorithmicRecommendations ? 'notice' : undefined"
+            >
+              <span>{{ $t(hideFromAlgorithmicRecommendations ? "algorithmicRecommendationRefused" : "algorithmicRecommendationAllowed") }}</span>
             </div>
           </div>
         </button>
