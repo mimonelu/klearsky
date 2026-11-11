@@ -10,7 +10,7 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 
 | コマンド | 用途 |
 |---|---|
-| `npm run dev` | 開発サーバー（http://localhost:5173/） |
+| `npm run dev` | 開発サーバー（http://127.0.0.1:5173/）。OAuth のリダイレクト先が `127.0.0.1` のため、`localhost` ではログイン状態を共有しない |
 | `npm run type-check` | 型チェック（`vue-tsc --build`）。**変更後は必ず実行** |
 | `npm run build` | 型チェック＋本番ビルド（出力先は `docs/`） |
 | `npm run lint` | ESLint（チェックのみ） |
