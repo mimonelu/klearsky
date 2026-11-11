@@ -5,7 +5,7 @@ const EMOJI_ONLY_REGEX = /^(?:(?:\p{Emoji_Presentation}|\p{Extended_Pictographic
 
 <script lang="ts" setup>
 /* eslint-disable vue/no-mutating-props */
-import { computed, inject, onMounted, onBeforeUnmount, reactive, ref } from "vue"
+import { computed, inject, onMounted, onBeforeUnmount, reactive, ref, toRaw } from "vue"
 import { RouterLink, useRouter } from "vue-router"
 import { RichText } from "@atproto/api"
 import { differenceInDays } from "date-fns"
@@ -401,7 +401,10 @@ const isQuoteMute = computed((): boolean => {
 const contentRichText = computed(() => {
   // テキストまたはfacetsが変更された場合のみ再生成
   const currentText = text.value ?? ""
-  const facets = props.post.record?.facets
+
+  // `RichText` は facets を複製する際に全プロパティを読むため、リアクティブの依存を作らないよう生のデータを渡す
+  // 編集時は `record` ごと置き換わるため、更新は `record` の参照で検知できる
+  const facets = toRaw(props.post.record?.facets)
   const richText = new RichText({
     text: currentText,
     facets,

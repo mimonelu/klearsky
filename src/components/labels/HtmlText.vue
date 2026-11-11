@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject } from "vue"
+import { computed, inject, toRaw } from "vue"
 import { useRouter } from "vue-router"
 import type { Facet } from "@atproto/api"
 import { RichText } from "@atproto/api"
@@ -31,10 +31,11 @@ const richTextSegments = computed(() => {
   if (props.richText != null) {
     return props.richText.segments()
   }
+  // `RichText` は facets を複製する際に全プロパティを読むため、リアクティブの依存を作らないよう生のデータを渡す
   const rt = new RichText(
     {
       text: props.text ?? "",
-      facets: props.facets,
+      facets: toRaw(props.facets),
     }, {
       cleanNewlines: true,
     }

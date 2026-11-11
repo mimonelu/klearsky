@@ -42,6 +42,24 @@
 | `blink::PaintLayerScrollableArea` | `overflow: hidden` / `auto` 等のスクロールコンテナごとに作られる。`overflow: clip` では作られない |
 | `blink::PaintLayer` / `blink::ClipPaintPropertyNode` | 描画レイヤーと切り取り。`overflow` が `visible` 以外（`clip` を含む）の要素や `position` 指定の要素等に作られる |
 
+## リアクティブの依存（#104）
+
+`Link` / `Dep` は、ポストのデータの参照よりも、コンポーネント自体が作る依存の方が多い。ログインした状態のホームタイムライン（196 ポスト）で、1 ポストあたり `Dep` 約 226 個・`Link` 約 362 個あり、うちポストのデータ（`post.*`）の参照は `Dep` の 25% だった。
+
+| 発生元 | `Dep` |
+|---|---|
+| `Post.vue` 本体（props・computed・ポストのデータ） | 36% |
+| `RouterLink`（1 個あたり約 18 個。現在のルートとの一致判定のため） | 16% |
+| `SVGIcon`（props 2 個ずつ） | 9% |
+| `Feed.vue` / `LabelTags` | 各 6% |
+
+- `RichText` は生成時に facets を複製し、その際に全プロパティを読む。リアクティブなまま渡すと facets のあるポストで約 17 個の依存ができるため、`toRaw` で渡す。複製されるので元のデータは書き換わらない
+- ポストのリンクの `RouterLink` を `<a>` に置き換える案は、メニューのプロフィールボタンが同じ `AvatarLink` を使い `router-link-active` で強調しているため、共用部品に分岐が増える。効果に見合わないので見送った
+- `SVGIcon` の関数型化は、props をリアクティブにしないだけでインスタンスは作られる。scoped スタイルと属性の引き継ぎへの対応が要るわりに効果が小さいので見送った
+- `author` などの参照を非リアクティブにする案は、`FollowButton` などが `viewer` を直接書き換えており、表示が追従しなくなるので避ける
+
+内訳は開発サーバーで数えた。`FeedList` 配下のコンポーネントの `scope.effects` から `deps` / `nextDep` をたどり（computed の依存は再帰する）、発生元はリアクティブなオブジェクトごとの依存マップ（`dep.map`）で判別する。メモリへの効果は、上記のヒープスナップショットの比較で確かめる。
+
 ## `content-visibility` を見送った理由（#55）
 
 `.feed` に `content-visibility: auto` を指定して計測し、採用を見送った。
