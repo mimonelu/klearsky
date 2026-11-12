@@ -58,7 +58,8 @@ export default function (
     }
 
     // 既存フィード
-    else {
+    // 新着取得の時だけ更新する。過去取得と抜け漏れ取得では、画面より上のフィードの高さが変わるとスクロール位置がずれるため
+    else if (doesUnshift) {
       updateFeed(oldFeeds[oldIndex], targetFeed, repostMutes)
     }
   })
