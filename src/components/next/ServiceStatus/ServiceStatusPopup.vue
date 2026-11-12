@@ -2,16 +2,13 @@
 import { computed, inject, onBeforeMount, onBeforeUnmount, reactive } from "vue"
 import { format } from "date-fns/format"
 import Popup from "@/components/popups/Popup.vue"
+import ServiceStatusEventList from "@/components/next/ServiceStatus/ServiceStatusEventList.vue"
 import SVGIcon from "@/components/images/SVGIcon.vue"
-import Util from "@/composables/util"
-import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 import CONSTS from "@/consts/consts.json"
 
 const emit = defineEmits<{(event: string): void}>()
 
 const mainState = inject("state") as MainState
-
-const { onClickExternalLink } = useSafeExternalUrl()
 
 const myServiceStatus = mainState.myServiceStatus!
 
@@ -44,49 +41,6 @@ const componentGroups = computed((): Array<{
       }
     })
 })
-
-// インシデントとメンテナンスを同じ形で並べる
-const events = computed((): Array<{
-  name?: string
-  status?: string
-  message?: string
-  details: Array<string>
-  url?: string
-}> => {
-  const summary = myServiceStatus.summary
-  return [
-    ...(summary?.activeIncidents ?? []).map((incident) => {
-      return {
-        name: incident.name,
-        status: incident.impact,
-        message: incident.lastUpdate?.message?.trim() || undefined,
-        details: [incident.status, formatEventDate(incident.started)]
-          .filter((detail): detail is string => detail != null),
-        url: incident.url,
-      }
-    }),
-    ...(summary?.activeMaintenances ?? []).map((maintenance) => {
-      return {
-        name: maintenance.name,
-        status: "UNDERMAINTENANCE",
-        details: [maintenance.status, formatEventDate(maintenance.start)]
-          .filter((detail): detail is string => detail != null),
-        url: maintenance.url,
-      }
-    }),
-  ]
-})
-
-// 日時として解釈できれば他の日時表示と同じ形式に整え、できなければそのまま返す
-// NOTICE: 日時の形式はドキュメントの例（独自形式）と実際の応答（ISO 8601）で異なる。無効な日時を `formatDate` に渡すと例外になる
-function formatEventDate (value?: string): undefined | string {
-  if (!value) {
-    return
-  }
-  return Number.isNaN(new Date(value).getTime())
-    ? value
-    : mainState.formatDate(value)
-}
 
 const fetchedAt = computed((): string => {
   const date = myServiceStatus.fetchedAt
@@ -169,46 +123,10 @@ async function update () {
       </div>
 
       <!-- 進行中のインシデント・メンテナンス -->
-      <div
-        v-if="events.length > 0"
+      <ServiceStatusEventList
         class="service-status-popup__events"
-      >
-        <!-- URL がない場合はリンクにしない（押すと不正な URL のエラーになるため） -->
-        <component
-          v-for="event, eventIndex of events"
-          :key="eventIndex"
-          :is="event.url != null ? 'a' : 'div'"
-          class="service-status-popup__event"
-          :data-link="event.url != null"
-          :href="Util.safeExternalUrl(event.url)"
-          :rel="event.url != null ? 'noreferrer' : undefined"
-          :target="event.url != null ? '_blank' : undefined"
-          @click="event.url != null && onClickExternalLink($event, event.url)"
-        >
-          <div
-            class="service-status-popup__event__name"
-            translate="no"
-          >{{ event.name }}</div>
-          <div
-            v-if="event.message != null"
-            class="service-status-popup__event__message"
-          >{{ event.message }}</div>
-          <div
-            class="service-status-popup__event__detail"
-            translate="no"
-          >
-            <span
-              v-if="event.status != null"
-              class="service-status-popup__badge"
-              :data-status="event.status"
-            >{{ event.status }}</span>
-            <span
-              v-for="detail, detailIndex of event.details"
-              :key="detailIndex"
-            >{{ detail }}</span>
-          </div>
-        </component>
-      </div>
+        :summary="myServiceStatus.summary"
+      />
 
       <!-- コンポーネント -->
       <ul
@@ -264,27 +182,6 @@ async function update () {
 </template>
 
 <style lang="scss" scoped>
-// 状態ごとの色
-@mixin status-color () {
-  --status-color: var(--fg-color);
-  &[data-status="UP"],
-  &[data-status="OPERATIONAL"] {
-    --status-color: var(--share-color);
-  }
-  &[data-status="UNDERMAINTENANCE"] {
-    --status-color: var(--accent-color);
-  }
-  &[data-status="HASISSUES"],
-  &[data-status="DEGRADEDPERFORMANCE"],
-  &[data-status="PARTIALOUTAGE"] {
-    --status-color: var(--label-color);
-  }
-  &[data-status="MAJOROUTAGE"],
-  &[data-status="ERROR"] {
-    --status-color: var(--notice-color);
-  }
-}
-
 .service-status-popup {
   &:deep() {
     .popup-body {
@@ -301,7 +198,7 @@ async function update () {
 
   // 全体の状態
   &__overview {
-    @include status-color;
+    @include service-status-color;
     background-color: rgb(var(--status-color), 0.125);
     display: flex;
     align-items: center;
@@ -335,68 +232,12 @@ async function update () {
 
   // 状態のバッジ
   &__badge {
-    @include status-color;
-    background-color: rgb(var(--status-color), 0.125);
-    border-radius: var(--border-radius-large);
-    color: rgb(var(--status-color));
-    flex-shrink: 0;
-    font-size: 0.75rem;
-    font-weight: bold;
-    line-height: var(--line-height-low);
-    padding: 0.25rem 0.5rem;
-    white-space: nowrap;
+    @include service-status-badge;
   }
 
   // インシデント・メンテナンス
   &__events {
-    display: flex;
-    flex-direction: column;
-    grid-gap: 0.5rem;
-  }
-
-  &__event {
-    background-color: rgb(var(--accent-color), 0.0625);
-    border: 1px solid rgb(var(--accent-color), 0.25);
-    border-radius: var(--border-radius-middle);
-    display: flex;
-    flex-direction: column;
-    grid-gap: 0.25rem;
     margin: 0 1rem;
-    padding: 0.75rem 1rem;
-    &[data-link="true"] {
-      cursor: pointer;
-      &:focus, &:hover {
-        background-color: rgb(var(--accent-color), 0.125);
-        border: 1px solid rgb(var(--accent-color), 0.375);
-      }
-    }
-
-    &__name {
-      font-weight: bold;
-      line-height: var(--line-height-low);
-      word-break: break-word;
-    }
-
-    &__message {
-      color: rgb(var(--fg-color), 0.75);
-      font-size: 0.875rem;
-      line-height: var(--line-height-high);
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    &__detail {
-      color: rgb(var(--fg-color), 0.75);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      grid-gap: 0.25rem 0.5rem;
-      font-size: 0.875rem;
-
-      & > span {
-        line-height: var(--line-height-low);
-      }
-    }
   }
 
   // コンポーネント

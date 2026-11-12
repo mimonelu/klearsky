@@ -63,7 +63,7 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 - [features/post-draft.md](dev-docs/features/post-draft.md) — ポスト下書きと IndexedDB メディアストア
 - [features/profile-links.md](dev-docs/features/profile-links.md) — プロフィールリンクの保存手順、死にレコード、favicon とタイトル候補の取得。プロフィール更新処理を変更する時にも読む
 - [features/search.md](dev-docs/features/search.md) — 投稿検索の現状実装と searchPostsV2 移行の検討
-- [features/service-status.md](dev-docs/features/service-status.md) — Bluesky 公式のステータスページの監視、障害表示の条件、実機確認の方法
+- [features/service-status.md](dev-docs/features/service-status.md) — Bluesky 公式のステータスページの監視、障害表示の条件、ログイン画面での表示、実機確認の方法
 - [features/stale-response.md](dev-docs/features/stale-response.md) — 遷移後に届いた古いレスポンスの破棄（世代番号）。非同期で画面の状態を書き換える処理を追加・変更する時に読む
 - [features/post-embed.md](dev-docs/features/post-embed.md) — ポストの embed（View と生レコード、引用先）の読み方と `__custom` の扱い。ポストの添付や引用の処理を追加・変更する時に読む
 - [features/feed-reason.md](dev-docs/features/feed-reason.md) — フィードの `reason`（リポストとピン留めのユニオン）の判定と格納先。フィードのリポスト判定を追加・変更する時に読む

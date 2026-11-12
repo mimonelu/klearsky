@@ -1,0 +1,34 @@
+// サービスステータスの状態ごとの色（`data-status` に状態を入れた要素で使う）
+@mixin service-status-color () {
+  --status-color: var(--fg-color);
+  &[data-status="UP"],
+  &[data-status="OPERATIONAL"] {
+    --status-color: var(--share-color);
+  }
+  &[data-status="UNDERMAINTENANCE"] {
+    --status-color: var(--accent-color);
+  }
+  &[data-status="HASISSUES"],
+  &[data-status="DEGRADEDPERFORMANCE"],
+  &[data-status="PARTIALOUTAGE"] {
+    --status-color: var(--label-color);
+  }
+  &[data-status="MAJOROUTAGE"],
+  &[data-status="ERROR"] {
+    --status-color: var(--notice-color);
+  }
+}
+
+// サービスステータスの状態のバッジ
+@mixin service-status-badge () {
+  @include service-status-color;
+  background-color: rgb(var(--status-color), 0.125);
+  border-radius: var(--border-radius-large);
+  color: rgb(var(--status-color));
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: var(--line-height-low);
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+}

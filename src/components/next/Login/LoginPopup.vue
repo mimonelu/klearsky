@@ -1,16 +1,47 @@
 <script lang="ts" setup>
-import { ref } from "vue"
+import { onMounted, ref } from "vue"
 import AccountList from "@/components/next/Account/AccountList.vue"
 import Copyright from "@/components/labels/Copyright.vue"
 import LoginForm from "@/components/next/Login/LoginForm.vue"
 import Logo from "@/components/images/Logo.vue"
+import ServiceStatusEventList from "@/components/next/ServiceStatus/ServiceStatusEventList.vue"
+import SVGIcon from "@/components/images/SVGIcon.vue"
+import Util from "@/composables/util"
 
 defineExpose({
   setHasAuthFactorToken,
   setAccountToLoginForm,
+  updateServiceStatus,
 })
 
 const loginForm = ref(null)
+
+// Bluesky 公式のサービスステータス。異常がある時（メンテナンス中を含む）だけ保持する
+// ログイン中の監視（`MyServiceStatus`）とは別に、表示時とログインの失敗時にだけ取得する
+const serviceStatusSummary = ref<TTServiceStatusSummary>()
+
+// 最新の取得だけを反映するための世代番号
+const serviceStatusGeneration = Util.createGeneration()
+
+onMounted(() => {
+  updateServiceStatus()
+})
+
+async function updateServiceStatus () {
+  const generation = serviceStatusGeneration.next()
+  const response = await Util.fetchServiceStatus("summary.json")
+  if (!serviceStatusGeneration.isCurrent(generation)) {
+    return
+  }
+
+  // 取得に失敗した場合は表示しない
+  const summary = response instanceof Error
+    ? undefined
+    : Util.sanitizeServiceStatus.summary(response)
+  serviceStatusSummary.value = summary?.page?.status != null && summary.page.status !== "UP"
+    ? summary
+    : undefined
+}
 
 async function setHasAuthFactorToken (value: boolean) {
   await (loginForm.value as any)?.setHasAuthFactorToken(value)
@@ -29,15 +60,35 @@ async function setAccountToLoginForm (session: TTSession) {
         <div class="description">Alt Web Client for Bluesky</div>
       </div>
       <div class="login-popup__body">
-        <LoginForm
-          ref="loginForm"
-          @login="(...args) => $emit('login', ...args)"
-          @signUp="(...args) => $emit('signUp', ...args)"
-          @oauthLogin="(...args) => $emit('oauthLogin', ...args)"
-        />
-        <div class="account-container">
-          <div class="account-header">{{ $t("myAccounts") }}</div>
-          <AccountList :isAtLoginPopup="true" />
+        <!-- サービスステータスの異常 -->
+        <div
+          v-if="serviceStatusSummary != null"
+          class="service-status"
+        >
+          <div
+            class="service-status__label"
+            translate="no"
+          >
+            <SVGIcon name="pulse" />
+            <span>Bluesky Status</span>
+          </div>
+          <ServiceStatusEventList
+            :summary="serviceStatusSummary"
+            :pageStatusFallback="true"
+          />
+        </div>
+
+        <div class="login-popup__body__content">
+          <LoginForm
+            ref="loginForm"
+            @login="(...args) => $emit('login', ...args)"
+            @signUp="(...args) => $emit('signUp', ...args)"
+            @oauthLogin="(...args) => $emit('oauthLogin', ...args)"
+          />
+          <div class="account-container">
+            <div class="account-header">{{ $t("myAccounts") }}</div>
+            <AccountList :isAtLoginPopup="true" />
+          </div>
         </div>
       </div>
       <Copyright />
@@ -74,6 +125,8 @@ $width: 768px;
   }
 
   &__body {
+    display: flex;
+    flex-direction: column;
     grid-gap: 2rem;
     margin: 0 auto;
     padding: 0 2rem;
@@ -82,17 +135,25 @@ $width: 768px;
 
     // 縦長
     @media (max-width: $width) {
-      display: flex;
-      flex-direction: column;
       width: 100%;
       max-width: 576px;
     }
 
-    // 横長
-    @media not all and (max-width: $width) {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: flex-start;
+    &__content {
+      grid-gap: 2rem;
+
+      // 縦長
+      @media (max-width: $width) {
+        display: flex;
+        flex-direction: column;
+      }
+
+      // 横長
+      @media not all and (max-width: $width) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: flex-start;
+      }
     }
   }
 }
@@ -110,6 +171,28 @@ $width: 768px;
 .description {
   color: rgb(var(--fg-color), 0.75);
   font-size: min(1.25rem, 2vmax);
+}
+
+.service-status {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 0.5rem;
+
+  &__label {
+    color: rgb(var(--fg-color), 0.75);
+    display: flex;
+    align-items: center;
+    grid-gap: 0.5rem;
+    font-weight: bold;
+
+    & > .svg-icon {
+      fill: rgb(var(--fg-color), 0.75);
+    }
+
+    & > span {
+      line-height: var(--line-height-low);
+    }
+  }
 }
 
 .account-container {

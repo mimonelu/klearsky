@@ -193,6 +193,10 @@ export function useMainViewAuth (options: Options) {
       // リダイレクトされるため、この後のコードは実行されない
     } catch (error) {
       state.loaderDisplay = false
+
+      // 公式の障害が原因の場合に備え、サービスステータスを取得し直す
+      ;(loginPopup.value as any)?.updateServiceStatus()
+
       const errorMessage = (error as Error)?.message ?? ""
       // エラーメッセージをローカライズ
       if (errorMessage.includes("Failed to resolve identity")) {
@@ -234,6 +238,10 @@ export function useMainViewAuth (options: Options) {
     }
     if (response instanceof Error || !state.atp.hasLogin()) {
       state.loaderDisplay = false
+
+      // 公式の障害が原因の場合に備え、サービスステータスを取得し直す
+      ;(loginPopup.value as any)?.updateServiceStatus()
+
       state.openErrorPopup($t("getSessionError"), "MainView/manualLogin")
       return
     }
