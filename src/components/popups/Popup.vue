@@ -113,7 +113,12 @@ function scrollTop (): undefined | number {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  // ポップアップの外側やヘッダーでのスクロールを背面のページに伝えない
+  // `overscroll-behavior` はスクロールコンテナでないと効かないため `overflow` を指定する
+  overflow: hidden;
   overscroll-behavior: none;
+
   position: fixed;
   left: 0;
   top: 0;

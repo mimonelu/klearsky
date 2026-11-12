@@ -139,6 +139,10 @@ function setNotificationCurrentTab (reason?: TTNotificationReason) {
 }
 
 function scrolledToBottom () {
+  // 取得中に再び最下部へ達した時に、同じカーソルで二重に取得しないようにする
+  if (state.processing) {
+    return
+  }
   fetchNotifications("old")
 }
 </script>
