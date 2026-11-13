@@ -29,6 +29,10 @@ $font-family-ja: "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", M
     font-family: $font-family-head, $font-family-ja, $font-family-tail;
   }
 
+  // Inter の文脈による字形の置き換え（`->` を矢印に、`3x4` の `x` を `×` にする等）を無効化
+  // NOTICE: カーニング設定の `font-feature-settings` と競合しないよう `font-variant-ligatures` で指定する
+  font-variant-ligatures: no-contextual;
+
   // フォントサイズ
   font-size: 15px;
   &[data-font-size="small"] {
