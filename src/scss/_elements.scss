@@ -1,6 +1,3 @@
-// SEE: https://fonts.google.com/selection/embed
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-
 // タイ語結合記号によるZalgo文字列対策としてタイ語を外部フォント化
 @font-face {
   font-family: "IBM Plex Sans Thai";
@@ -11,26 +8,26 @@
   unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC;
 }
 
-*,
-* > * {
+* {
   line-height: 1;
 }
 
+// フォントファミリー
+// NOTICE: Inter は `index.html` で Google Fonts から読み込む
+$font-family-head: "IBM Plex Sans Thai", Inter;
+$font-family-tail: system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
+
+// 和文フォント
+// NOTICE: `system-ui` より前に置く。後ろに置くと Windows では和文が OS 任せのフォントになる
+// NOTICE: 他の言語の漢字が日本の字形にならないよう、表示言語が日本語の時だけ指定する
+// NOTICE: Hiragino Sans は同じ `font-weight` でも 1 段階太いウェイトが割り当てられるため使わない
+$font-family-ja: "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", Meiryo;
+
 :root {
-  // フォントファミリー
-  font-family:
-    "IBM Plex Sans Thai",
-    InterVariable,
-    "system-ui",
-    "-apple-system",
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji";
+  font-family: $font-family-head, $font-family-tail;
+  &:lang(ja) {
+    font-family: $font-family-head, $font-family-ja, $font-family-tail;
+  }
 
   // フォントサイズ
   font-size: 15px;
@@ -142,13 +139,11 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   color: rgb(var(--fg-color));
-  font-optical-sizing: auto;
   overflow-x: hidden;
   overflow-y: scroll;
   overscroll-behavior: none;
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
-  -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   transition: background-color 500ms ease-out;
   user-select: none;

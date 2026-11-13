@@ -27,9 +27,11 @@ export default {
     }
 
     let currentLanguage = Util.getUserLanguage() ?? "en"
+    updateDocumentLanguage(translationMap, currentLanguage)
 
     app.provide("$setCurrentLanguage", (newLanguage: string) => {
       currentLanguage = newLanguage
+      updateDocumentLanguage(translationMap, currentLanguage)
     })
 
     app.provide("$getCurrentLanguage", (): string => {
@@ -46,6 +48,12 @@ export default {
     app.config.globalProperties.$t = $t
     app.provide("$t", $t)
   },
+}
+
+// ページの言語（`<html lang>`）を表示言語に合わせる
+// NOTICE: 和文フォントの指定を `:lang(ja)` で切り替えているため、翻訳がない言語は表示に使う `en` にする
+function updateDocumentLanguage (translationMap: TITranslationMap, language: string) {
+  window.document.documentElement.lang = translationMap[language] != null ? language : "en"
 }
 
 // 翻訳キー数の検証
