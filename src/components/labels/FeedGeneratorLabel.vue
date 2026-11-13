@@ -78,7 +78,7 @@ const scheme = SCHEMES[props.did]
 
 a {
   line-height: var(--line-height-high);
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .lazy-image,

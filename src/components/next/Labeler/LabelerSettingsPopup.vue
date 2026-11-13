@@ -355,7 +355,7 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
     color: rgb(var(--fg-color), 0.75);
     line-height: var(--line-height-middle);
     font-style: italic;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   // ラベル設定
@@ -397,7 +397,7 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
         font-size: 1.125rem;
         font-weight: bold;
         line-height: var(--line-height-high);
-        word-break: break-word;
+        overflow-wrap: anywhere;
       }
       &:focus, &:hover {
         & > span {
@@ -424,7 +424,7 @@ async function translate (pseudoDefinition: TIPseudoLabelerDefinition) {
     line-height: var(--line-height-middle);
     overflow: hidden;
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   // リセットボタン

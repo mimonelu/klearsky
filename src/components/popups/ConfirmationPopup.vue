@@ -82,7 +82,7 @@ function apply () {
     line-height: var(--line-height-high);
     user-select: text;
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
   .detail {
     background-color: rgb(var(--fg-color), 0.125);

@@ -22,7 +22,7 @@
       & > span {
         line-height: var(--line-height-low);
         overflow: hidden;
-        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
     }
     &__body > &__header {

@@ -271,7 +271,7 @@ function openProfilePopover ($event: Event) {
       & > span {
         font-weight: bold;
         line-height: var(--line-height-low);
-        word-break: break-word;
+        overflow-wrap: anywhere;
       }
       &:focus, &:hover {
         & > span {
@@ -386,7 +386,7 @@ function openProfilePopover ($event: Event) {
     font-size: 0.875em;
     line-height: var(--line-height-high);
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   // ボタンコンテナ

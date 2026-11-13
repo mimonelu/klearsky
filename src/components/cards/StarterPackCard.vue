@@ -328,7 +328,7 @@ async function deleteStarterPack () {
     &__label {
       font-weight: bold;
       line-height: var(--line-height-low);
-      word-break: break-word;
+      overflow-wrap: anywhere;
     }
   }
 
@@ -406,7 +406,7 @@ async function deleteStarterPack () {
     font-size: 0.875em;
     line-height: var(--line-height-high);
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
   &[data-unclickable="true"] &__description {
     cursor: auto;
@@ -428,7 +428,7 @@ async function deleteStarterPack () {
 
     &__link {
       line-height: var(--line-height-high);
-      word-break: break-word;
+      overflow-wrap: anywhere;
     }
   }
 }

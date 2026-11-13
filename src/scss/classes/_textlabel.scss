@@ -22,7 +22,7 @@
 
   &__item {
     line-height: var(--line-height-high);
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 }
 .textlabel {

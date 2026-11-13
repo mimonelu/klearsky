@@ -395,7 +395,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
         color: rgb(var(--fg-color));
         font-weight: bold;
         line-height: var(--line-height-low);
-        word-break: break-word;
+        overflow-wrap: anywhere;
       }
       &:focus, &:hover {
         & > span {
@@ -499,7 +499,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     }
 
     & > .textlabel__text {
-      word-break: break-word;
+      overflow-wrap: anywhere;
     }
   }
 
@@ -514,7 +514,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     font-size: 0.875em;
     line-height: var(--line-height-high);
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   // フィード作成者
@@ -534,7 +534,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
 
     &__link {
       line-height: var(--line-height-high);
-      word-break: break-word;
+      overflow-wrap: anywhere;
     }
   }
 

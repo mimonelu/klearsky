@@ -139,7 +139,7 @@ function formatEventDate (value?: string): undefined | string {
   &__name {
     font-weight: bold;
     line-height: var(--line-height-low);
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   &__message {
@@ -147,7 +147,7 @@ function formatEventDate (value?: string): undefined | string {
     font-size: 0.875rem;
     line-height: var(--line-height-high);
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   &__detail {

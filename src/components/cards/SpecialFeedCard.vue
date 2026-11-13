@@ -114,7 +114,7 @@ function changeCustomFeedOrder (direction: "top" | "up" | "down" | "bottom") {
     color: rgb(var(--fg-color), 0.5);
     font-size: 0.875em;
     line-height: var(--line-height-high);
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 }
 

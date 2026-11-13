@@ -411,7 +411,7 @@ function validate (): boolean {
       & > dt {
         font-weight: bold;
         line-height: var(--line-height-middle);
-        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
 
       & > dd  {
@@ -447,7 +447,7 @@ function validate (): boolean {
   font-size: 0.875rem;
   line-height: var(--line-height-middle);
   text-align: right;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .max-length-indicator {

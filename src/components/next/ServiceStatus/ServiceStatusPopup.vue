@@ -221,7 +221,7 @@ async function update () {
       font-size: 1.25rem;
       font-weight: bold;
       line-height: var(--line-height-low);
-      word-break: break-word;
+      overflow-wrap: anywhere;
     }
 
     &__fetched-at {
@@ -269,7 +269,7 @@ async function update () {
 
     &__name {
       line-height: var(--line-height-low);
-      word-break: break-word;
+      overflow-wrap: anywhere;
     }
   }
 

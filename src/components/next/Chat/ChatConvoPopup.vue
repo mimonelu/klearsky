@@ -504,7 +504,7 @@ function isMine (message: TIChatMessage): boolean {
       color: rgb(var(--fg-color), var(--alpha));
       font-size: 0.875rem;
       line-height: var(--line-height-middle);
-      word-break: break-word;
+      overflow-wrap: anywhere;
     }
   }
   &__system-message--positive {

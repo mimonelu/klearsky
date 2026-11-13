@@ -1377,7 +1377,7 @@ function removeThisPost () {
   line-height: var(--line-height-high);
   user-select: text;
   white-space: pre-wrap;
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .statistics {

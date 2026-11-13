@@ -68,6 +68,6 @@ function close () {
   padding: 0 1rem;
   user-select: text;
   white-space: pre-wrap;
-  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 </style>

@@ -2091,7 +2091,7 @@ function toggleQuotePostDisplay () {
 .text--slim {
   color: rgb(var(--fg-color));
   line-height: var(--line-height-high);
-  word-break: break-word;
+  overflow-wrap: anywhere;
   &:empty {
     display: contents;
   }
@@ -2215,7 +2215,7 @@ function toggleQuotePostDisplay () {
     line-height: var(--line-height-high);
     margin-top: 0.5em;
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 }
 

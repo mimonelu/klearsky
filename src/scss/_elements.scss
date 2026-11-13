@@ -169,7 +169,7 @@ p {
   align-items: baseline;
   grid-gap: 0.5em;
   line-height: var(--line-height-high);
-  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 pre {
