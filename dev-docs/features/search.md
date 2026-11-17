@@ -10,6 +10,13 @@
 - 新規フィルタ（`hasMedia`, `hasVideo`, `following`, `allTime`など）をUIにどこまで露出するか
 - V2 の `since`/`until` は `createdAt` ではなく `sortAt` 基準。デフォルトソートは `top`（V1 は `latest`）
 
+## 日本語のみのクエリーで OR が効かない（サーバー側の挙動、2026-11-17調査）
+
+- `犬 | 猫` のように全語が日本語だと `|` が OR として解釈されず、全語を含むポストだけがヒットする（AND 相当）。`いぬ | ねこ` は 0 件
+- 半角英数字の語が 1 つでも混ざると OR が効く（例: `犬 | 猫 | zzzaaayyybbb`）。`dog | cat` も OR が効く
+- V1（`searchPosts`）と V2（`searchPostsV2`）で同じ挙動。V2 へ移行しても解消しない
+- Klearsky はクエリー文字列を加工せず渡しているため、クライアント側の不具合ではない。回避策の案（ダミーの英字語の自動付与、語ごとに個別検索して結果をマージ）はあるが未実装。いずれもサーバー側の挙動に依存する
+
 ## 現状のklearsky検索実装（V1ベース、2026-07-16調査）
 
 - `src/composables/atp-wrapper/fetch/fetch-post-search.ts`: `searchPosts`（V1）を呼ぶ唯一の低レベル実装。`TIPostSearch`（`text`, `sort`, `lang`, `author`, `to`, `mentions`, `domain`, `since`, `until`）から `lang:`/`from:`/`to:`/`mentions:`/`domain:`/`since:`/`until:` プレフィックス付きの `q` 文字列を組み立てる方式
