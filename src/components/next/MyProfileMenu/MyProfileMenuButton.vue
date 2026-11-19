@@ -211,6 +211,8 @@ function select (callback: () => void) {
   & > span {
     color: rgb(var(--fg-color), 0.875);
     line-height: var(--line-height-high);
+    // `align-items: flex-start` だと幅が内容に合わせて伸びて省略されないため、親の幅で抑える
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
   }
