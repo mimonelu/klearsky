@@ -13,8 +13,8 @@
 }
 
 // フォントファミリー
-// NOTICE: Inter は `index.html` で Google Fonts から読み込む
-$font-family-head: "IBM Plex Sans Thai", Inter;
+// NOTICE: 欧文はウェブフォントを使わず OS のフォント（`system-ui`）に任せる。理由は `dev-docs/features/font.md` を参照
+$font-family-head: "IBM Plex Sans Thai";
 $font-family-tail: system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
 
 // 和文フォント
@@ -28,10 +28,6 @@ $font-family-ja: "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", M
   &:lang(ja) {
     font-family: $font-family-head, $font-family-ja, $font-family-tail;
   }
-
-  // Inter の文脈による字形の置き換え（`->` を矢印に、`3x4` の `x` を `×` にする等）を無効化
-  // NOTICE: カーニング設定の `font-feature-settings` と競合しないよう `font-variant-ligatures` で指定する
-  font-variant-ligatures: no-contextual;
 
   // フォントサイズ
   font-size: 15px;

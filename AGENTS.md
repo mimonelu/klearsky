@@ -72,6 +72,7 @@ Klearsky は AT Protocol（Bluesky）向けの Web クライアント（Vue 3 + 
 - [features/atmosphere.md](dev-docs/features/atmosphere.md) — プロフィールの Atmosphere（リポジトリのコレクションから他サービスのドメインを列挙）、リンク先とアイコンにアカウントを使う理由
 - [features/memory.md](dev-docs/features/memory.md) — メモリ使用量の計測手順と結果の読み方、リアクティブの依存の内訳、動画の再生器のコスト。メモリ削減の効果を確かめる時と、動画の再生処理を変更する時に読む
 - [features/video-upload.md](dev-docs/features/video-upload.md) — 動画のアップロード（`createVideo`）のトークン、本文の読み方、失敗の理由の表示、処理済みの動画（409）。動画の投稿処理を変更する時に読む
+- [features/font.md](dev-docs/features/font.md) — 全体のフォントの指定順序、日本語表示時だけの和文フォント、欧文に Inter を使わない理由。フォントの指定を変更する時に読む
 
 ## ドキュメントの更新ルール
 
