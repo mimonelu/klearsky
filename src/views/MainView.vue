@@ -747,12 +747,12 @@ const {
       <Transition>
         <SelectLanguagesPopup
           v-if="state.postLanguagesPopupDisplay"
-          :state="state.currentSetting"
+          :state="state.postLanguagesPopupState ?? state.currentSetting"
           property="postLanguages"
           title="postLanguages"
           :limit="3"
           @close="state.closePostLanguagesPopup"
-          @change="saveSetting"
+          @change="state.postLanguagesPopupState == null && saveSetting()"
         />
       </Transition>
 

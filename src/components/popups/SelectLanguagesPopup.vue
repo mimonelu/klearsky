@@ -21,7 +21,7 @@ const state = reactive<{
   numberOfSelected: ComputedRef<number>
 }>({
   numberOfSelected: computed((): number => {
-    return mainState.currentSetting[props.property]?.length ?? 0
+    return props.state[props.property]?.length ?? 0
   }),
 })
 

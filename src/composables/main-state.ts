@@ -577,6 +577,7 @@ export const state: MainState = reactive<MainState>({
 
   // ポップアップ - ポスト言語ポップアップ
   postLanguagesPopupDisplay: false,
+  postLanguagesPopupState: undefined,
   openPostLanguagesPopup: openPostLanguagesPopup,
   closePostLanguagesPopup: closePostLanguagesPopup,
 
@@ -2710,12 +2711,15 @@ function closeContentLanguagesPopup () {
 
 // ポップアップ - ポスト言語ポップアップ
 
-function openPostLanguagesPopup () {
+// `target` 省略時は設定のポスト言語を編集する
+function openPostLanguagesPopup (target?: { postLanguages?: Array<string> }) {
   state.postLanguagesPopupDisplay = true
+  state.postLanguagesPopupState = target
 }
 
 function closePostLanguagesPopup () {
   state.postLanguagesPopupDisplay = false
+  state.postLanguagesPopupState = undefined
 }
 
 // ポップアップ - ミュートユーザーリストポップアップ

@@ -35,7 +35,7 @@ async function applyDraft () {
     }
   }
 
-  const params = await extractSendPostPopupParams(props.draftView, mainState.currentSetting.postLanguages)
+  const params = await extractSendPostPopupParams(props.draftView)
   if (params == null) {
     return
   }

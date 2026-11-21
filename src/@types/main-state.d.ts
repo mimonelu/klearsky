@@ -503,7 +503,8 @@ interface MainState {
 
   // ポップアップ - ポスト言語ポップアップ
   postLanguagesPopupDisplay: boolean
-  openPostLanguagesPopup: Function
+  postLanguagesPopupState?: { postLanguages?: Array<string> }
+  openPostLanguagesPopup: (target?: { postLanguages?: Array<string> }) => void
   closePostLanguagesPopup: () => void
 
   // ポップアップ - ミュートユーザーリストポップアップ

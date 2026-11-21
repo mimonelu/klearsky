@@ -34,6 +34,7 @@ const $t = inject("$t") as Function
 const mainState = inject("state") as MainState
 
 const state = reactive<{
+  postLanguages: Array<string>
   labels: Array<string>
   currentDraftId: string | undefined
   draftReactionControl: TTDraftReactionControl
@@ -41,6 +42,8 @@ const state = reactive<{
   postDatePopupDate: ComputedRef<undefined | string>
   videoLimits?: TIVideoLimits
 }>({
+  // このポストの言語。設定のポスト言語とは分けて持ち、ポップアップを閉じると破棄する
+  postLanguages: [...(mainState.currentSetting.postLanguages ?? [])],
   labels: [],
   currentDraftId: undefined,
   draftReactionControl: {
@@ -245,7 +248,8 @@ watch(() => mainState.sendPostPopupProps.visibility, async (value?: boolean) => 
     state.draftReactionControl.allowFollower = false
     state.draftReactionControl.allowFollowing = false
     state.draftReactionControl.listUris = []
-    mainState.currentSetting.postLanguages = props.langs ?? []
+    // NOTICE: 言語のない下書き・ポストは言語なしのまま適用する
+    state.postLanguages = [...(props.langs ?? [])]
 
     // 下書きの添付ファイル
     if (props.medias != null) {
@@ -372,7 +376,7 @@ async function submitCallback () {
       type: props.type,
       post: props.post,
       createdAt: state.postDatePopupDate,
-      languages: mainState.currentSetting.postLanguages,
+      languages: state.postLanguages,
       labels: state.labels,
       lightning: mainState.currentSetting.lightning,
     })
@@ -454,7 +458,7 @@ async function saveOrUpdateDraft () {
     url: easyFormState.url,
     type: props.type,
     post: props.post,
-    langs: mainState.currentSetting.postLanguages,
+    langs: state.postLanguages,
     labels: state.labels,
     medias: easyFormState.medias,
     alts: easyFormState.alts,
@@ -762,15 +766,15 @@ function openEasterEggPopover ($event: Event) {
             <button
               type="button"
               class="button--bordered post-language-button"
-              @click.prevent="mainState.openPostLanguagesPopup()"
+              @click.prevent="mainState.openPostLanguagesPopup(state)"
             >
               <SVGIcon name="translate" />
               <!-- span>{{ $t("languages") }}</span -->
               <b
-                v-if="mainState.currentSetting.postLanguages?.length"
+                v-if="state.postLanguages.length"
                 class="post-language-button__set"
                 translate="no"
-              >{{ mainState.currentSetting.postLanguages?.join(", ") }}</b>
+              >{{ state.postLanguages.join(", ") }}</b>
               <b
                 v-else
                 class="post-language-button__not-set"

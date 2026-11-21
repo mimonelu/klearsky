@@ -172,7 +172,6 @@ export async function draftMediaExistsInStore (draft: AppBskyDraftDefs.Draft): P
 // 下書きから TTSendPostPopupParams を組み立て
 export async function extractSendPostPopupParams (
   draftView: AppBskyDraftDefs.DraftView,
-  fallbackLangs?: Array<string>,
 ): Promise<TTSendPostPopupParams | undefined> {
   const draft = draftView.draft
   const post = draft.posts[0]
@@ -192,9 +191,9 @@ export async function extractSendPostPopupParams (
   }
 
   // ポスト言語
-  const langs = draft.langs ?? fallbackLangs
-  if ((langs ?? []).length > 0) {
-    params.langs = langs
+  // NOTICE: 言語を外して保存した下書きは `langs` を持たないため、既定のポスト言語で補わない
+  if ((draft.langs ?? []).length > 0) {
+    params.langs = draft.langs
   }
 
   // 反応制限
