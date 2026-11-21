@@ -23,10 +23,16 @@ $font-family-tail: system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
 // NOTICE: Hiragino Sans は同じ `font-weight` でも 1 段階太いウェイトが割り当てられるため使わない
 $font-family-ja: "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", Meiryo;
 
+// 和文フォントより前に置く OS の欧文フォント
+// NOTICE: 和文フォントは欧文の字形も持つため、前に置かないと英数字が和文フォントの字形になる
+// NOTICE: `system-ui` は前に置くと Windows で和文が OS 任せのフォントになるため使わない。Mac は `-apple-system`（Safari・Firefox）と `BlinkMacSystemFont`（Chrome）、Windows は Segoe UI を名前で指定する
+// NOTICE: Safari では `-apple-system` が和文も OS 任せのフォントで表示し、後ろの和文フォントが効かない。英数字を San Francisco にするため、これを許容している
+$font-family-ja-latin: -apple-system, BlinkMacSystemFont, "Segoe UI";
+
 :root {
   font-family: $font-family-head, $font-family-tail;
   &:lang(ja) {
-    font-family: $font-family-head, $font-family-ja, $font-family-tail;
+    font-family: $font-family-head, $font-family-ja-latin, $font-family-ja, $font-family-tail;
   }
 
   // フォントサイズ
