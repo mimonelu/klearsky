@@ -35,6 +35,7 @@ const mainState = inject("state") as MainState
 
 const state = reactive<{
   postLanguages: Array<string>
+  isPostLanguagesChanged: ComputedRef<boolean>
   labels: Array<string>
   currentDraftId: string | undefined
   draftReactionControl: TTDraftReactionControl
@@ -44,6 +45,15 @@ const state = reactive<{
 }>({
   // このポストの言語。設定のポスト言語とは分けて持ち、ポップアップを閉じると破棄する
   postLanguages: [...(mainState.currentSetting.postLanguages ?? [])],
+
+  // このポストの言語が既定のポスト言語と異なるか（順序は問わない）
+  isPostLanguagesChanged: computed((): boolean => {
+    const defaultLanguages = mainState.currentSetting.postLanguages ?? []
+    return (
+      state.postLanguages.length !== defaultLanguages.length ||
+      state.postLanguages.some((language) => !defaultLanguages.includes(language))
+    )
+  }),
   labels: [],
   currentDraftId: undefined,
   draftReactionControl: {
@@ -773,6 +783,7 @@ function openEasterEggPopover ($event: Event) {
               <b
                 v-if="state.postLanguages.length"
                 class="post-language-button__set"
+                :data-changed="state.isPostLanguagesChanged"
                 translate="no"
               >{{ state.postLanguages.join(", ") }}</b>
               <b
@@ -1033,6 +1044,11 @@ function openEasterEggPopover ($event: Event) {
       &__set {
         color: rgb(var(--fg-color));
         text-transform: uppercase;
+
+        // 既定のポスト言語と異なる場合
+        &[data-changed="true"] {
+          color: rgb(var(--orange-color));
+        }
       }
 
       &__not-set {
