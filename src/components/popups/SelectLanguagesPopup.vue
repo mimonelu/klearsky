@@ -13,6 +13,7 @@ const props = defineProps<{
   title: string
   limit?: number
   hasHelpButton?: boolean
+  description?: string
 }>()
 
 const mainState = inject("state") as MainState
@@ -67,6 +68,12 @@ function close () {
         <span v-if="state.numberOfSelected > 0">({{ state.numberOfSelected }})</span>
       </h2>
     </template>
+    <template
+      v-if="description"
+      #header-after
+    >
+      <p class="select-languages-popup__description">{{ $t(description) }}</p>
+    </template>
     <template #body>
       <EasyForm v-bind="easyFormProps" />
     </template>
@@ -74,6 +81,12 @@ function close () {
 </template>
 
 <style lang="scss" scoped>
+.select-languages-popup__description {
+  font-size: 0.875rem;
+  line-height: var(--line-height-high);
+  padding: 0.75rem;
+}
+
 .select-languages-popup:deep() {
   .popup-body {
     grid-gap: 1.5rem;

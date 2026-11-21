@@ -751,6 +751,7 @@ const {
           property="postLanguages"
           title="postLanguages"
           :limit="3"
+          :description="state.postLanguagesPopupState != null ? 'postLanguagesTemporary' : undefined"
           @close="state.closePostLanguagesPopup"
           @change="state.postLanguagesPopupState == null && saveSetting()"
         />

@@ -382,6 +382,7 @@ export default () => ({
   "contentLanguagesDetail4": "아무것도 선택하지 않으면 모든 게시물이 표시됩니다.",
   "postLanguages": "게시물 언어",
   "postLanguagesEdit": "게시물 언어 선택",
+  "postLanguagesTemporary": "게시물 언어를 일시적으로 변경합니다.",
   "postLanguagesDetail1": "게시물에서 사용하는 언어를 최대 3개까지 선택하세요.",
   "postLanguagesDetail2": "이 설정은 조회자의 콘텐츠 언어와 매칭됩니다.",
   "autoTranslation": "자동 번역",

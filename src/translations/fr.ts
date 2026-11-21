@@ -382,6 +382,7 @@ export default () => ({
   "contentLanguagesDetail4": "Si rien n'est sélectionné, tout sera affiché.",
   "postLanguages": "Langues des publications",
   "postLanguagesEdit": "Sélectionner les langues",
+  "postLanguagesTemporary": "Modifie temporairement les langues de la publication.",
   "postLanguagesDetail1": "Choisir jusqu'à 3 langues pour tes publications.",
   "postLanguagesDetail2": "Ce réglage sera vérifié contre les langues des lecteurs.",
   "autoTranslation": "Traduction automatique",

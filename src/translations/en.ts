@@ -382,6 +382,7 @@ export default () => ({
   "contentLanguagesDetail4": "If none are selected, all posts will be displayed.",
   "postLanguages": "Post Languages",
   "postLanguagesEdit": "Select post languages",
+  "postLanguagesTemporary": "Changes post languages temporarily.",
   "postLanguagesDetail1": "Select up to 3 languages used in your post.",
   "postLanguagesDetail2": "This setting will be checked against the viewer's content languages.",
   "autoTranslation": "Automatic Translation",

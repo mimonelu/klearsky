@@ -382,6 +382,7 @@ export default () => ({
   "contentLanguagesDetail4": "ひとつも選択しない場合はすべてのポストが表示されます。",
   "postLanguages": "ポスト言語",
   "postLanguagesEdit": "ポスト言語を選択する",
+  "postLanguagesTemporary": "ポスト言語を一時的に変更します。",
   "postLanguagesDetail1": "ポストで使用している言語を3つまで選択してください。",
   "postLanguagesDetail2": "この設定は閲覧者のコンテンツ言語と照合されます。",
   "autoTranslation": "自動翻訳",

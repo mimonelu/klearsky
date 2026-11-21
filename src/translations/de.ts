@@ -382,6 +382,7 @@ export default () => ({
   "contentLanguagesDetail4": "Ohne Auswahl: alle Posts sichtbar.",
   "postLanguages": "Beitragssprachen",
   "postLanguagesEdit": "Post-Sprachen wählen",
+  "postLanguagesTemporary": "Ändert die Beitragssprachen vorübergehend.",
   "postLanguagesDetail1": "Wählen Sie bis zu 3 Sprachen für Ihren Beitrag aus.",
   "postLanguagesDetail2": "Diese Einstellung wird mit den Inhaltssprachen des Betrachters abgeglichen.",
   "autoTranslation": "Automatische Übersetzung",
