@@ -217,8 +217,6 @@ function validateUrl (urlObject: URL, text: string): boolean {
         <span>{{ $t("translate") }}</span>
       </a>
     </template>
-
-    <slot name="after-translate-link" />
   </div>
 </template>
 
@@ -234,13 +232,16 @@ function validateUrl (urlObject: URL, text: string): boolean {
   align-items: center;
   grid-gap: 0.25em;
   font-size: min(0.875em, 0.875rem);
-  padding: 0.125em 0.25em;
-  vertical-align: middle;
+  line-height: var(--line-height-low);
+  padding: 0.125em 0 0.125em 0.5em; // 部品の間と本文末尾からの隙間を揃えるため、左側だけに取る
+  vertical-align: text-bottom;
   & > .svg-icon {
     fill: rgb(var(--fg-color), var(--opacity));
+    font-size: min(0.875em, 0.875rem);
   }
   & > span {
     color: rgb(var(--fg-color), var(--opacity));
+    line-height: 1; // ポストスレッドインデックスや閲覧数と高さを揃える
   }
   &:focus, &:hover {
     --opacity: 1.0;

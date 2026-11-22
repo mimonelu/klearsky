@@ -1253,26 +1253,31 @@ function toggleQuotePostDisplay () {
           @onActivateHashTag="(tag) => onActivateHashTag(tag as string)"
           @translate="onForceTranslate"
         >
-          <!-- ポストスレッドインデックス -->
           <template
-            v-if="hasOpThreadPostIndex"
+            v-if="hasOpThreadPostIndex || viewCount != null"
             #after
           >
-            <template v-if="text">&nbsp;</template><span class="post-thread-index">
-              <SVGIcon name="posts" />
-              <span>{{ post.__custom.opThreadPostIndex }}/{{ post.__custom.opThreadPostCount }}</span>
-            </span>
-          </template>
+            <!-- ポストスレッドインデックス -->
+            <template v-if="hasOpThreadPostIndex">
+              <template v-if="text">&nbsp;</template><span
+                class="post-thread-index"
+                :data-is-first="!text"
+              >
+                <SVGIcon name="posts" />
+                <span>{{ post.__custom.opThreadPostIndex }}/{{ post.__custom.opThreadPostCount }}</span>
+              </span>
+            </template>
 
-          <!-- 閲覧数 -->
-          <template
-            v-if="viewCount != null"
-            #after-translate-link
-          >
-            <template v-if="text || hasOpThreadPostIndex">&nbsp;</template><span class="post-view-count">
-              <SVGIcon name="viewCount" />
-              <span>{{ viewCount }}</span>
-            </span>
+            <!-- 閲覧数 -->
+            <template v-if="viewCount != null">
+              <template v-if="text || hasOpThreadPostIndex">&nbsp;</template><span
+                class="post-view-count"
+                :data-is-first="!text && !hasOpThreadPostIndex"
+              >
+                <SVGIcon name="viewCount" />
+                <span>{{ viewCount }}</span>
+              </span>
+            </template>
           </template>
         </HtmlText>
         <div
@@ -2129,7 +2134,8 @@ function toggleQuotePostDisplay () {
   white-space: pre-wrap;
 
   // 折り返されたURLの隙間が選択されないようにする
-  &:deep(.textlink > span) {
+  // 翻訳リンクは縦位置がずれるため除く
+  &:deep(.textlink:not(.translate-link) > span) {
     padding-top: 0.125em;
     padding-bottom: 0.125em;
   }
@@ -2149,9 +2155,14 @@ function toggleQuotePostDisplay () {
   grid-gap: 0.25em;
   color: rgb(var(--fg-color), 0.5);
   font-size: min(0.875em, 0.875rem);
-  padding: 0.125em 0.25em;
+  padding: 0.125em 0 0.125em 0.5em; // 部品の間と本文末尾からの隙間を揃えるため、左側だけに取る
   line-height: var(--line-height-low);
   vertical-align: text-bottom;
+
+  // 行頭の部品は左側の隙間を取らない
+  &[data-is-first="true"] {
+    padding-left: 0;
+  }
 
   & > .svg-icon {
     fill: rgb(var(--fg-color), 0.5);
