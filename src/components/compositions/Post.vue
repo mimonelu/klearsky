@@ -456,6 +456,22 @@ const focused = computed((): boolean => {
   )
 })
 
+// ポストスレッドインデックスがあるかどうか
+const hasOpThreadPostIndex = computed((): boolean => {
+  return (
+    props.post.__custom?.opThreadPostIndex != null &&
+    props.post.__custom?.opThreadPostCount != null
+  )
+})
+
+// 閲覧数
+const viewCount = computed((): undefined | number => {
+  if (mainState.currentSetting.hideNumberOfReaction) {
+    return
+  }
+  return props.post.viewCount
+})
+
 // 古いポスト警告
 const displayOldPostNotification = props.hasOldPostNotification && indexedAt != null
   ? differenceInDays(new Date(), new Date(indexedAt)) >= CONSTS.OLD_POST_NOTIFICATION_DAYS
@@ -1223,34 +1239,47 @@ function toggleQuotePostDisplay () {
         class="post__content"
       >
         <!-- 本文 -->
-        <template v-if="text !== ''">
-          <HtmlText
-            v-if="position !== 'slim'"
-            class="text"
-            dir="auto"
-            :richText="contentRichText"
-            :hasTranslateLink="hasOtherLanguagesForText"
-            :data-is-text-only-emoji="isTextOnlyEmoji"
-            @onActivateHashTag="(tag) => onActivateHashTag(tag as string)"
-            @translate="onForceTranslate"
+        <!-- MEMO: 本文が空でもポストスレッドインデックスと閲覧数は表示する -->
+        <HtmlText
+          v-if="
+            position !== 'slim' &&
+            (text !== '' || hasOpThreadPostIndex || viewCount != null)
+          "
+          class="text"
+          dir="auto"
+          :richText="contentRichText"
+          :hasTranslateLink="hasOtherLanguagesForText"
+          :data-is-text-only-emoji="isTextOnlyEmoji"
+          @onActivateHashTag="(tag) => onActivateHashTag(tag as string)"
+          @translate="onForceTranslate"
+        >
+          <!-- ポストスレッドインデックス -->
+          <template
+            v-if="hasOpThreadPostIndex"
+            #after
           >
-            <!-- ポストスレッドインデックス -->
-            <template
-              v-if="
-                post.__custom?.opThreadPostIndex != null &&
-                post.__custom?.opThreadPostCount != null
-              "
-              #after
-            >
-              &nbsp;<span class="post-thread-index">{{ post.__custom.opThreadPostIndex }}/{{ post.__custom.opThreadPostCount }}</span>
-            </template>
-          </HtmlText>
-          <div
-            v-else
-            class="text--slim"
-            dir="auto"
-          >{{ text }}</div>
-        </template>
+            <template v-if="text">&nbsp;</template><span class="post-thread-index">
+              <SVGIcon name="posts" />
+              <span>{{ post.__custom.opThreadPostIndex }}/{{ post.__custom.opThreadPostCount }}</span>
+            </span>
+          </template>
+
+          <!-- 閲覧数 -->
+          <template
+            v-if="viewCount != null"
+            #after-translate-link
+          >
+            <template v-if="text || hasOpThreadPostIndex">&nbsp;</template><span class="post-view-count">
+              <SVGIcon name="viewCount" />
+              <span>{{ viewCount }}</span>
+            </span>
+          </template>
+        </HtmlText>
+        <div
+          v-else-if="position === 'slim' && text !== ''"
+          class="text--slim"
+          dir="auto"
+        >{{ text }}</div>
 
         <!-- 自動翻訳 -->
         <TranslatedText
@@ -2112,11 +2141,27 @@ function toggleQuotePostDisplay () {
   }
 }
 
-.post-thread-index {
+// ポストスレッドインデックスと閲覧数
+.post-thread-index,
+.post-view-count {
+  display: inline-flex;
+  align-items: center;
+  grid-gap: 0.25em;
   color: rgb(var(--fg-color), 0.5);
   font-size: min(0.875em, 0.875rem);
   padding: 0.125em 0.25em;
   line-height: var(--line-height-low);
+  vertical-align: text-bottom;
+
+  & > .svg-icon {
+    fill: rgb(var(--fg-color), 0.5);
+    font-size: min(0.875em, 0.875rem);
+  }
+}
+
+// 閲覧数
+.post-view-count {
+  user-select: none;
 }
 
 .omit-images {

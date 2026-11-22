@@ -3,6 +3,7 @@ import { computed, inject, toRaw } from "vue"
 import { useRouter } from "vue-router"
 import type { Facet } from "@atproto/api"
 import { RichText } from "@atproto/api"
+import SVGIcon from "@/components/images/SVGIcon.vue"
 import Util from "@/composables/util"
 import { useSafeExternalUrl } from "@/composables/util/use-safe-external-url"
 
@@ -212,9 +213,12 @@ function validateUrl (urlObject: URL, text: string): boolean {
         class="textlink translate-link"
         @click.prevent.stop="$emit('translate')"
       >
+        <SVGIcon name="translate" />
         <span>{{ $t("translate") }}</span>
       </a>
     </template>
+
+    <slot name="after-translate-link" />
   </div>
 </template>
 
@@ -225,16 +229,21 @@ function validateUrl (urlObject: URL, text: string): boolean {
 }
 
 .translate-link {
+  --opacity: 0.5;
+  display: inline-flex;
+  align-items: center;
+  grid-gap: 0.25em;
   font-size: min(0.875em, 0.875rem);
   padding: 0.125em 0.25em;
+  vertical-align: middle;
+  & > .svg-icon {
+    fill: rgb(var(--fg-color), var(--opacity));
+  }
   & > span {
-    --opacity: 0.5;
     color: rgb(var(--fg-color), var(--opacity));
   }
   &:focus, &:hover {
-    & > span {
-      --opacity: 1.0;
-    }
+    --opacity: 1.0;
   }
 }
 </style>

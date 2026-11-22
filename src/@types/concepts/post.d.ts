@@ -25,6 +25,7 @@ type TTPost = {
   quoteCount: number
   threadgate?: TTThreadgate
   uri: string
+  viewCount?: number
   viewer?: {
     bookmarked?: boolean
     repost?: string

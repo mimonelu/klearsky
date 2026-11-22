@@ -62,4 +62,10 @@ export default function updatePostProps (src: TTPost, dst: TTPost) {
 
   // Threadgate の更新
   src.threadgate = dst.threadgate
+
+  // 閲覧数の更新
+  // AppView 側の時間制限で項目ごと省かれることがあるため、値がある時だけ更新する
+  if (dst.viewCount != null) {
+    src.viewCount = dst.viewCount
+  }
 }
